@@ -308,8 +308,8 @@ a.ecaps-header-nav img {
 
 .dropdown-grid {
   background: var(--color-white);
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   row-gap: 33px;
   column-gap: 10px;
   justify-content: center;
@@ -341,7 +341,9 @@ a.ecaps-header-nav img {
   color: var(--color-primary);
   border: 2px solid var(--color-primary);
 }
-
+.dropdown-item img{
+  max-width: 100%;
+}
 .dropdown-icon {
   height: auto !important;
   object-fit: contain;

@@ -16,7 +16,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, var(--card-max-width)));
     gap: 32px;
-    justify-content: center;
+    justify-content: start;
     justify-items: center;
     list-style: none;
   }

@@ -351,7 +351,7 @@
         if (grid) {
           grid.style.pointerEvents = 'auto';
           grid.style.visibility = 'visible';
-          grid.style.display = 'flex';
+          grid.style.display = 'grid';
         }
       }
 
@@ -363,7 +363,7 @@
     handleMenuClick(menuState, dropdown) {
       const grid = dropdown.querySelector('.dropdown-grid');
       if (grid) {
-        grid.style.display = 'flex';
+        grid.style.display = 'grid';
         grid.style.visibility = 'visible';
         grid.style.pointerEvents = 'auto';
       }
@@ -377,7 +377,7 @@
     handleMenuClick(menuState, dropdown) {
       const grid = dropdown.querySelector('.dropdown-grid');
       if (grid) {
-        grid.style.display = 'flex';
+        grid.style.display = 'grid';
         grid.style.visibility = 'visible';
         grid.style.pointerEvents = 'auto';
       }
@@ -603,7 +603,7 @@
             if (grid) {
               grid.style.pointerEvents = 'auto';
               grid.style.visibility = 'visible';
-              grid.style.display = 'flex';
+              grid.style.display = 'grid';
             }
           }
 
