@@ -67,7 +67,8 @@
             <div class="product-detail-layout">
                 <section class="product-detail-media-left" aria-labelledby="product-title">
                     <figure class="product-detail-media-figure">
-                        <img src="./Content/imgs/prd-1.png" width="640" height="480" alt="Centrifugal upblast exhaust fan main view" loading="eager" id="main-product-image" />
+                        <img src="./Content/imgs/prd-1.png" width="640" height="480" alt="Centrifugal upblast exhaust fan main view" loading="eager" id="main-product-image" class="product-detail-main-image-clickable"
+                            role="button" tabindex="0" aria-label="Click to view larger image" />
                     </figure>
                     <div class="product-detail-thumbs-carousel">
                         <div class="product-detail-carousel-container">
@@ -173,29 +174,61 @@
             </div>
         </article>
 
+        <!-- Quick View Modal -->
+        <div class="product-detail-quick-view-modal" role="dialog" aria-modal="true" aria-labelledby="quick-view-title" id="quick-view-modal" hidden>
+            <h2 id="quick-view-title" class="product-detail-sr-only">Product Image Quick View</h2>
+            <div class="product-detail-modal-backdrop"></div>
+            <div class="product-detail-modal-container">
+                <button class="product-detail-modal-close" id="quick-view-close" aria-label="Close quick view">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <div class="product-detail-modal-image-container">
+                    <img class="product-detail-modal-main-image" id="modal-main-image" src="" alt="" />
+                    <button class="product-detail-modal-nav prev" id="modal-nav-prev" aria-label="Previous image">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <button class="product-detail-modal-nav next" id="modal-nav-next" aria-label="Next image">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <div class="product-detail-modal-counter" id="modal-image-counter" aria-live="polite">1 of 5</div>
+                </div>
+                <div class="product-detail-modal-thumbs" id="modal-thumbs-container" role="tablist" aria-label="Product image thumbnails">
+                    <!-- Thumbnails will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
         <!-- Section 2: Navigation Bar -->
-        <nav class="product-detail-nav" role="tablist" aria-label="Product information sections">
-            <button class="product-detail-nav-item is-active" role="tab" aria-selected="true" aria-controls="features-panel" id="features-tab">
-                Features
-            </button>
-            <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="product-details-panel" id="product-details-tab">
-                Product Details
-            </button>
-            <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="documents-panel" id="documents-tab">
-                Documents
-            </button>
-            <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="drawings-panel" id="drawings-tab">
-                Drawings
-            </button>
-            <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="media-panel" id="media-tab">
-                Media
-            </button>
-            <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="related-products-panel" id="related-products-tab">
-                Related Products
-            </button>
-            <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="blog-highlights-panel" id="blog-highlights-tab">
-                Blog Highlights
-            </button>
+        <nav class="product-detail-nav-container" role="tablist" aria-label="Product information sections">
+            <div class="product-detail-nav">
+                <button class="product-detail-nav-item is-active" role="tab" aria-selected="true" aria-controls="features-panel" id="features-tab">
+                    Features
+                </button>
+                <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="product-details-panel" id="product-details-tab">
+                    Product Details
+                </button>
+                <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="documents-panel" id="documents-tab">
+                    Documents
+                </button>
+                <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="drawings-panel" id="drawings-tab">
+                    Drawings
+                </button>
+                <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="media-panel" id="media-tab">
+                    Media
+                </button>
+                <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="related-products-panel" id="related-products-tab">
+                    Related Products
+                </button>
+                <button class="product-detail-nav-item" role="tab" aria-selected="false" aria-controls="blog-highlights-panel" id="blog-highlights-tab">
+                    Blog Highlights
+                </button>
+            </div>
         </nav>
 
         <!-- Features Panel -->
@@ -973,7 +1006,7 @@
             ) {
                 let currentPosition = 0;
                 const thumbWidth = 120; // Width of each thumbnail
-                const gap = 6; // Gap between thumbnails
+                const gap = 17; // Gap between thumbnails (matches CSS)
                 const visibleThumbs = 3; // Number of thumbnails visible at once
                 const totalThumbs = productThumbsTrack.children.length;
                 const maxPosition = Math.max(0, totalThumbs - visibleThumbs);
@@ -982,18 +1015,65 @@
                     const translateX = -(currentPosition * (thumbWidth + gap));
                     productThumbsTrack.style.transform = `translateX(${translateX}px)`;
 
-                    // Update button states
-                    productThumbsPrev.disabled = currentPosition === 0;
-                    productThumbsNext.disabled = currentPosition >= maxPosition;
+                    // For infinite carousel, buttons are never disabled
+                    if (productThumbsPrev) {
+                        productThumbsPrev.disabled = false;
+                    }
+                    if (productThumbsNext) {
+                        productThumbsNext.disabled = false;
+                    }
+                }
+
+                function getActiveThumbIndex() {
+                    for (let i = 0; i < thumbButtons.length; i++) {
+                        if (thumbButtons[i].classList.contains("active")) {
+                            return i;
+                        }
+                    }
+                    return 0; // Default to first if none found
                 }
 
                 function moveThumbs(direction) {
-                    if (direction === "prev" && currentPosition > 0) {
-                        currentPosition--;
-                    } else if (direction === "next" && currentPosition < maxPosition) {
-                        currentPosition++;
+                    // Get the currently active thumbnail index
+                    const activeIndex = getActiveThumbIndex();
+                    let newActiveIndex;
+
+                    // Calculate the next/previous thumbnail index with infinite loop
+                    if (direction === "next") {
+                        // If at last thumbnail, wrap to first
+                        newActiveIndex = (activeIndex + 1) % totalThumbs;
+                    } else {
+                        // If at first thumbnail, wrap to last
+                        newActiveIndex = activeIndex === 0 ? totalThumbs - 1 : activeIndex - 1;
                     }
+
+                    // Update carousel scroll position to keep the selected thumbnail visible
+                    // Handle wrapping for infinite carousel
+                    if (direction === "next" && activeIndex === totalThumbs - 1) {
+                        // Wrapping from last to first - scroll to beginning
+                        currentPosition = 0;
+                    } else if (direction === "prev" && activeIndex === 0) {
+                        // Wrapping from first to last - scroll to end
+                        currentPosition = maxPosition;
+                    } else {
+                        // Normal scrolling - keep selected thumbnail visible
+                        if (newActiveIndex >= currentPosition + visibleThumbs) {
+                            // Need to scroll forward
+                            currentPosition = newActiveIndex - visibleThumbs + 1;
+                        } else if (newActiveIndex < currentPosition) {
+                            // Need to scroll backward
+                            currentPosition = newActiveIndex;
+                        }
+                    }
+
+                    // Ensure currentPosition is within bounds
+                    currentPosition = Math.max(0, Math.min(currentPosition, maxPosition));
                     updateThumbsPosition();
+
+                    // Select the new thumbnail and update main image
+                    if (thumbButtons[newActiveIndex]) {
+                        selectThumb(thumbButtons[newActiveIndex]);
+                    }
                 }
 
                 function selectThumb(btn) {
@@ -1049,6 +1129,262 @@
 
                 // Initialize carousel
                 updateThumbsPosition();
+
+                // Quick View Modal functionality
+                const quickViewModal = document.getElementById("quick-view-modal");
+                const modalBackdrop = quickViewModal?.querySelector(".product-detail-modal-backdrop");
+                const modalCloseBtn = document.getElementById("quick-view-close");
+                const modalMainImage = document.getElementById("modal-main-image");
+                const modalNavPrev = document.getElementById("modal-nav-prev");
+                const modalNavNext = document.getElementById("modal-nav-next");
+                const modalCounter = document.getElementById("modal-image-counter");
+                const modalThumbsContainer = document.getElementById("modal-thumbs-container");
+                let currentModalImageIndex = 0;
+                let modalImageData = [];
+                let previousActiveElement = null;
+
+                // Collect image data from thumbnails
+                function collectImageData() {
+                    modalImageData = [];
+                    thumbButtons.forEach(function (btn) {
+                        const src = btn.getAttribute("data-src");
+                        const alt = btn.getAttribute("data-alt");
+                        if (src && alt) {
+                            modalImageData.push({ src: src, alt: alt });
+                        }
+                    });
+                }
+
+                // Populate modal thumbnails
+                function populateModalThumbs() {
+                    if (!modalThumbsContainer) return;
+                    modalThumbsContainer.innerHTML = "";
+                    modalImageData.forEach(function (imgData, index) {
+                        const thumbBtn = document.createElement("button");
+                        thumbBtn.className = "product-detail-modal-thumb-btn";
+                        thumbBtn.setAttribute("role", "tab");
+                        thumbBtn.setAttribute("aria-selected", "false");
+                        thumbBtn.setAttribute("aria-label", `View image ${index + 1}: ${imgData.alt}`);
+                        thumbBtn.setAttribute("tabindex", index === 0 ? "0" : "-1");
+                        thumbBtn.dataset.index = index;
+                        const img = document.createElement("img");
+                        img.src = imgData.src;
+                        img.alt = imgData.alt;
+                        img.loading = "lazy";
+                        thumbBtn.appendChild(img);
+                        thumbBtn.addEventListener("click", function () {
+                            selectModalImage(index);
+                        });
+                        thumbBtn.addEventListener("keydown", function (e) {
+                            if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                selectModalImage(index);
+                            }
+                        });
+                        modalThumbsContainer.appendChild(thumbBtn);
+                    });
+                }
+
+                // Update modal image counter
+                function updateModalCounter() {
+                    if (modalCounter) {
+                        modalCounter.textContent = `${currentModalImageIndex + 1} of ${modalImageData.length}`;
+                    }
+                }
+
+                // Update modal thumbnail active states
+                function updateModalThumbStates() {
+                    const modalThumbBtns = modalThumbsContainer?.querySelectorAll(".product-detail-modal-thumb-btn");
+                    if (modalThumbBtns) {
+                        modalThumbBtns.forEach(function (btn, index) {
+                            if (index === currentModalImageIndex) {
+                                btn.classList.add("active");
+                                btn.setAttribute("aria-selected", "true");
+                                btn.setAttribute("tabindex", "0");
+                            } else {
+                                btn.classList.remove("active");
+                                btn.setAttribute("aria-selected", "false");
+                                btn.setAttribute("tabindex", "-1");
+                            }
+                        });
+                    }
+                }
+
+                // Select image in modal
+                function selectModalImage(index) {
+                    if (index < 0 || index >= modalImageData.length) return;
+                    currentModalImageIndex = index;
+                    const imgData = modalImageData[index];
+                    if (modalMainImage) {
+                        modalMainImage.style.opacity = "0";
+                        setTimeout(function () {
+                            modalMainImage.src = imgData.src;
+                            modalMainImage.alt = imgData.alt;
+                            modalMainImage.style.opacity = "1";
+                        }, 150);
+                    }
+                    updateModalCounter();
+                    updateModalThumbStates();
+                    updateNavButtons();
+                    syncWithMainCarousel(index);
+                }
+
+                // Update navigation button states
+                function updateNavButtons() {
+                    if (modalNavPrev) {
+                        modalNavPrev.disabled = currentModalImageIndex === 0;
+                    }
+                    if (modalNavNext) {
+                        modalNavNext.disabled = currentModalImageIndex >= modalImageData.length - 1;
+                    }
+                }
+
+                // Sync modal with main carousel
+                function syncWithMainCarousel(index) {
+                    if (thumbButtons[index]) {
+                        selectThumb(thumbButtons[index]);
+                    }
+                }
+
+                // Navigate modal images
+                function navigateModal(direction) {
+                    if (direction === "prev" && currentModalImageIndex > 0) {
+                        selectModalImage(currentModalImageIndex - 1);
+                    } else if (direction === "next" && currentModalImageIndex < modalImageData.length - 1) {
+                        selectModalImage(currentModalImageIndex + 1);
+                    }
+                }
+
+                // Focus trap for modal
+                function trapFocus(e) {
+                    if (!quickViewModal || quickViewModal.hasAttribute("hidden")) return;
+                    const focusableElements = quickViewModal.querySelectorAll(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    );
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+
+                    if (e.key === "Tab") {
+                        if (e.shiftKey) {
+                            if (document.activeElement === firstElement) {
+                                e.preventDefault();
+                                lastElement.focus();
+                            }
+                        } else {
+                            if (document.activeElement === lastElement) {
+                                e.preventDefault();
+                                firstElement.focus();
+                            }
+                        }
+                    }
+                }
+
+                // Open modal
+                function openModal(imageIndex) {
+                    if (!quickViewModal || !modalMainImage) return;
+                    previousActiveElement = document.activeElement;
+                    collectImageData();
+                    populateModalThumbs();
+                    currentModalImageIndex = imageIndex >= 0 && imageIndex < modalImageData.length ? imageIndex : 0;
+                    selectModalImage(currentModalImageIndex);
+                    quickViewModal.removeAttribute("hidden");
+                    document.body.style.overflow = "hidden";
+                    quickViewModal.addEventListener("keydown", trapFocus);
+                    setTimeout(function () {
+                        modalCloseBtn?.focus();
+                    }, 100);
+                }
+
+                // Close modal
+                function closeModal() {
+                    if (!quickViewModal) return;
+                    quickViewModal.setAttribute("hidden", "");
+                    document.body.style.overflow = "";
+                    quickViewModal.removeEventListener("keydown", trapFocus);
+                    if (previousActiveElement) {
+                        previousActiveElement.focus();
+                    }
+                }
+
+                // Event listeners for modal
+                if (quickViewModal && mainProductImage) {
+                    // Open modal on main image click
+                    mainProductImage.addEventListener("click", function () {
+                        const activeIndex = Array.from(thumbButtons).findIndex(function (btn) {
+                            return btn.classList.contains("active");
+                        });
+                        openModal(activeIndex >= 0 ? activeIndex : 0);
+                    });
+
+                    // Open modal on main image Enter/Space key
+                    mainProductImage.addEventListener("keydown", function (e) {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            const activeIndex = Array.from(thumbButtons).findIndex(function (btn) {
+                                return btn.classList.contains("active");
+                            });
+                            openModal(activeIndex >= 0 ? activeIndex : 0);
+                        }
+                    });
+
+                    // Close modal on backdrop click
+                    if (modalBackdrop) {
+                        modalBackdrop.addEventListener("click", function (e) {
+                            if (e.target === modalBackdrop) {
+                                closeModal();
+                            }
+                        });
+                    }
+
+                    // Close modal on close button
+                    if (modalCloseBtn) {
+                        modalCloseBtn.addEventListener("click", closeModal);
+                        modalCloseBtn.addEventListener("keydown", function (e) {
+                            if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                closeModal();
+                            }
+                        });
+                    }
+
+                    // Navigation buttons
+                    if (modalNavPrev) {
+                        modalNavPrev.addEventListener("click", function () {
+                            navigateModal("prev");
+                        });
+                        modalNavPrev.addEventListener("keydown", function (e) {
+                            if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                navigateModal("prev");
+                            }
+                        });
+                    }
+
+                    if (modalNavNext) {
+                        modalNavNext.addEventListener("click", function () {
+                            navigateModal("next");
+                        });
+                        modalNavNext.addEventListener("keydown", function (e) {
+                            if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                navigateModal("next");
+                            }
+                        });
+                    }
+
+                    // Keyboard navigation (ESC to close, Arrow keys to navigate)
+                    quickViewModal.addEventListener("keydown", function (e) {
+                        if (e.key === "Escape") {
+                            closeModal();
+                        } else if (e.key === "ArrowLeft") {
+                            e.preventDefault();
+                            navigateModal("prev");
+                        } else if (e.key === "ArrowRight") {
+                            e.preventDefault();
+                            navigateModal("next");
+                        }
+                    });
+                }
             }
 
             // Blog Carousel functionality

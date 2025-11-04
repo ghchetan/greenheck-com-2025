@@ -187,7 +187,7 @@
        font-size: 15px;
        line-height: var(--line-height-relaxed);
        color: var(--text-color);
-       background-color: var(--background-light);
+       background-color: var(--background-white);
        -webkit-font-smoothing: antialiased;
        -moz-osx-font-smoothing: grayscale;
      }
