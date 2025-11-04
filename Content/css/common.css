@@ -76,6 +76,7 @@
   --color-lighter-gray: #e5e5e5;
   --color-hover-gray: rgb(87 88 90);
   --color-white: #fff;
+  --white: #fff;
 
   /* Brand Colors */
   --primary-color: #075697;
@@ -86,8 +87,8 @@
 
   /* Text Colors */
   --text-color: #1f2937;
-  --text-primary: #333333;
-  --text-secondary: #999999;
+  --text-primary: #333;
+  --text-secondary: #666;
   --text-light: #6b7280;
   --link-color: #999999;
 
@@ -103,14 +104,21 @@
   --color-bg-lightest: #f7f8fa;
 
   /* Border Colors */
-  --border-color: #e5e7eb;
+  --border-color: #e5e5e5;
   --card-border: #e5e5e5;
   --checkbox-border: #d1d5db;
 
   /* Layout & Spacing */
   --border-radius: 21px;
+  --border-radius-sm: 4px;
+  --border-radius-pill: 21px;
   --max-width-container: 1248px;
+  --max-content: 1247px;
   --container-max-width: 1288px;
+  --spacing-sm: 6px;
+  --spacing-md: 15px;
+  --spacing-lg: 30px;
+  --spacing-xl: 32px;
 
   /* Layout */
   --card-max-width: 288px;

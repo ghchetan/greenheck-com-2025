@@ -667,7 +667,7 @@
         "title": "Building Type",
         "layout": "standard",
         "items": [
-          { "title": "K-12 School", "url": "https://www.greenheck.com/building-type/k-12-school" },
+          { "title": "K-12 School", "url": "./k-12-school.html" },
           {
             "title": "Higher Education",
             "url": "https://www.greenheck.com/building-type/higher-education"
