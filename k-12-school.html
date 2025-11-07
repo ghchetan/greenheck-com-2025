@@ -255,48 +255,9 @@
                     <div id="building-overview-scene" class="scene active">
                         <div class="school-building-container">
                             <div class="school-building">
-                                <img src="./Content/imgs/school/school-roof-on.svg" alt="Greenheck High School Building" class="school-building-image" />
-                                <img src="./Content/imgs/school/school-roof-off.webp" alt="Admin Office Roof Open" class="school-building-image admin-office-overlay" style="display: none;" />
-                                <!-- Clickable Areas -->
-                                <div class="clickable-area classrooms" data-space="classrooms" data-system="Dedicated Outdoor Air System(DOAS)" style="top: 43.8%; left: 18.5%; right: auto; transform: none;">
-                                    <div class="space-icon"></div>
-                                    <div class="space-label">Classrooms</div>
-                                </div>
-
-                                <div class="clickable-area science-lab" data-space="science-lab" data-system="DOAS" style="top: 19.6%; left: 33.8%; right: auto; transform: none;">
-                                    <div class="space-icon"></div>
-                                    <div class="space-label">Science Lab</div>
-                                </div>
-
-                                <div class="clickable-area locker-room" data-space="locker-room" data-system="DOAS" style="top: 24%;left: 39.4%; right: auto; transform: none;">
-                                    <div class="space-icon"></div>
-                                    <div class="space-label">Locker Room</div>
-                                </div>
-
-                                <div class="clickable-area admin-offices" data-space="admin-offices" data-system="Multi-zone variable air volume" style="top: 43.5%; left: 50.1%; right: auto; transform: none;">
-                                    <div class="space-icon"></div>
-                                    <div class="space-label">Admin Offices</div>
-                                </div>
-
-                                <div class="clickable-area gym" data-space="gym" data-system="DOAS" style="top: 12.5%; left: 53.0%; right: auto; transform: none;">
-                                    <div class="space-icon"></div>
-                                    <div class="space-label">Gym</div>
-                                </div>
-
-                                <div class="clickable-area lobby" data-space="lobby" data-system="DOAS" style="top: 26%; left: 62.5%; right: auto; transform: none;">
-                                    <div class="space-icon"></div>
-                                    <div class="space-label">Lobby</div>
-                                </div>
-
-                                <div class="clickable-area cafeteria" data-space="cafeteria" data-system="DOAS" style="top: 26%; left: 76.4%; right: auto; transform: none;">
-                                    <div class="space-icon"></div>
-                                    <div class="space-label">Cafeteria</div>
-                                </div>
-
-                                <div class="clickable-area kitchen" data-space="kitchen" data-system="DOAS" style="top: 23.1%; left: 86.5%; right: auto; transform: none;">
-                                    <div class="space-icon"></div>
-                                    <div class="space-label">Kitchen</div>
-                                </div>
+                                <object id="building-svg-object" data="./Content/imgs/K-12Map-with-Pins.svg" type="image/svg+xml" class="school-building-image"></object>
+                                <!-- Marker Overlay Container -->
+                                <div id="marker-overlay-container" class="marker-overlay-container"></div>
                             </div>
                         </div>
                     </div>
@@ -412,17 +373,12 @@
                                 </div>
                             </div>
 
-                            <!-- Right Panel - 3D Exploded View -->
+                            <!-- Right Panel - Space SVG View -->
                             <div class="detail-right-panel">
-                                <div class="exploded-view-container">
-                                    <div class="exploded-3d-view">
-                                        <div class="hvac-elements">
-                                            <div class="hvac-component blue-highlight" data-product="rve-85">RVE-85</div>
-                                            <div class="hvac-component blue-highlight" data-product="atu-xg-th-500">VAV Box</div>
-                                            <div class="hvac-component">Ductwork</div>
-                                            <div class="hvac-component">Diffuser</div>
-                                        </div>
-                                    </div>
+                                <div class="space-svg-container">
+                                    <object id="space-svg-object" data="" type="image/svg+xml" class="space-svg-image"></object>
+                                    <!-- Marker and Title Overlay Container -->
+                                    <div id="space-marker-overlay-container" class="space-marker-overlay-container"></div>
                                 </div>
                             </div>
                         </div>
@@ -598,11 +554,506 @@
             // Cached NodeLists
             const tabs = document.querySelectorAll('.space-selection-modal-tab');
             const shareBtn = document.querySelector('.space-selection-modal-share-btn');
-            const clickableAreas = document.querySelectorAll('.clickable-area');
             const tabContents = document.querySelectorAll('.tab-content');
             const productCards = document.querySelectorAll('.product-card');
             const dots = document.querySelectorAll('.dot');
             const hvacComponents = document.querySelectorAll('.hvac-component');
+
+            // SVG and overlay elements
+            const buildingSvgObject = document.getElementById('building-svg-object');
+            const markerOverlayContainer = document.getElementById('marker-overlay-container');
+            const spaceSvgObject = document.getElementById('space-svg-object');
+            const spaceMarkerOverlayContainer = document.getElementById('space-marker-overlay-container');
+            const schoolBuilding = document.querySelector('.school-building');
+
+            // Marker data storage
+            let markerData = {};
+            let resizeTimeout = null;
+            const originalBuildingSvgPath = './Content/imgs/K-12Map-with-Pins.svg';
+            const MARKER_DATA_STORAGE_KEY = 'k12-marker-data';
+            const MARKER_DATA_VERSION = '1.0';
+
+            // Space to SVG file mapping
+            const spaceToSvgMap = {
+                'admin-offices': './Content/imgs/K-12 Spaces/K-12-Admin.svg',
+                'cafeteria': './Content/imgs/K-12 Spaces/K-12-Cafeteria.svg',
+                'classrooms': './Content/imgs/K-12 Spaces/K-12-Classrooms.svg',
+                'gym': './Content/imgs/K-12 Spaces/K-12-Gym.svg',
+                'kitchen': './Content/imgs/K-12 Spaces/K-12-Kitchen.svg',
+                'lobby': './Content/imgs/K-12 Spaces/K-12-Lobby.svg',
+                'locker-room': './Content/imgs/K-12 Spaces/K-12-LockerRoom.svg',
+                'science-lab': './Content/imgs/K-12 Spaces/K-12-ScienceLab.svg'
+            };
+
+            // Text ID to space key mapping
+            const textIdToSpaceMap = {
+                'Gym': 'gym',
+                'Lobby': 'lobby',
+                'Admin-Offices': 'admin-offices',
+                'Locker-Room': 'locker-room',
+                'Science-Lab': 'science-lab',
+                'Classrooms': 'classrooms',
+                'Kitchen': 'kitchen',
+                'Cafeteria': 'cafeteria'
+            };
+
+            // System data
+            const spaceSystemMap = {
+                'classrooms': 'Dedicated Outdoor Air System(DOAS)',
+                'science-lab': 'DOAS',
+                'locker-room': 'DOAS',
+                'admin-offices': 'Multi-zone variable air volume',
+                'gym': 'DOAS',
+                'lobby': 'DOAS',
+                'cafeteria': 'DOAS',
+                'kitchen': 'DOAS'
+            };
+
+            // Top markers (roof/upper level markers) - popover should appear at top of modal
+            const topMarkers = ['gym', 'lobby', 'locker-room', 'science-lab', 'cafeteria', 'kitchen'];
+
+            // Helper function to accumulate all parent transforms
+            function getParentTransforms(element) {
+                const transforms = [];
+                let current = element;
+
+                while (current && current !== current.ownerDocument.documentElement) {
+                    const transform = current.getAttribute('transform') || '';
+                    const translateMatch = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+                    if (translateMatch) {
+                        transforms.push({
+                            x: parseFloat(translateMatch[1]),
+                            y: parseFloat(translateMatch[2])
+                        });
+                    }
+                    current = current.parentElement;
+                }
+
+                return transforms;
+            }
+
+            // Extract marker positions and titles from SVG
+            function extractMarkerPositions(svgDoc) {
+                if (!svgDoc) return {};
+
+                const svg = svgDoc.documentElement;
+                const viewBox = svg.getAttribute('viewBox') || '0 0 1417 600';
+                const viewBoxValues = viewBox.split(' ').map(Number);
+                const svgWidth = viewBoxValues[2] || 1417;
+                const svgHeight = viewBoxValues[3] || 600;
+
+                const markers = {};
+
+                // Find all marker groups
+                const markerGroups = [
+                    ...Array.from(svgDoc.querySelectorAll('g[id="Group-18"]')),
+                    svgDoc.getElementById('admin-offices-target'),
+                    svgDoc.getElementById('Kitchen-marker'),
+                    svgDoc.getElementById('cafeteria-marker')
+                ].filter(Boolean);
+
+                markerGroups.forEach(markerGroup => {
+                    // Find text element within the marker group
+                    const textEl = markerGroup.querySelector('text[id]');
+                    if (!textEl || !textEl.id) return;
+
+                    const textId = textEl.id;
+                    const spaceKey = textIdToSpaceMap[textId];
+                    if (!spaceKey) return;
+
+                    // Skip if we already have a marker for this space (deduplicate)
+                    if (markers[spaceKey]) return;
+
+                    // Get text content for title
+                    const title = textEl.textContent || textId;
+
+                    // Get all parent transforms
+                    const parentTransforms = getParentTransforms(markerGroup);
+
+                    // Sum up all transform X and Y values
+                    let totalX = 0;
+                    let totalY = 0;
+                    parentTransforms.forEach(t => {
+                        totalX += t.x;
+                        totalY += t.y;
+                    });
+
+                    // Try to get bounding box for more accurate center position
+                    let markerCenterX = totalX;
+                    let markerCenterY = totalY;
+
+                    try {
+                        // Get bbox in the marker group's local coordinate system
+                        const bbox = markerGroup.getBBox();
+                        if (bbox.width > 0 && bbox.height > 0) {
+                            // The bbox is relative to the marker group's coordinate system
+                            // Add the center of the bbox to the accumulated transforms
+                            markerCenterX = totalX + bbox.x + (bbox.width / 2);
+                            markerCenterY = totalY + bbox.y + (bbox.height / 2);
+                        } else {
+                            // Fallback: try text element bbox
+                            try {
+                                const textBbox = textEl.getBBox();
+                                if (textBbox.width > 0 && textBbox.height > 0) {
+                                    markerCenterX = totalX + textBbox.x + (textBbox.width / 2);
+                                    markerCenterY = totalY + textBbox.y + (textBbox.height / 2);
+                                }
+                            } catch (e) {
+                                // Use transform position if bbox fails
+                            }
+                        }
+                    } catch (e) {
+                        // Use transform position if getBBox fails
+                    }
+
+                    markers[spaceKey] = {
+                        x: markerCenterX,
+                        y: markerCenterY,
+                        title: title,
+                        system: spaceSystemMap[spaceKey] || 'DOAS',
+                        svgX: markerCenterX / svgWidth,
+                        svgY: markerCenterY / svgHeight
+                    };
+
+                    // Debug logging
+                    console.log(`Marker ${spaceKey}:`, {
+                        title: title,
+                        absoluteX: markerCenterX,
+                        absoluteY: markerCenterY,
+                        percentageX: (markerCenterX / svgWidth * 100).toFixed(2) + '%',
+                        percentageY: (markerCenterY / svgHeight * 100).toFixed(2) + '%'
+                    });
+                });
+
+                return markers;
+            }
+
+            // Create responsive marker overlay
+            function createMarkerOverlay(markerInfo, container) {
+                const marker = document.createElement('div');
+                marker.className = 'clickable-area';
+                marker.setAttribute('data-space', markerInfo.spaceKey);
+                marker.setAttribute('data-system', markerInfo.system);
+                marker.style.position = 'absolute';
+                marker.style.left = `${markerInfo.svgX * 100}%`;
+                marker.style.top = `${markerInfo.svgY * 100}%`;
+                marker.style.transform = 'translate(-50%, -50%)';
+                marker.style.zIndex = '20';
+                marker.style.cursor = 'pointer';
+
+                const icon = document.createElement('div');
+                icon.className = 'space-icon';
+
+                const label = document.createElement('div');
+                label.className = 'space-label';
+                label.textContent = markerInfo.title;
+
+                marker.appendChild(icon);
+                marker.appendChild(label);
+
+                container.appendChild(marker);
+
+                return marker;
+            }
+
+            // Update marker positions on resize
+            function updateMarkerPositions() {
+                if (!buildingSvgObject || !markerOverlayContainer) return;
+
+                // Update all marker positions (positions are percentage-based so they scale automatically)
+                markerOverlayContainer.querySelectorAll('.clickable-area').forEach(marker => {
+                    const spaceKey = marker.getAttribute('data-space');
+                    const markerInfo = markerData[spaceKey];
+                    if (markerInfo) {
+                        marker.style.left = `${markerInfo.svgX * 100}%`;
+                        marker.style.top = `${markerInfo.svgY * 100}%`;
+                    }
+                });
+
+                // Update popover position if visible
+                if (isPopoverVisible && previousClickedMarker) {
+                    // Use stored position if available (to prevent reset during SVG replacement)
+                    if (storedPopoverPosition) {
+                        popover.style.left = `${storedPopoverPosition.x}px`;
+                        popover.style.top = `${storedPopoverPosition.y}px`;
+                        // Update pointer position if it was set
+                        if (storedPopoverPosition.pointerLeft !== null && storedPopoverPosition.pointerLeft !== undefined) {
+                            popover.style.setProperty('--pointer-left', `${storedPopoverPosition.pointerLeft}px`);
+                            popover.setAttribute('data-pointer-left', storedPopoverPosition.pointerLeft);
+                        } else {
+                            popover.removeAttribute('data-pointer-left');
+                            popover.style.removeProperty('--pointer-left');
+                        }
+                    } else {
+                        // Fallback: recalculate if stored position is not available
+                        const clickableAreaRect = previousClickedMarker.getBoundingClientRect();
+                        const position = calculatePopoverPosition(clickableAreaRect, currentSpace || '');
+                        storedPopoverPosition = position;
+                        showPopover(currentSpace, currentSystem, position.x, position.y, position.pointerLeft);
+                    }
+                }
+
+                // Update space SVG marker positions if in detail scene
+                if (detailScene.classList.contains('active')) {
+                    updateSpaceSvgMarkerPositions();
+                }
+            }
+
+            // Save marker data to localStorage
+            function saveMarkerDataToStorage(data) {
+                try {
+                    const storageData = {
+                        version: MARKER_DATA_VERSION,
+                        data: data,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem(MARKER_DATA_STORAGE_KEY, JSON.stringify(storageData));
+                } catch (e) {
+                    console.warn('Failed to save marker data to localStorage:', e);
+                }
+            }
+
+            // Load marker data from localStorage
+            function loadMarkerDataFromStorage() {
+                try {
+                    const stored = localStorage.getItem(MARKER_DATA_STORAGE_KEY);
+                    if (!stored) return null;
+
+                    const storageData = JSON.parse(stored);
+
+                    // Check version compatibility
+                    if (storageData.version !== MARKER_DATA_VERSION) {
+                        console.log('Marker data version mismatch, will re-extract');
+                        return null;
+                    }
+
+                    return storageData.data;
+                } catch (e) {
+                    console.warn('Failed to load marker data from localStorage:', e);
+                    return null;
+                }
+            }
+
+            // Create marker overlays from stored data
+            function createMarkerOverlaysFromData(data) {
+                if (!data || Object.keys(data).length === 0) return false;
+
+                markerData = data;
+
+                // Create marker overlays
+                markerOverlayContainer.innerHTML = '';
+                Object.keys(markerData).forEach(spaceKey => {
+                    const markerInfo = {
+                        ...markerData[spaceKey],
+                        spaceKey: spaceKey
+                    };
+                    createMarkerOverlay(markerInfo, markerOverlayContainer);
+                });
+
+                // Update clickable areas reference
+                const newClickableAreas = markerOverlayContainer.querySelectorAll('.clickable-area');
+                setupMarkerClickHandlers(newClickableAreas);
+
+                return true;
+            }
+
+            // Load building SVG and extract markers
+            function initializeBuildingSvg() {
+                if (!buildingSvgObject) return;
+
+                // Try to load from localStorage first
+                const storedMarkerData = loadMarkerDataFromStorage();
+                if (storedMarkerData) {
+                    if (createMarkerOverlaysFromData(storedMarkerData)) {
+                        console.log('Marker data loaded from localStorage');
+                        return;
+                    }
+                }
+
+                // If not in storage or load failed, extract from SVG
+                function extractAndSaveMarkers() {
+                    const svgDoc = buildingSvgObject.contentDocument;
+                    if (!svgDoc) return;
+
+                    // Extract marker positions
+                    markerData = extractMarkerPositions(svgDoc);
+
+                    // Save to localStorage
+                    saveMarkerDataToStorage(markerData);
+
+                    // Create marker overlays
+                    markerOverlayContainer.innerHTML = '';
+                    Object.keys(markerData).forEach(spaceKey => {
+                        const markerInfo = {
+                            ...markerData[spaceKey],
+                            spaceKey: spaceKey
+                        };
+                        createMarkerOverlay(markerInfo, markerOverlayContainer);
+                    });
+
+                    // Update clickable areas reference
+                    const newClickableAreas = markerOverlayContainer.querySelectorAll('.clickable-area');
+                    setupMarkerClickHandlers(newClickableAreas);
+                }
+
+                // Check if SVG is already loaded
+                if (buildingSvgObject.contentDocument && buildingSvgObject.contentDocument.readyState === 'complete') {
+                    extractAndSaveMarkers();
+                } else {
+                    buildingSvgObject.addEventListener('load', extractAndSaveMarkers, { once: true });
+                }
+            }
+
+            // Replace building SVG with space SVG
+            function replaceBuildingSvg(spaceKey) {
+                const svgPath = spaceToSvgMap[spaceKey];
+                if (!svgPath || !buildingSvgObject) return;
+
+                // Replace the building SVG with the space SVG
+                buildingSvgObject.setAttribute('data', svgPath);
+            }
+
+            // Restore original building SVG
+            function restoreBuildingSvg() {
+                if (!buildingSvgObject) return;
+                buildingSvgObject.setAttribute('data', originalBuildingSvgPath);
+            }
+
+            // Setup marker click handlers
+            function setupMarkerClickHandlers(clickableAreas) {
+                clickableAreas.forEach(area => {
+                    area.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const space = this.getAttribute('data-space');
+                        const system = this.getAttribute('data-system');
+
+                        // Reset previous marker if exists
+                        if (previousClickedMarker && previousClickedMarker !== this) {
+                            previousClickedMarker.style.display = 'flex';
+                        }
+
+                        // Store the clickable area position before hiding it
+                        const clickableAreaRect = this.getBoundingClientRect();
+
+                        // Hide the clicked area
+                        this.style.display = 'none';
+
+                        // Track this marker as the previous one
+                        previousClickedMarker = this;
+
+                        // Calculate and store popover position BEFORE replacing SVG
+                        // This prevents the position from being reset when ResizeObserver fires
+                        const position = calculatePopoverPosition(clickableAreaRect, space);
+                        storedPopoverPosition = position;
+
+                        // Replace the building SVG with the space SVG
+                        replaceBuildingSvg(space);
+
+                        // Show popover with stored position and pointer adjustment
+                        showPopover(space, system, position.x, position.y, position.pointerLeft);
+                    });
+                });
+            }
+
+            // Load space SVG with marker overlay
+            function loadSpaceSvg(spaceKey) {
+                const svgPath = spaceToSvgMap[spaceKey];
+                if (!svgPath || !spaceSvgObject) return;
+
+                // Clear previous overlay
+                spaceMarkerOverlayContainer.innerHTML = '';
+
+                // Set new SVG source
+                spaceSvgObject.setAttribute('data', svgPath);
+
+                // Handle SVG load
+                function onSpaceSvgLoad() {
+                    const markerInfo = markerData[spaceKey];
+                    if (!markerInfo) return;
+
+                    // Create marker overlay
+                    const marker = document.createElement('div');
+                    marker.className = 'space-marker';
+                    marker.style.position = 'absolute';
+                    marker.style.left = `${markerInfo.svgX * 100}%`;
+                    marker.style.top = `${markerInfo.svgY * 100}%`;
+                    marker.style.transform = 'translate(-50%, -50%)';
+                    marker.style.zIndex = '20';
+
+                    const icon = document.createElement('div');
+                    icon.className = 'space-icon';
+
+                    marker.appendChild(icon);
+                    spaceMarkerOverlayContainer.appendChild(marker);
+
+                    // Create title overlay
+                    const title = document.createElement('div');
+                    title.className = 'space-title-overlay';
+                    title.textContent = markerInfo.title;
+                    title.style.position = 'absolute';
+                    title.style.left = `${markerInfo.svgX * 100}%`;
+                    title.style.top = `${markerInfo.svgY * 100}%`;
+                    title.style.transform = 'translate(-50%, calc(-50% + 30px))';
+                    title.style.zIndex = '20';
+                    spaceMarkerOverlayContainer.appendChild(title);
+                }
+
+                // Check if SVG is already loaded
+                if (spaceSvgObject.contentDocument && spaceSvgObject.contentDocument.readyState === 'complete') {
+                    onSpaceSvgLoad();
+                } else {
+                    spaceSvgObject.addEventListener('load', onSpaceSvgLoad, { once: true });
+                }
+            }
+
+            // Update space SVG marker positions on resize
+            function updateSpaceSvgMarkerPositions() {
+                if (!spaceMarkerOverlayContainer) return;
+
+                const marker = spaceMarkerOverlayContainer.querySelector('.space-marker');
+                const title = spaceMarkerOverlayContainer.querySelector('.space-title-overlay');
+
+                if (!marker || !title) return;
+
+                const spaceKey = currentSpace;
+                const markerInfo = markerData[spaceKey];
+                if (!markerInfo) return;
+
+                // Positions are already percentage-based, so they should scale automatically
+                // But we can ensure they're set correctly
+                marker.style.left = `${markerInfo.svgX * 100}%`;
+                marker.style.top = `${markerInfo.svgY * 100}%`;
+                title.style.left = `${markerInfo.svgX * 100}%`;
+                title.style.top = `${markerInfo.svgY * 100}%`;
+            }
+
+            // Resize handler with debouncing
+            function handleResize() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    updateMarkerPositions();
+                }, 100);
+            }
+
+            // Initialize on load
+            initializeBuildingSvg();
+
+            // Setup resize observer
+            if (window.ResizeObserver) {
+                const resizeObserver = new ResizeObserver(handleResize);
+                if (schoolBuilding) {
+                    resizeObserver.observe(schoolBuilding);
+                }
+                if (buildingSvgObject) {
+                    resizeObserver.observe(buildingSvgObject);
+                }
+                const spaceSvgContainer = document.querySelector('.space-svg-container');
+                if (spaceSvgContainer) {
+                    resizeObserver.observe(spaceSvgContainer);
+                }
+            } else {
+                window.addEventListener('resize', handleResize);
+            }
 
             // Popover elements
             const popoverCloseBtn = document.getElementById('popover-close-btn');
@@ -625,6 +1076,7 @@
             let firstFocusableElement = null;
             let lastFocusableElement = null;
             let previousClickedMarker = null;
+            let storedPopoverPosition = null; // Store popover position to prevent reset on SVG replacement
 
             // Focus trap helper
             function updateFocusableElements() {
@@ -656,6 +1108,12 @@
             selectSpaceBtn.addEventListener('click', function () {
                 modal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
+
+                // Initialize SVG if not already initialized
+                if (Object.keys(markerData).length === 0) {
+                    initializeBuildingSvg();
+                }
+
                 showBuildingOverview();
                 updateFocusableElements();
                 setTimeout(() => closeBtn.focus(), 100);
@@ -696,18 +1154,19 @@
                     shareBtn.disabled = true;
                 }
 
-                // Reset admin office overlay
-                if (adminOfficeOverlay) {
-                    adminOfficeOverlay.style.display = 'none';
-                }
-
                 // Show all clickable areas again
-                clickableAreas.forEach(area => {
-                    area.style.display = 'flex';
-                });
+                if (markerOverlayContainer) {
+                    markerOverlayContainer.querySelectorAll('.clickable-area').forEach(area => {
+                        area.style.display = 'flex';
+                    });
+                }
 
                 // Reset marker tracking
                 previousClickedMarker = null;
+                storedPopoverPosition = null; // Clear stored position
+
+                // Restore original building SVG
+                restoreBuildingSvg();
 
                 updateFocusableElements();
             }
@@ -747,6 +1206,10 @@
 
                 // Update content based on space
                 updateDetailContent(space, system);
+
+                // Load space SVG with marker overlay
+                loadSpaceSvg(space);
+
                 updateFocusableElements();
             }
 
@@ -776,59 +1239,187 @@
                 detailDescription.textContent = data.description;
             }
 
+            // Calculate popover position based on clickable area position and popover dimensions
+            function calculatePopoverPosition(clickableAreaRect, spaceName = '') {
+                if (!popover) return { x: 0, y: 0, pointerLeft: null };
+
+                // Get modal container for bounds checking
+                const modal = document.getElementById('space-selection-modal');
+                const modalContainer = document.querySelector('.space-selection-modal-container');
+                const modalContent = document.querySelector('.space-selection-modal-content');
+                if (!modal || !modalContainer || !modalContent) return { x: 0, y: 0, pointerLeft: null };
+
+                const modalRect = modal.getBoundingClientRect();
+                const modalContainerRect = modalContainer.getBoundingClientRect();
+                const modalContentRect = modalContent.getBoundingClientRect();
+                const containerWidth = modalContentRect.width;
+                const containerHeight = modalContentRect.height;
+                const padding = 10; // Padding from edges
+                const pointerHeight = 8; // Height of the pointer triangle (from CSS border-top: 8px)
+
+                // Get popover dimensions (we need to show it first to measure)
+                const wasVisible = popover.style.display !== 'none';
+                const originalVisibility = popover.style.visibility;
+                if (!wasVisible) {
+                    popover.style.display = 'flex';
+                    popover.style.visibility = 'hidden';
+                }
+
+                const popoverRect = popover.getBoundingClientRect();
+                const popoverWidth = popoverRect.width || 300; // Fallback width if measurement fails
+                const popoverHeight = popoverRect.height || 200; // Fallback height if measurement fails
+
+                if (!wasVisible) {
+                    popover.style.display = 'none';
+                    popover.style.visibility = originalVisibility;
+                }
+
+                // Get clickable area center position (relative to viewport for fixed positioning)
+                const clickableAreaCenterX = clickableAreaRect.left + clickableAreaRect.width / 2;
+                const clickableAreaCenterY = clickableAreaRect.top + clickableAreaRect.height / 2;
+
+                // Check if this is a top marker (case-insensitive check)
+                const isTopMarker = spaceName && topMarkers.includes(spaceName.toLowerCase());
+
+                // Calculate X position: center of clickable area (viewport coordinates for fixed positioning)
+                // Account for transform: translateX(-50%) which centers the popover horizontally
+                let x = clickableAreaCenterX;
+                const halfPopoverWidth = popoverWidth / 2;
+                let pointerLeft = null; // For top markers, we'll adjust pointer position
+
+                // Adjust X position to stay within modal bounds (accounting for transform)
+                const modalLeft = modalContentRect.left;
+                const modalRight = modalContentRect.right;
+                if (x - halfPopoverWidth < modalLeft + padding) {
+                    x = modalLeft + padding + halfPopoverWidth;
+                } else if (x + halfPopoverWidth > modalRight - padding) {
+                    x = Math.max(modalLeft + padding + halfPopoverWidth, modalRight - halfPopoverWidth - padding);
+                }
+
+                // For top markers, position popover at the top of the modal content area (below header)
+                let y;
+                if (isTopMarker) {
+                    // Position at top of modal content area with padding (viewport coordinates)
+                    // This places it at the top of the content area, just below the header
+                    y = modalContentRect.top + padding;
+
+                    // Calculate pointer position AFTER x has been adjusted for boundaries
+                    // The pointer needs to point from the popover (at top) down to the marker
+                    // markerXRelative is the marker center X relative to viewport
+                    const markerXRelative = clickableAreaCenterX;
+                    // popoverLeft is the popover's left edge relative to viewport (after boundary adjustments)
+                    const popoverLeft = x - halfPopoverWidth;
+                    // pointerLeft is the distance from popover's left edge to where pointer center should be
+                    // Since CSS uses translateX(-50%), the left value represents the center of the pointer
+                    pointerLeft = markerXRelative - popoverLeft;
+
+                    // Clamp pointer position to stay within popover bounds (with some margin)
+                    // The pointer is 16px wide (8px border on each side), so we need at least 8px margin
+                    const pointerMargin = 20; // Keep pointer away from edges
+                    pointerLeft = Math.max(pointerMargin, Math.min(pointerLeft, popoverWidth - pointerMargin));
+
+                    console.log('Top marker pointer calculation:', {
+                        markerX: Math.round(markerXRelative),
+                        popoverX: Math.round(x),
+                        popoverLeft: Math.round(popoverLeft),
+                        popoverWidth: Math.round(popoverWidth),
+                        calculatedPointerLeft: Math.round(pointerLeft),
+                        clampedPointerLeft: Math.round(pointerLeft)
+                    });
+                } else {
+                    // For non-top markers, position above the marker
+                    // Calculate Y position: popover top = clickable area center Y - popover height - pointer height
+                    // This positions the popover so its bottom center pointer aligns with the clickable area center
+                    y = clickableAreaCenterY - popoverHeight - pointerHeight;
+
+                    // Adjust Y position to stay within modal bounds
+                    const modalTop = modalContentRect.top;
+                    const modalBottom = modalContentRect.bottom;
+                    if (y < modalTop + padding) {
+                        // If popover would go above modal, position it below clickable area instead
+                        y = clickableAreaCenterY + pointerHeight;
+                        // Check if it fits below
+                        if (y + popoverHeight > modalBottom - padding) {
+                            y = Math.max(modalTop + padding, modalBottom - popoverHeight - padding);
+                        }
+                    } else if (y + popoverHeight + pointerHeight > modalBottom - padding) {
+                        y = Math.max(modalTop + padding, modalBottom - popoverHeight - pointerHeight - padding);
+                    }
+                }
+
+                // Handle edge case: if popover is larger than container, center it
+                if (popoverWidth > containerWidth - (padding * 2)) {
+                    x = modalContainerRect.left + (modalContainerRect.width / 2); // Center horizontally within modal container
+                    console.warn(`Popover width (${popoverWidth}px) exceeds available container width, centering horizontally`);
+                }
+                if (popoverHeight + pointerHeight > containerHeight - (padding * 2)) {
+                    y = modalContainerRect.top + padding;
+                    console.warn(`Popover height (${popoverHeight}px) exceeds available container height, centering vertically`);
+                }
+
+                // Log position calculations for debugging
+                console.log(`Popover position calculated${spaceName ? ` for ${spaceName}` : ''}:`, {
+                    isTopMarker: isTopMarker,
+                    spaceName: spaceName,
+                    topMarkersList: topMarkers,
+                    clickableAreaCenter: {
+                        x: Math.round(clickableAreaCenterX - modalContentRect.left),
+                        y: Math.round(clickableAreaCenterY - modalContentRect.top)
+                    },
+                    popoverSize: { width: Math.round(popoverWidth), height: Math.round(popoverHeight) },
+                    pointerHeight: pointerHeight,
+                    pointerLeft: pointerLeft !== null ? Math.round(pointerLeft) : 'center',
+                    finalPosition: { x: Math.round(x), y: Math.round(y) },
+                    containerSize: { width: Math.round(containerWidth), height: Math.round(containerHeight) }
+                });
+
+                return { x, y, pointerLeft };
+            }
+
             // Show popover
-            function showPopover(space, system, x, y) {
+            function showPopover(space, system, x, y, pointerLeft = null) {
                 currentSpace = space;
                 currentSystem = system;
                 isPopoverVisible = true;
+
+                // Move popover to body if not already there (for fixed positioning)
+                if (popover.parentElement !== document.body) {
+                    document.body.appendChild(popover);
+                }
 
                 popoverSpaceName.textContent = capitalizeSpace(space);
                 popoverSystemName.textContent = system;
                 popover.style.display = 'flex';
                 popover.style.left = `${x}px`;
                 popover.style.top = `${y}px`;
+
+                // Adjust pointer position for top markers
+                if (pointerLeft !== null && pointerLeft !== undefined) {
+                    // Set pointer position using CSS custom property
+                    // pointerLeft is the distance from popover's left edge to marker center
+                    popover.style.setProperty('--pointer-left', `${pointerLeft}px`);
+                    popover.setAttribute('data-pointer-left', pointerLeft);
+                    console.log('Setting pointer position:', {
+                        pointerLeft: pointerLeft,
+                        cssVar: `--pointer-left: ${pointerLeft}px`,
+                        dataAttr: `data-pointer-left="${pointerLeft}"`
+                    });
+                } else {
+                    popover.removeAttribute('data-pointer-left');
+                    popover.style.removeProperty('--pointer-left');
+                }
             }
 
             // Hide popover
             function hidePopover() {
                 popover.style.display = 'none';
                 isPopoverVisible = false;
+                storedPopoverPosition = null; // Clear stored position
+                // Restore original building SVG when popover is closed
+                restoreBuildingSvg();
             }
 
-            // Clickable areas functionality
-            clickableAreas.forEach(area => {
-                area.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    const space = this.dataset.space;
-                    const system = this.dataset.system;
-
-                    // Reset previous marker if exists
-                    if (previousClickedMarker && previousClickedMarker !== this) {
-                        previousClickedMarker.style.display = 'flex';
-                    }
-
-                    // Toggle admin office roof overlay
-                    if (space === 'admin-offices' && adminOfficeOverlay) {
-                        const isVisible = adminOfficeOverlay.style.display !== 'none';
-                        adminOfficeOverlay.style.display = isVisible ? 'none' : 'block';
-                    }
-
-                    // Store the position before hiding the area
-                    const rect = this.getBoundingClientRect();
-                    const modalRect = modal.getBoundingClientRect();
-                    const x = rect.left - modalRect.left + rect.width / 2 - POPOVER_OFFSET_X;
-                    const y = rect.top - modalRect.top - POPOVER_OFFSET_Y;
-
-                    // Hide the clicked area
-                    this.style.display = 'none';
-
-                    // Track this marker as the previous one
-                    previousClickedMarker = this;
-
-                    // Show popover at the same position
-                    showPopover(space, system, x, y);
-                });
-            });
+            // Clickable areas functionality is now handled in setupMarkerClickHandlers
 
             // Popover view button
             popoverViewBtn.addEventListener('click', function () {
@@ -854,9 +1445,11 @@
             popoverCloseBtn.addEventListener('click', function () {
                 hidePopover();
                 // Show all clickable areas when popover is closed
-                clickableAreas.forEach(area => {
-                    area.style.display = 'flex';
-                });
+                if (markerOverlayContainer) {
+                    markerOverlayContainer.querySelectorAll('.clickable-area').forEach(area => {
+                        area.style.display = 'flex';
+                    });
+                }
                 // Reset marker tracking
                 previousClickedMarker = null;
             });
@@ -945,9 +1538,11 @@
                     if (isPopoverVisible) {
                         hidePopover();
                         // Show all clickable areas when popover is closed
-                        clickableAreas.forEach(area => {
-                            area.style.display = 'flex';
-                        });
+                        if (markerOverlayContainer) {
+                            markerOverlayContainer.querySelectorAll('.clickable-area').forEach(area => {
+                                area.style.display = 'flex';
+                            });
+                        }
                         // Reset marker tracking
                         previousClickedMarker = null;
                     } else if (modal.style.display === 'flex') {
@@ -961,9 +1556,11 @@
                 if (isPopoverVisible && !popover.contains(e.target) && !e.target.closest('.clickable-area')) {
                     hidePopover();
                     // Show all clickable areas when popover is closed by clicking outside
-                    clickableAreas.forEach(area => {
-                        area.style.display = 'flex';
-                    });
+                    if (markerOverlayContainer) {
+                        markerOverlayContainer.querySelectorAll('.clickable-area').forEach(area => {
+                            area.style.display = 'flex';
+                        });
+                    }
                     // Reset marker tracking
                     previousClickedMarker = null;
                 }

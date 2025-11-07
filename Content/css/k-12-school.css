@@ -399,10 +399,10 @@
   
   /* Popover */
   .space-popover {
-    position: absolute;
+    position: fixed;
     background-color: white;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    z-index: 1001;
+    z-index: 10001;
     min-width: 325px;
     transform: translateX(-50%);
     border: 1px solid #979797;
@@ -419,6 +419,12 @@
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-top: 8px solid white;
+  }
+  
+  /* Adjust pointer position for top markers */
+  .space-popover[data-pointer-left]::after {
+    left: var(--pointer-left);
+    transform: translateX(-50%);
   }
   
   .popover-content {
@@ -566,7 +572,58 @@
     margin: 0 0 10px 0;
   }
   
-  /* Exploded 3D View */
+  /* Space SVG Container */
+  .space-svg-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .space-svg-image {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    display: block;
+  }
+  
+  .space-svg-image object {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    display: block;
+  }
+  
+  .space-marker-overlay-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  
+  .space-marker {
+    position: absolute;
+    z-index: 20;
+  }
+  
+  .space-title-overlay {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: var(--color-gray);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-family: var(--font-family-medium);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+  }
+  
+  /* Exploded 3D View (kept for backward compatibility if needed) */
   .exploded-view-container {
     width: 100%;
     height: 100%;
@@ -814,6 +871,27 @@
   
   .school-building-image {
     width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .school-building-image object {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .marker-overlay-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  
+  .marker-overlay-container .clickable-area {
+    pointer-events: auto;
   }
   
   .admin-office-overlay {
