@@ -255,7 +255,7 @@
                     <div id="building-overview-scene" class="scene active">
                         <div class="school-building-container">
                             <div class="school-building">
-                                <object id="building-svg-object" data="./Content/imgs/K-12Map-with-Pins.svg" type="image/svg+xml" class="school-building-image"></object>
+                                <object id="building-svg-object" data="./Content/imgs/Space Pins and Labels with Popover/K-12-Pins-Roof-Closed.svg" type="image/svg+xml" class="school-building-image"></object>
                                 <!-- Marker Overlay Container -->
                                 <div id="marker-overlay-container" class="marker-overlay-container"></div>
                             </div>
@@ -531,6 +531,10 @@
             // Constants
             const POPOVER_OFFSET_X = 19;
             const POPOVER_OFFSET_Y = 235;
+            const SPACE_MARKER_OFFSET_X = 160;
+            const SPACE_MARKER_OFFSET_Y = 10;
+            const SPACE_POPOVER_OFFSET_X = SPACE_MARKER_OFFSET_X;
+            const SPACE_POPOVER_OFFSET_Y = SPACE_MARKER_OFFSET_Y;
 
             // Helper functions
             function capitalizeSpace(space) {
@@ -560,7 +564,8 @@
             const hvacComponents = document.querySelectorAll('.hvac-component');
 
             // SVG and overlay elements
-            const buildingSvgObject = document.getElementById('building-svg-object');
+            let buildingSvgObject = document.getElementById('building-svg-object');
+            const buildingSvgContainer = buildingSvgObject ? buildingSvgObject.parentElement : null;
             const markerOverlayContainer = document.getElementById('marker-overlay-container');
             const spaceSvgObject = document.getElementById('space-svg-object');
             const spaceMarkerOverlayContainer = document.getElementById('space-marker-overlay-container');
@@ -569,20 +574,18 @@
             // Marker data storage
             let markerData = {};
             let resizeTimeout = null;
-            const originalBuildingSvgPath = './Content/imgs/K-12Map-with-Pins.svg';
-            const MARKER_DATA_STORAGE_KEY = 'k12-marker-data';
-            const MARKER_DATA_VERSION = '1.0';
+            const originalBuildingSvgPath = './Content/imgs/Space Pins and Labels with Popover/K-12-Pins-Roof-Closed.svg';
 
             // Space to SVG file mapping
             const spaceToSvgMap = {
-                'admin-offices': './Content/imgs/K-12 Spaces/K-12-Admin.svg',
-                'cafeteria': './Content/imgs/K-12 Spaces/K-12-Cafeteria.svg',
-                'classrooms': './Content/imgs/K-12 Spaces/K-12-Classrooms.svg',
-                'gym': './Content/imgs/K-12 Spaces/K-12-Gym.svg',
-                'kitchen': './Content/imgs/K-12 Spaces/K-12-Kitchen.svg',
-                'lobby': './Content/imgs/K-12 Spaces/K-12-Lobby.svg',
-                'locker-room': './Content/imgs/K-12 Spaces/K-12-LockerRoom.svg',
-                'science-lab': './Content/imgs/K-12 Spaces/K-12-ScienceLab.svg'
+                'admin-offices': './Content/imgs/Space Pins and Labels with Popover/K-12-Admin.svg',
+                'cafeteria': './Content/imgs/Space Pins and Labels with Popover/K-12-Cafeteria.svg',
+                'classrooms': './Content/imgs/Space Pins and Labels with Popover/K-12-Classrooms.svg',
+                'gym': './Content/imgs/Space Pins and Labels with Popover/K-12-Gym.svg',
+                'kitchen': './Content/imgs/Space Pins and Labels with Popover/K-12-Kitchen.svg',
+                'lobby': './Content/imgs/Space Pins and Labels with Popover/K-12-Lobby.svg',
+                'locker-room': './Content/imgs/Space Pins and Labels with Popover/K-12-LockerRoom.svg',
+                'science-lab': './Content/imgs/Space Pins and Labels with Popover/K-12-ScienceLab.svg'
             };
 
             // Text ID to space key mapping
@@ -612,6 +615,25 @@
             // Top markers (roof/upper level markers) - popover should appear at top of modal
             const topMarkers = ['gym', 'lobby', 'locker-room', 'science-lab', 'cafeteria', 'kitchen'];
 
+            // Helper to collect translate values from a transform string (supports comma or space separated values)
+            function parseTranslateValues(transform) {
+                if (!transform) {
+                    return [];
+                }
+
+                const results = [];
+                const regex = /translate\(\s*([-\d.]+)(?:[,\s]+([-\d.]+))?\s*\)/gi;
+                let match;
+
+                while ((match = regex.exec(transform)) !== null) {
+                    const valueX = parseFloat(match[1]) || 0;
+                    const valueY = match[2] !== undefined ? parseFloat(match[2]) : 0;
+                    results.push({ x: valueX, y: valueY });
+                }
+
+                return results;
+            }
+
             // Helper function to accumulate all parent transforms
             function getParentTransforms(element) {
                 const transforms = [];
@@ -619,11 +641,13 @@
 
                 while (current && current !== current.ownerDocument.documentElement) {
                     const transform = current.getAttribute('transform') || '';
-                    const translateMatch = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
-                    if (translateMatch) {
-                        transforms.push({
-                            x: parseFloat(translateMatch[1]),
-                            y: parseFloat(translateMatch[2])
+                    const translateValues = parseTranslateValues(transform);
+                    if (translateValues.length > 0) {
+                        translateValues.forEach(value => {
+                            transforms.push({
+                                x: value.x,
+                                y: value.y
+                            });
                         });
                     }
                     current = current.parentElement;
@@ -649,148 +673,77 @@
                     ...Array.from(svgDoc.querySelectorAll('g[id="Group-18"]')),
                     svgDoc.getElementById('admin-offices-target'),
                     svgDoc.getElementById('Kitchen-marker'),
-                    svgDoc.getElementById('cafeteria-marker')
+                    svgDoc.getElementById('cafeteria-marker'),
+                    svgDoc.getElementById('Lobby-marker'),
+                    svgDoc.getElementById('Group')
                 ].filter(Boolean);
 
                 markerGroups.forEach(markerGroup => {
-                    // Find text element within the marker group
-                    const textEl = markerGroup.querySelector('text[id]');
-                    if (!textEl || !textEl.id) return;
+                    // In the new SVG structure, child groups have IDs like "Gym", "Locker-Room", etc.
+                    const childGroups = Array.from(markerGroup.children).filter(c => c.tagName === 'g' && c.id && c.id !== 'Group-60');
 
-                    const textId = textEl.id;
-                    const spaceKey = textIdToSpaceMap[textId];
-                    if (!spaceKey) return;
+                    childGroups.forEach(childGroup => {
+                        const childId = childGroup.id;
+                        const spaceKey = textIdToSpaceMap[childId];
 
-                    // Skip if we already have a marker for this space (deduplicate)
-                    if (markers[spaceKey]) return;
+                        if (!spaceKey) return;
 
-                    // Get text content for title
-                    const title = textEl.textContent || textId;
+                        // Skip if we already have a marker for this space (deduplicate)
+                        if (markers[spaceKey]) return;
 
-                    // Get all parent transforms
-                    const parentTransforms = getParentTransforms(markerGroup);
+                        // Get text content for title
+                        const textEl = childGroup.querySelector('text');
+                        const title = textEl ? textEl.textContent.trim() : childId.replace(/-/g, ' ');
 
-                    // Sum up all transform X and Y values
-                    let totalX = 0;
-                    let totalY = 0;
-                    parentTransforms.forEach(t => {
-                        totalX += t.x;
-                        totalY += t.y;
-                    });
+                        // Get bounding box for the child group (which contains the pin)
+                        let markerCenterX = 0;
+                        let markerCenterY = 0;
 
-                    // Try to get bounding box for more accurate center position
-                    let markerCenterX = totalX;
-                    let markerCenterY = totalY;
-
-                    try {
-                        // Get bbox in the marker group's local coordinate system
-                        const bbox = markerGroup.getBBox();
-                        if (bbox.width > 0 && bbox.height > 0) {
-                            // The bbox is relative to the marker group's coordinate system
-                            // Add the center of the bbox to the accumulated transforms
-                            markerCenterX = totalX + bbox.x + (bbox.width / 2);
-                            markerCenterY = totalY + bbox.y + (bbox.height / 2);
-                        } else {
-                            // Fallback: try text element bbox
-                            try {
-                                const textBbox = textEl.getBBox();
-                                if (textBbox.width > 0 && textBbox.height > 0) {
-                                    markerCenterX = totalX + textBbox.x + (textBbox.width / 2);
-                                    markerCenterY = totalY + textBbox.y + (textBbox.height / 2);
-                                }
-                            } catch (e) {
-                                // Use transform position if bbox fails
+                        try {
+                            const bbox = childGroup.getBBox();
+                            if (bbox.width > 0 && bbox.height > 0) {
+                                markerCenterX = bbox.x + (bbox.width / 2);
+                                markerCenterY = bbox.y + (bbox.height / 2);
                             }
+                        } catch (e) {
+                            console.warn(`Failed to get bbox for ${childId}:`, e);
+                            return;
                         }
-                    } catch (e) {
-                        // Use transform position if getBBox fails
-                    }
 
-                    markers[spaceKey] = {
-                        x: markerCenterX,
-                        y: markerCenterY,
-                        title: title,
-                        system: spaceSystemMap[spaceKey] || 'DOAS',
-                        svgX: markerCenterX / svgWidth,
-                        svgY: markerCenterY / svgHeight
-                    };
+                        markers[spaceKey] = {
+                            x: markerCenterX,
+                            y: markerCenterY,
+                            title: title,
+                            system: spaceSystemMap[spaceKey] || 'DOAS',
+                            svgX: markerCenterX / svgWidth,
+                            svgY: markerCenterY / svgHeight
+                        };
 
-                    // Debug logging
-                    console.log(`Marker ${spaceKey}:`, {
-                        title: title,
-                        absoluteX: markerCenterX,
-                        absoluteY: markerCenterY,
-                        percentageX: (markerCenterX / svgWidth * 100).toFixed(2) + '%',
-                        percentageY: (markerCenterY / svgHeight * 100).toFixed(2) + '%'
+                        // Debug logging
+                        console.log(`Marker ${spaceKey}:`, {
+                            title: title,
+                            absoluteX: markerCenterX,
+                            absoluteY: markerCenterY,
+                            percentageX: (markerCenterX / svgWidth * 100).toFixed(2) + '%',
+                            percentageY: (markerCenterY / svgHeight * 100).toFixed(2) + '%'
+                        });
                     });
                 });
 
                 return markers;
             }
 
-            // Create responsive marker overlay
-            function createMarkerOverlay(markerInfo, container) {
-                const marker = document.createElement('div');
-                marker.className = 'clickable-area';
-                marker.setAttribute('data-space', markerInfo.spaceKey);
-                marker.setAttribute('data-system', markerInfo.system);
-                marker.style.position = 'absolute';
-                marker.style.left = `${markerInfo.svgX * 100}%`;
-                marker.style.top = `${markerInfo.svgY * 100}%`;
-                marker.style.transform = 'translate(-50%, -50%)';
-                marker.style.zIndex = '20';
-                marker.style.cursor = 'pointer';
-
-                const icon = document.createElement('div');
-                icon.className = 'space-icon';
-
-                const label = document.createElement('div');
-                label.className = 'space-label';
-                label.textContent = markerInfo.title;
-
-                marker.appendChild(icon);
-                marker.appendChild(label);
-
-                container.appendChild(marker);
-
-                return marker;
-            }
+            // No longer creating custom marker overlays - using SVG pins directly
 
             // Update marker positions on resize
             function updateMarkerPositions() {
-                if (!buildingSvgObject || !markerOverlayContainer) return;
-
-                // Update all marker positions (positions are percentage-based so they scale automatically)
-                markerOverlayContainer.querySelectorAll('.clickable-area').forEach(marker => {
-                    const spaceKey = marker.getAttribute('data-space');
-                    const markerInfo = markerData[spaceKey];
-                    if (markerInfo) {
-                        marker.style.left = `${markerInfo.svgX * 100}%`;
-                        marker.style.top = `${markerInfo.svgY * 100}%`;
-                    }
-                });
+                if (!buildingSvgObject) return;
 
                 // Update popover position if visible
-                if (isPopoverVisible && previousClickedMarker) {
-                    // Use stored position if available (to prevent reset during SVG replacement)
-                    if (storedPopoverPosition) {
-                        popover.style.left = `${storedPopoverPosition.x}px`;
-                        popover.style.top = `${storedPopoverPosition.y}px`;
-                        // Update pointer position if it was set
-                        if (storedPopoverPosition.pointerLeft !== null && storedPopoverPosition.pointerLeft !== undefined) {
-                            popover.style.setProperty('--pointer-left', `${storedPopoverPosition.pointerLeft}px`);
-                            popover.setAttribute('data-pointer-left', storedPopoverPosition.pointerLeft);
-                        } else {
-                            popover.removeAttribute('data-pointer-left');
-                            popover.style.removeProperty('--pointer-left');
-                        }
-                    } else {
-                        // Fallback: recalculate if stored position is not available
-                        const clickableAreaRect = previousClickedMarker.getBoundingClientRect();
-                        const position = calculatePopoverPosition(clickableAreaRect, currentSpace || '');
-                        storedPopoverPosition = position;
-                        showPopover(currentSpace, currentSystem, position.x, position.y, position.pointerLeft);
-                    }
+                if (isPopoverVisible && lastPointerInfo) {
+                    const position = calculatePopoverPosition(lastPointerInfo);
+                    storedPopoverPosition = position;
+                    showPopover(currentSpace, currentSystem, position.x, position.y, position.pointerLeft);
                 }
 
                 // Update space SVG marker positions if in detail scene
@@ -799,160 +752,340 @@
                 }
             }
 
-            // Save marker data to localStorage
-            function saveMarkerDataToStorage(data) {
-                try {
-                    const storageData = {
-                        version: MARKER_DATA_VERSION,
-                        data: data,
-                        timestamp: Date.now()
-                    };
-                    localStorage.setItem(MARKER_DATA_STORAGE_KEY, JSON.stringify(storageData));
-                } catch (e) {
-                    console.warn('Failed to save marker data to localStorage:', e);
+            function attachSvgPinHandlers() {
+                if (!buildingSvgObject) return;
+
+                const svgDoc = buildingSvgObject.contentDocument;
+                if (!svgDoc) return;
+
+                // Find all marker groups and attach click handlers directly to SVG elements
+                const markerGroups = [
+                    ...Array.from(svgDoc.querySelectorAll('g[id="Group-18"]')),
+                    svgDoc.getElementById('admin-offices-target'),
+                    svgDoc.getElementById('Kitchen-marker'),
+                    svgDoc.getElementById('cafeteria-marker'),
+                    svgDoc.getElementById('Lobby-marker'),
+                    svgDoc.getElementById('Group')
+                ].filter(Boolean);
+
+                if (markerGroups.length === 0) {
+                    return;
                 }
-            }
 
-            // Load marker data from localStorage
-            function loadMarkerDataFromStorage() {
-                try {
-                    const stored = localStorage.getItem(MARKER_DATA_STORAGE_KEY);
-                    if (!stored) return null;
-
-                    const storageData = JSON.parse(stored);
-
-                    // Check version compatibility
-                    if (storageData.version !== MARKER_DATA_VERSION) {
-                        console.log('Marker data version mismatch, will re-extract');
-                        return null;
-                    }
-
-                    return storageData.data;
-                } catch (e) {
-                    console.warn('Failed to load marker data from localStorage:', e);
-                    return null;
+                const svgRoot = svgDoc.documentElement;
+                if (svgRoot.getAttribute('data-pin-handlers-attached') === 'true') {
+                    return;
                 }
-            }
 
-            // Create marker overlays from stored data
-            function createMarkerOverlaysFromData(data) {
-                if (!data || Object.keys(data).length === 0) return false;
+                // Mark this SVG as initialized to avoid duplicate handlers for the same document
+                svgRoot.setAttribute('data-pin-handlers-attached', 'true');
 
-                markerData = data;
+                // Extract marker positions for popover placement
+                const extractedMarkers = extractMarkerPositions(svgDoc);
+                if (Object.keys(extractedMarkers).length > 0) {
+                    markerData = extractedMarkers;
+                }
 
-                // Create marker overlays
-                markerOverlayContainer.innerHTML = '';
-                Object.keys(markerData).forEach(spaceKey => {
-                    const markerInfo = {
-                        ...markerData[spaceKey],
-                        spaceKey: spaceKey
-                    };
-                    createMarkerOverlay(markerInfo, markerOverlayContainer);
+                markerGroups.forEach(markerGroup => {
+                    const childGroups = Array.from(markerGroup.children).filter(c => c.tagName === 'g' && c.id && c.id !== 'Group-60');
+
+                    childGroups.forEach(childGroup => {
+                        const childId = childGroup.id;
+                        const spaceKey = textIdToSpaceMap[childId];
+
+                        if (!spaceKey) return;
+
+                        // Make the SVG group clickable
+                        childGroup.style.cursor = 'pointer';
+                        childGroup.setAttribute('data-space-pin', 'true');
+                        childGroup.setAttribute('data-space-key', spaceKey);
+
+                        // Add click handler
+                        childGroup.addEventListener('click', function (e) {
+                            e.stopPropagation();
+                            handleSvgPinClick(spaceKey, childGroup);
+                        });
+                    });
                 });
 
-                // Update clickable areas reference
-                const newClickableAreas = markerOverlayContainer.querySelectorAll('.clickable-area');
-                setupMarkerClickHandlers(newClickableAreas);
+                attachViewButtonInteraction(svgDoc);
 
-                return true;
+                console.log('SVG pin handlers attached for', Object.keys(markerData).length, 'spaces');
             }
 
-            // Load building SVG and extract markers
+            function attachViewButtonInteraction(svgDoc) {
+                if (!svgDoc) {
+                    return;
+                }
+
+                const viewDefaultGroup = svgDoc.getElementById('view-default');
+                if (!viewDefaultGroup) {
+                    return;
+                }
+
+                const targets = [];
+                targets.push(viewDefaultGroup);
+
+                let sibling = viewDefaultGroup.nextElementSibling;
+                while (sibling && (sibling.id === 'Rectangle' || sibling.id === 'View')) {
+                    targets.push(sibling);
+                    sibling = sibling.nextElementSibling;
+                }
+
+                targets.forEach(target => {
+                    if (!target || target.getAttribute('data-view-handler-attached') === 'true') {
+                        return;
+                    }
+
+                    target.style.cursor = 'pointer';
+                    target.setAttribute('data-view-handler-attached', 'true');
+                    target.addEventListener('click', function handleViewClick(event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        openSpaceDetailScene();
+                    });
+                });
+            }
+
+            function attachSpaceSvgCloseInteraction(svgDoc) {
+                if (!svgDoc) {
+                    return;
+                }
+
+                const closeTarget = svgDoc.getElementById('close-me');
+                if (!closeTarget) {
+                    return;
+                }
+
+                if (closeTarget.getAttribute('data-close-handler-attached') === 'true') {
+                    return;
+                }
+
+                closeTarget.style.cursor = 'pointer';
+                closeTarget.style.pointerEvents = 'all';
+                closeTarget.setAttribute('role', 'button');
+                closeTarget.setAttribute('tabindex', '0');
+                closeTarget.setAttribute('data-close-handler-attached', 'true');
+
+                function handleClose(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    resetSpaceSvgToOriginal();
+                }
+
+                closeTarget.addEventListener('click', handleClose);
+                closeTarget.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        handleClose(event);
+                    }
+                });
+            }
+
+            function resetSpaceSvgToOriginal() {
+                if (spaceMarkerOverlayContainer) {
+                    spaceMarkerOverlayContainer.innerHTML = '';
+                }
+
+                if (spaceSvgObject) {
+                    spaceSvgObject.setAttribute('data', originalBuildingSvgPath);
+                }
+
+                currentSpace = null;
+                currentSystem = null;
+
+                hidePopover({ preserveState: false, restoreSvg: true });
+                showBuildingOverview();
+            }
+
+            function loadBuildingSvg(svgPath) {
+                if (!svgPath || !buildingSvgObject) {
+                    return;
+                }
+
+                const parent = buildingSvgContainer || buildingSvgObject.parentElement;
+                if (!parent) {
+                    buildingSvgObject.setAttribute('data', svgPath);
+                    return;
+                }
+
+                if (loadingBuildingSvgObject && loadingBuildingSvgObject.parentElement === parent) {
+                    loadingBuildingSvgObject.parentElement.removeChild(loadingBuildingSvgObject);
+                }
+
+                const previousSvgObject = buildingSvgObject;
+                const preloadObject = previousSvgObject.cloneNode(false);
+                preloadObject.removeAttribute('data');
+                preloadObject.id = 'building-svg-object-loading';
+                preloadObject.style.position = 'absolute';
+                preloadObject.style.top = '0';
+                preloadObject.style.left = '0';
+                preloadObject.style.width = '100%';
+                preloadObject.style.height = '100%';
+                preloadObject.style.opacity = '0';
+                preloadObject.style.pointerEvents = 'none';
+
+                preloadObject.addEventListener('load', function handleLoad() {
+                    preloadObject.removeEventListener('load', handleLoad);
+                    preloadObject.style.position = '';
+                    preloadObject.style.top = '';
+                    preloadObject.style.left = '';
+                    preloadObject.style.width = '';
+                    preloadObject.style.height = '';
+                    preloadObject.style.opacity = '';
+                    preloadObject.style.pointerEvents = '';
+                    preloadObject.id = 'building-svg-object';
+                    parent.replaceChild(preloadObject, previousSvgObject);
+                    buildingSvgObject = preloadObject;
+                    loadingBuildingSvgObject = null;
+                    attachSvgPinHandlers();
+                    buildingSvgObject.addEventListener('load', attachSvgPinHandlers);
+                    updateMarkerPositions();
+                });
+
+                preloadObject.addEventListener('error', function handleError() {
+                    preloadObject.removeEventListener('error', handleError);
+                    loadingBuildingSvgObject = null;
+                    if (preloadObject.parentElement) {
+                        preloadObject.parentElement.removeChild(preloadObject);
+                    }
+                });
+
+                loadingBuildingSvgObject = preloadObject;
+                parent.appendChild(preloadObject);
+                requestAnimationFrame(function () {
+                    preloadObject.setAttribute('data', svgPath);
+                });
+            }
+
+            // Load building SVG and attach click handlers to embedded pins
             function initializeBuildingSvg() {
                 if (!buildingSvgObject) return;
 
-                // Try to load from localStorage first
-                const storedMarkerData = loadMarkerDataFromStorage();
-                if (storedMarkerData) {
-                    if (createMarkerOverlaysFromData(storedMarkerData)) {
-                        console.log('Marker data loaded from localStorage');
-                        return;
-                    }
-                }
-
-                // If not in storage or load failed, extract from SVG
-                function extractAndSaveMarkers() {
-                    const svgDoc = buildingSvgObject.contentDocument;
-                    if (!svgDoc) return;
-
-                    // Extract marker positions
-                    markerData = extractMarkerPositions(svgDoc);
-
-                    // Save to localStorage
-                    saveMarkerDataToStorage(markerData);
-
-                    // Create marker overlays
-                    markerOverlayContainer.innerHTML = '';
-                    Object.keys(markerData).forEach(spaceKey => {
-                        const markerInfo = {
-                            ...markerData[spaceKey],
-                            spaceKey: spaceKey
-                        };
-                        createMarkerOverlay(markerInfo, markerOverlayContainer);
-                    });
-
-                    // Update clickable areas reference
-                    const newClickableAreas = markerOverlayContainer.querySelectorAll('.clickable-area');
-                    setupMarkerClickHandlers(newClickableAreas);
-                }
-
-                // Check if SVG is already loaded
+                // Attach handlers immediately if SVG is ready
                 if (buildingSvgObject.contentDocument && buildingSvgObject.contentDocument.readyState === 'complete') {
-                    extractAndSaveMarkers();
-                } else {
-                    buildingSvgObject.addEventListener('load', extractAndSaveMarkers, { once: true });
+                    attachSvgPinHandlers();
                 }
+
+                // Ensure handlers are reattached whenever the SVG reloads
+                buildingSvgObject.addEventListener('load', attachSvgPinHandlers);
             }
 
             // Replace building SVG with space SVG
             function replaceBuildingSvg(spaceKey) {
                 const svgPath = spaceToSvgMap[spaceKey];
-                if (!svgPath || !buildingSvgObject) return;
+                if (!svgPath) return;
 
-                // Replace the building SVG with the space SVG
-                buildingSvgObject.setAttribute('data', svgPath);
+                loadBuildingSvg(svgPath);
             }
 
             // Restore original building SVG
             function restoreBuildingSvg() {
-                if (!buildingSvgObject) return;
-                buildingSvgObject.setAttribute('data', originalBuildingSvgPath);
+                loadBuildingSvg(originalBuildingSvgPath);
             }
 
-            // Setup marker click handlers
-            function setupMarkerClickHandlers(clickableAreas) {
-                clickableAreas.forEach(area => {
-                    area.addEventListener('click', function (e) {
-                        e.stopPropagation();
-                        const space = this.getAttribute('data-space');
-                        const system = this.getAttribute('data-system');
+            // Handle SVG pin click
+            function handleSvgPinClick(spaceKey, svgElement) {
+                const system = spaceSystemMap[spaceKey] || 'DOAS';
 
-                        // Reset previous marker if exists
-                        if (previousClickedMarker && previousClickedMarker !== this) {
-                            previousClickedMarker.style.display = 'flex';
-                        }
+                if (!buildingSvgObject) {
+                    return;
+                }
 
-                        // Store the clickable area position before hiding it
-                        const clickableAreaRect = this.getBoundingClientRect();
+                const svgDoc = buildingSvgObject.contentDocument;
+                if (!svgDoc) {
+                    return;
+                }
 
-                        // Hide the clicked area
-                        this.style.display = 'none';
+                const svg = svgDoc.documentElement;
+                const viewBox = svg.getAttribute('viewBox') || '0 0 1417 600';
+                const viewBoxValues = viewBox.split(' ').map(Number);
+                const svgWidth = viewBoxValues[2] || 1417;
+                const svgHeight = viewBoxValues[3] || 600;
 
-                        // Track this marker as the previous one
-                        previousClickedMarker = this;
+                const markerGroup = svgElement.closest('g[id$="-marker"]') || svgElement.parentElement;
+                if (!markerGroup) {
+                    return;
+                }
 
-                        // Calculate and store popover position BEFORE replacing SVG
-                        // This prevents the position from being reset when ResizeObserver fires
-                        const position = calculatePopoverPosition(clickableAreaRect, space);
-                        storedPopoverPosition = position;
-
-                        // Replace the building SVG with the space SVG
-                        replaceBuildingSvg(space);
-
-                        // Show popover with stored position and pointer adjustment
-                        showPopover(space, system, position.x, position.y, position.pointerLeft);
-                    });
+                // Sum all translate() transforms up the DOM tree (including the marker itself)
+                const transforms = getParentTransforms(markerGroup);
+                let translateX = 0;
+                let translateY = 0;
+                transforms.forEach(t => {
+                    translateX += t.x;
+                    translateY += t.y;
                 });
+
+                let pointerCenterSvgX = translateX;
+                let pointerAnchorSvgY = translateY;
+                let anchorSvgX = translateX;
+                let anchorSvgY = translateY;
+
+                try {
+                    const bbox = markerGroup.getBBox();
+                    const ctm = typeof markerGroup.getCTM === 'function' ? markerGroup.getCTM() : null;
+                    if (bbox && Number.isFinite(bbox.width) && Number.isFinite(bbox.height) && typeof svg.createSVGPoint === 'function') {
+                        const bottomCenterPoint = svg.createSVGPoint();
+                        bottomCenterPoint.x = bbox.x + (bbox.width / 2);
+                        bottomCenterPoint.y = bbox.y + bbox.height;
+
+                        if (ctm) {
+                            const transformedBottomCenter = bottomCenterPoint.matrixTransform(ctm);
+                            pointerCenterSvgX = transformedBottomCenter.x;
+                            pointerAnchorSvgY = transformedBottomCenter.y;
+                            anchorSvgX = transformedBottomCenter.x;
+                            anchorSvgY = transformedBottomCenter.y;
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Unable to resolve marker bounding box for', spaceKey, error);
+                }
+
+                const markerInfo = markerData[spaceKey] || null;
+                if ((!Number.isFinite(pointerCenterSvgX) || pointerCenterSvgX === 0) && markerInfo) {
+                    pointerCenterSvgX = markerInfo.x;
+                }
+                if ((!Number.isFinite(pointerAnchorSvgY) || pointerAnchorSvgY === 0) && markerInfo) {
+                    pointerAnchorSvgY = markerInfo.y;
+                }
+                if ((!Number.isFinite(anchorSvgX) || anchorSvgX === 0) && markerInfo) {
+                    anchorSvgX = markerInfo.x;
+                }
+                if ((!Number.isFinite(anchorSvgY) || anchorSvgY === 0) && markerInfo) {
+                    anchorSvgY = markerInfo.y;
+                }
+
+                const safeCenterRatioX = Math.max(0, Math.min(1, (pointerCenterSvgX || 0) / svgWidth));
+                const safeAnchorRatioX = Math.max(0, Math.min(1, (anchorSvgX || 0) / svgWidth));
+                const safeAnchorRatioY = Math.max(0, Math.min(1, anchorSvgY / svgHeight));
+
+                if (isPopoverVisible) {
+                    hidePopover();
+                }
+
+                previousClickedMarker = markerGroup;
+
+                const pointerOffset = topMarkers.includes(spaceKey) ? 24 : 16;
+                const pointerInfo = {
+                    centerRatioX: safeCenterRatioX,
+                    anchorRatioX: safeAnchorRatioX,
+                    anchorRatioY: safeAnchorRatioY,
+                    anchorOffset: pointerOffset,
+                    pointerHeight: pointerOffset
+                };
+
+                const position = calculatePopoverPosition(pointerInfo);
+
+                lastPointerInfo = pointerInfo;
+                storedPopoverPosition = position;
+
+                replaceBuildingSvg(spaceKey);
+
+                if (position) {
+                    showPopover(spaceKey, system, position.x, position.y, position.pointerLeft);
+                } else {
+                    showPopover(spaceKey, system, 0, 0, null);
+                }
             }
 
             // Load space SVG with marker overlay
@@ -973,10 +1106,12 @@
 
                     // Create marker overlay
                     const marker = document.createElement('div');
+                    const markerLeft = `calc(${markerInfo.svgX * 100}% + ${SPACE_MARKER_OFFSET_X}px)`;
+                    const markerTop = `calc(${markerInfo.svgY * 100}% + ${SPACE_MARKER_OFFSET_Y}px)`;
                     marker.className = 'space-marker';
                     marker.style.position = 'absolute';
-                    marker.style.left = `${markerInfo.svgX * 100}%`;
-                    marker.style.top = `${markerInfo.svgY * 100}%`;
+                    marker.style.left = markerLeft;
+                    marker.style.top = markerTop;
                     marker.style.transform = 'translate(-50%, -50%)';
                     marker.style.zIndex = '20';
 
@@ -991,11 +1126,14 @@
                     title.className = 'space-title-overlay';
                     title.textContent = markerInfo.title;
                     title.style.position = 'absolute';
-                    title.style.left = `${markerInfo.svgX * 100}%`;
-                    title.style.top = `${markerInfo.svgY * 100}%`;
+                    title.style.left = markerLeft;
+                    title.style.top = markerTop;
                     title.style.transform = 'translate(-50%, calc(-50% + 30px))';
                     title.style.zIndex = '20';
                     spaceMarkerOverlayContainer.appendChild(title);
+
+                    const svgDoc = spaceSvgObject.contentDocument;
+                    attachSpaceSvgCloseInteraction(svgDoc);
                 }
 
                 // Check if SVG is already loaded
@@ -1021,10 +1159,12 @@
 
                 // Positions are already percentage-based, so they should scale automatically
                 // But we can ensure they're set correctly
-                marker.style.left = `${markerInfo.svgX * 100}%`;
-                marker.style.top = `${markerInfo.svgY * 100}%`;
-                title.style.left = `${markerInfo.svgX * 100}%`;
-                title.style.top = `${markerInfo.svgY * 100}%`;
+                const markerLeft = `calc(${markerInfo.svgX * 100}% + ${SPACE_MARKER_OFFSET_X}px)`;
+                const markerTop = `calc(${markerInfo.svgY * 100}% + ${SPACE_MARKER_OFFSET_Y}px)`;
+                marker.style.left = markerLeft;
+                marker.style.top = markerTop;
+                title.style.left = markerLeft;
+                title.style.top = markerTop;
             }
 
             // Resize handler with debouncing
@@ -1077,6 +1217,8 @@
             let lastFocusableElement = null;
             let previousClickedMarker = null;
             let storedPopoverPosition = null; // Store popover position to prevent reset on SVG replacement
+            let lastPointerInfo = null; // Persist pointer coordinates for responsive recalculations
+            let loadingBuildingSvgObject = null;
 
             // Focus trap helper
             function updateFocusableElements() {
@@ -1154,16 +1296,10 @@
                     shareBtn.disabled = true;
                 }
 
-                // Show all clickable areas again
-                if (markerOverlayContainer) {
-                    markerOverlayContainer.querySelectorAll('.clickable-area').forEach(area => {
-                        area.style.display = 'flex';
-                    });
-                }
-
                 // Reset marker tracking
                 previousClickedMarker = null;
                 storedPopoverPosition = null; // Clear stored position
+                lastPointerInfo = null;
 
                 // Restore original building SVG
                 restoreBuildingSvg();
@@ -1240,24 +1376,25 @@
             }
 
             // Calculate popover position based on clickable area position and popover dimensions
-            function calculatePopoverPosition(clickableAreaRect, spaceName = '') {
-                if (!popover) return { x: 0, y: 0, pointerLeft: null };
+            function calculatePopoverPosition(pointerInfo) {
+                if (!pointerInfo || !popover || !buildingSvgObject) {
+                    return { x: 0, y: 0, pointerLeft: null, width: 0, height: 0 };
+                }
 
-                // Get modal container for bounds checking
                 const modal = document.getElementById('space-selection-modal');
                 const modalContainer = document.querySelector('.space-selection-modal-container');
                 const modalContent = document.querySelector('.space-selection-modal-content');
-                if (!modal || !modalContainer || !modalContent) return { x: 0, y: 0, pointerLeft: null };
+                if (!modal || !modalContainer || !modalContent) {
+                    return { x: 0, y: 0, pointerLeft: null, width: 0, height: 0 };
+                }
 
-                const modalRect = modal.getBoundingClientRect();
                 const modalContainerRect = modalContainer.getBoundingClientRect();
                 const modalContentRect = modalContent.getBoundingClientRect();
-                const containerWidth = modalContentRect.width;
-                const containerHeight = modalContentRect.height;
-                const padding = 10; // Padding from edges
-                const pointerHeight = 8; // Height of the pointer triangle (from CSS border-top: 8px)
+                const padding = 10;
+                const pointerMargin = 8;
+                const pointerHeight = pointerInfo.pointerHeight ?? 8;
 
-                // Get popover dimensions (we need to show it first to measure)
+                // Measure popover dimensions
                 const wasVisible = popover.style.display !== 'none';
                 const originalVisibility = popover.style.visibility;
                 if (!wasVisible) {
@@ -1266,114 +1403,68 @@
                 }
 
                 const popoverRect = popover.getBoundingClientRect();
-                const popoverWidth = popoverRect.width || 300; // Fallback width if measurement fails
-                const popoverHeight = popoverRect.height || 200; // Fallback height if measurement fails
+                const popoverWidth = popoverRect.width || 300;
+                const popoverHeight = popoverRect.height || 200;
 
                 if (!wasVisible) {
                     popover.style.display = 'none';
                     popover.style.visibility = originalVisibility;
                 }
 
-                // Get clickable area center position (relative to viewport for fixed positioning)
-                const clickableAreaCenterX = clickableAreaRect.left + clickableAreaRect.width / 2;
-                const clickableAreaCenterY = clickableAreaRect.top + clickableAreaRect.height / 2;
+                const svgRect = buildingSvgObject.getBoundingClientRect();
+                const anchorRatioX = pointerInfo.anchorRatioX ?? pointerInfo.centerRatioX ?? 0.5;
+                const centerRatioX = pointerInfo.centerRatioX ?? anchorRatioX;
+                const screenAnchorX = svgRect.left + (anchorRatioX * svgRect.width);
+                const screenCenterX = svgRect.left + (centerRatioX * svgRect.width);
+                const screenY = svgRect.top + (pointerInfo.anchorRatioY * svgRect.height);
 
-                // Check if this is a top marker (case-insensitive check)
-                const isTopMarker = spaceName && topMarkers.includes(spaceName.toLowerCase());
+                let popoverLeft = screenCenterX - (popoverWidth / 2);
+                const modalLeftLimit = modalContentRect.left + padding;
+                const modalRightLimit = modalContentRect.right - padding;
 
-                // Calculate X position: center of clickable area (viewport coordinates for fixed positioning)
-                // Account for transform: translateX(-50%) which centers the popover horizontally
-                let x = clickableAreaCenterX;
-                const halfPopoverWidth = popoverWidth / 2;
-                let pointerLeft = null; // For top markers, we'll adjust pointer position
-
-                // Adjust X position to stay within modal bounds (accounting for transform)
-                const modalLeft = modalContentRect.left;
-                const modalRight = modalContentRect.right;
-                if (x - halfPopoverWidth < modalLeft + padding) {
-                    x = modalLeft + padding + halfPopoverWidth;
-                } else if (x + halfPopoverWidth > modalRight - padding) {
-                    x = Math.max(modalLeft + padding + halfPopoverWidth, modalRight - halfPopoverWidth - padding);
+                if (popoverLeft < modalLeftLimit) {
+                    popoverLeft = modalLeftLimit;
+                } else if (popoverLeft + popoverWidth > modalRightLimit) {
+                    popoverLeft = Math.max(modalLeftLimit, modalRightLimit - popoverWidth);
                 }
 
-                // For top markers, position popover at the top of the modal content area (below header)
-                let y;
-                if (isTopMarker) {
-                    // Position at top of modal content area with padding (viewport coordinates)
-                    // This places it at the top of the content area, just below the header
-                    y = modalContentRect.top + padding;
+                const anchorOffset = pointerInfo.anchorOffset ?? pointerHeight;
+                let popoverTop = screenY - popoverHeight - anchorOffset;
+                const modalTopLimit = modalContentRect.top + padding;
+                const modalBottomLimit = modalContentRect.bottom - padding;
 
-                    // Calculate pointer position AFTER x has been adjusted for boundaries
-                    // The pointer needs to point from the popover (at top) down to the marker
-                    // markerXRelative is the marker center X relative to viewport
-                    const markerXRelative = clickableAreaCenterX;
-                    // popoverLeft is the popover's left edge relative to viewport (after boundary adjustments)
-                    const popoverLeft = x - halfPopoverWidth;
-                    // pointerLeft is the distance from popover's left edge to where pointer center should be
-                    // Since CSS uses translateX(-50%), the left value represents the center of the pointer
-                    pointerLeft = markerXRelative - popoverLeft;
-
-                    // Clamp pointer position to stay within popover bounds (with some margin)
-                    // The pointer is 16px wide (8px border on each side), so we need at least 8px margin
-                    const pointerMargin = 20; // Keep pointer away from edges
-                    pointerLeft = Math.max(pointerMargin, Math.min(pointerLeft, popoverWidth - pointerMargin));
-
-                    console.log('Top marker pointer calculation:', {
-                        markerX: Math.round(markerXRelative),
-                        popoverX: Math.round(x),
-                        popoverLeft: Math.round(popoverLeft),
-                        popoverWidth: Math.round(popoverWidth),
-                        calculatedPointerLeft: Math.round(pointerLeft),
-                        clampedPointerLeft: Math.round(pointerLeft)
-                    });
-                } else {
-                    // For non-top markers, position above the marker
-                    // Calculate Y position: popover top = clickable area center Y - popover height - pointer height
-                    // This positions the popover so its bottom center pointer aligns with the clickable area center
-                    y = clickableAreaCenterY - popoverHeight - pointerHeight;
-
-                    // Adjust Y position to stay within modal bounds
-                    const modalTop = modalContentRect.top;
-                    const modalBottom = modalContentRect.bottom;
-                    if (y < modalTop + padding) {
-                        // If popover would go above modal, position it below clickable area instead
-                        y = clickableAreaCenterY + pointerHeight;
-                        // Check if it fits below
-                        if (y + popoverHeight > modalBottom - padding) {
-                            y = Math.max(modalTop + padding, modalBottom - popoverHeight - padding);
-                        }
-                    } else if (y + popoverHeight + pointerHeight > modalBottom - padding) {
-                        y = Math.max(modalTop + padding, modalBottom - popoverHeight - pointerHeight - padding);
-                    }
+                if (popoverTop < modalTopLimit) {
+                    popoverTop = modalTopLimit;
+                }
+                if (popoverTop + popoverHeight + anchorOffset > modalBottomLimit) {
+                    popoverTop = Math.max(modalTopLimit, modalBottomLimit - popoverHeight - anchorOffset);
                 }
 
-                // Handle edge case: if popover is larger than container, center it
-                if (popoverWidth > containerWidth - (padding * 2)) {
-                    x = modalContainerRect.left + (modalContainerRect.width / 2); // Center horizontally within modal container
-                    console.warn(`Popover width (${popoverWidth}px) exceeds available container width, centering horizontally`);
-                }
-                if (popoverHeight + pointerHeight > containerHeight - (padding * 2)) {
-                    y = modalContainerRect.top + padding;
-                    console.warn(`Popover height (${popoverHeight}px) exceeds available container height, centering vertically`);
+                let finalPopoverLeft = popoverLeft + SPACE_POPOVER_OFFSET_X;
+                if (finalPopoverLeft < modalLeftLimit) {
+                    finalPopoverLeft = modalLeftLimit;
+                } else if (finalPopoverLeft + popoverWidth > modalRightLimit) {
+                    finalPopoverLeft = Math.max(modalLeftLimit, modalRightLimit - popoverWidth);
                 }
 
-                // Log position calculations for debugging
-                console.log(`Popover position calculated${spaceName ? ` for ${spaceName}` : ''}:`, {
-                    isTopMarker: isTopMarker,
-                    spaceName: spaceName,
-                    topMarkersList: topMarkers,
-                    clickableAreaCenter: {
-                        x: Math.round(clickableAreaCenterX - modalContentRect.left),
-                        y: Math.round(clickableAreaCenterY - modalContentRect.top)
-                    },
-                    popoverSize: { width: Math.round(popoverWidth), height: Math.round(popoverHeight) },
-                    pointerHeight: pointerHeight,
-                    pointerLeft: pointerLeft !== null ? Math.round(pointerLeft) : 'center',
-                    finalPosition: { x: Math.round(x), y: Math.round(y) },
-                    containerSize: { width: Math.round(containerWidth), height: Math.round(containerHeight) }
-                });
+                let finalPopoverTop = popoverTop + SPACE_POPOVER_OFFSET_Y;
+                if (finalPopoverTop < modalTopLimit) {
+                    finalPopoverTop = modalTopLimit;
+                }
+                if (finalPopoverTop + popoverHeight + anchorOffset > modalBottomLimit) {
+                    finalPopoverTop = Math.max(modalTopLimit, modalBottomLimit - popoverHeight - anchorOffset);
+                }
 
-                return { x, y, pointerLeft };
+                let pointerLeft = screenAnchorX - finalPopoverLeft;
+                pointerLeft = Math.max(pointerMargin, Math.min(pointerLeft, popoverWidth - pointerMargin));
+
+                return {
+                    x: finalPopoverLeft,
+                    y: finalPopoverTop,
+                    pointerLeft,
+                    width: popoverWidth,
+                    height: popoverHeight
+                };
             }
 
             // Show popover
@@ -1411,47 +1502,57 @@
             }
 
             // Hide popover
-            function hidePopover() {
+            function hidePopover(options = {}) {
+                const { preserveState = false, restoreSvg = true } = options;
                 popover.style.display = 'none';
                 isPopoverVisible = false;
                 storedPopoverPosition = null; // Clear stored position
-                // Restore original building SVG when popover is closed
-                restoreBuildingSvg();
+                lastPointerInfo = null;
+                if (!preserveState) {
+                    previousClickedMarker = null;
+                    currentSpace = null;
+                    currentSystem = null;
+                }
+                if (restoreSvg) {
+                    // Restore original building SVG when popover is closed
+                    restoreBuildingSvg();
+                }
             }
 
             // Clickable areas functionality is now handled in setupMarkerClickHandlers
 
-            // Popover view button
-            popoverViewBtn.addEventListener('click', function () {
-                // Enable tab buttons and share button, and select Overview
+            function openSpaceDetailScene() {
+                if (!currentSpace || !currentSystem) {
+                    return;
+                }
+
                 tabs.forEach(tab => {
                     tab.disabled = false;
                     tab.classList.remove('active');
                 });
+
                 if (shareBtn) {
                     shareBtn.disabled = false;
                 }
-                // Select Overview tab
+
                 const overviewTab = document.querySelector('[data-tab="overview"]');
                 if (overviewTab) {
                     overviewTab.classList.add('active');
                 }
 
-                hidePopover();
+                hidePopover({ preserveState: true, restoreSvg: false });
                 showDetailScene(currentSpace, currentSystem);
-            });
+            }
+
+            if (popoverViewBtn) {
+                popoverViewBtn.addEventListener('click', function () {
+                    openSpaceDetailScene();
+                });
+            }
 
             // Popover close button
             popoverCloseBtn.addEventListener('click', function () {
                 hidePopover();
-                // Show all clickable areas when popover is closed
-                if (markerOverlayContainer) {
-                    markerOverlayContainer.querySelectorAll('.clickable-area').forEach(area => {
-                        area.style.display = 'flex';
-                    });
-                }
-                // Reset marker tracking
-                previousClickedMarker = null;
             });
 
             // Back button
@@ -1537,14 +1638,6 @@
                 if (e.key === 'Escape') {
                     if (isPopoverVisible) {
                         hidePopover();
-                        // Show all clickable areas when popover is closed
-                        if (markerOverlayContainer) {
-                            markerOverlayContainer.querySelectorAll('.clickable-area').forEach(area => {
-                                area.style.display = 'flex';
-                            });
-                        }
-                        // Reset marker tracking
-                        previousClickedMarker = null;
                     } else if (modal.style.display === 'flex') {
                         closeModal();
                     }
@@ -1553,16 +1646,8 @@
 
             // Click outside popover to close - Only run when popover is visible
             document.addEventListener('click', function (e) {
-                if (isPopoverVisible && !popover.contains(e.target) && !e.target.closest('.clickable-area')) {
+                if (isPopoverVisible && !popover.contains(e.target) && !e.target.closest('[data-space-pin="true"]')) {
                     hidePopover();
-                    // Show all clickable areas when popover is closed by clicking outside
-                    if (markerOverlayContainer) {
-                        markerOverlayContainer.querySelectorAll('.clickable-area').forEach(area => {
-                            area.style.display = 'flex';
-                        });
-                    }
-                    // Reset marker tracking
-                    previousClickedMarker = null;
                 }
             });
         });

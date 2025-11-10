@@ -406,6 +406,7 @@
     min-width: 325px;
     transform: translateX(-50%);
     border: 1px solid #979797;
+    display: none !important;
   }
   
   .space-popover::after {
@@ -423,7 +424,7 @@
   
   /* Adjust pointer position for top markers */
   .space-popover[data-pointer-left]::after {
-    left: var(--pointer-left);
+    left: 50%;
     transform: translateX(-50%);
   }
   
