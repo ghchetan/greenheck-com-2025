@@ -256,6 +256,7 @@
                         <div class="school-building-container">
                             <div class="school-building">
                                 <object id="building-svg-object" data="./Content/imgs/Space Pins and Labels with Popover/K-12-Pins-Roof-Closed.svg" type="image/svg+xml" class="school-building-image"></object>
+                                <object id="building-space-overlay-object" data="" type="image/svg+xml" class="school-building-overlay-image"></object>
                                 <!-- Marker Overlay Container -->
                                 <div id="marker-overlay-container" class="marker-overlay-container"></div>
                             </div>
@@ -377,8 +378,6 @@
                             <div class="detail-right-panel">
                                 <div class="space-svg-container">
                                     <object id="space-svg-object" data="" type="image/svg+xml" class="space-svg-image"></object>
-                                    <!-- Marker and Title Overlay Container -->
-                                    <div id="space-marker-overlay-container" class="space-marker-overlay-container"></div>
                                 </div>
                             </div>
                         </div>
@@ -566,9 +565,9 @@
             // SVG and overlay elements
             let buildingSvgObject = document.getElementById('building-svg-object');
             const buildingSvgContainer = buildingSvgObject ? buildingSvgObject.parentElement : null;
+            const buildingSpaceOverlayObject = document.getElementById('building-space-overlay-object');
             const markerOverlayContainer = document.getElementById('marker-overlay-container');
             const spaceSvgObject = document.getElementById('space-svg-object');
-            const spaceMarkerOverlayContainer = document.getElementById('space-marker-overlay-container');
             const schoolBuilding = document.querySelector('.school-building');
 
             // Marker data storage
@@ -746,10 +745,6 @@
                     showPopover(currentSpace, currentSystem, position.x, position.y, position.pointerLeft);
                 }
 
-                // Update space SVG marker positions if in detail scene
-                if (detailScene.classList.contains('active')) {
-                    updateSpaceSvgMarkerPositions();
-                }
             }
 
             function attachSvgPinHandlers() {
@@ -757,6 +752,8 @@
 
                 const svgDoc = buildingSvgObject.contentDocument;
                 if (!svgDoc) return;
+
+                attachSvgCloseInteraction(svgDoc, resetSpaceSvgToOriginal);
 
                 // Find all marker groups and attach click handlers directly to SVG elements
                 const markerGroups = [
@@ -847,8 +844,8 @@
                 });
             }
 
-            function attachSpaceSvgCloseInteraction(svgDoc) {
-                if (!svgDoc) {
+            function attachSvgCloseInteraction(svgDoc, onClose) {
+                if (!svgDoc || typeof onClose !== 'function') {
                     return;
                 }
 
@@ -865,12 +862,11 @@
                 closeTarget.style.pointerEvents = 'all';
                 closeTarget.setAttribute('role', 'button');
                 closeTarget.setAttribute('tabindex', '0');
-                closeTarget.setAttribute('data-close-handler-attached', 'true');
 
                 function handleClose(event) {
                     event.preventDefault();
                     event.stopPropagation();
-                    resetSpaceSvgToOriginal();
+                    onClose();
                 }
 
                 closeTarget.addEventListener('click', handleClose);
@@ -879,12 +875,55 @@
                         handleClose(event);
                     }
                 });
+
+                closeTarget.setAttribute('data-close-handler-attached', 'true');
+            }
+
+            function attachSpaceSvgCloseInteraction(svgDoc) {
+                attachSvgCloseInteraction(svgDoc, resetSpaceSvgToOriginal);
+            }
+
+            function showBuildingSpaceOverlay(svgPath) {
+                if (!buildingSpaceOverlayObject || !svgPath) {
+                    return;
+                }
+
+                buildingSpaceOverlayObject.classList.add('is-visible');
+                buildingSpaceOverlayObject.removeAttribute('data');
+                requestAnimationFrame(function () {
+                    buildingSpaceOverlayObject.setAttribute('data', svgPath);
+                    if (buildingSpaceOverlayObject.contentDocument && buildingSpaceOverlayObject.contentDocument.readyState === 'complete') {
+                        attachSvgCloseInteraction(buildingSpaceOverlayObject.contentDocument, resetSpaceSvgToOriginal);
+                        attachViewButtonInteraction(buildingSpaceOverlayObject.contentDocument);
+                    }
+                });
+            }
+
+            function hideBuildingSpaceOverlay() {
+                if (!buildingSpaceOverlayObject) {
+                    return;
+                }
+
+                buildingSpaceOverlayObject.classList.remove('is-visible');
+                buildingSpaceOverlayObject.setAttribute('data', '');
+                requestAnimationFrame(function () {
+                    buildingSpaceOverlayObject.removeAttribute('data');
+                });
+            }
+
+            if (buildingSpaceOverlayObject) {
+                buildingSpaceOverlayObject.addEventListener('load', function () {
+                    if (!buildingSpaceOverlayObject.contentDocument) {
+                        return;
+                    }
+
+                    attachSvgCloseInteraction(buildingSpaceOverlayObject.contentDocument, resetSpaceSvgToOriginal);
+                    attachViewButtonInteraction(buildingSpaceOverlayObject.contentDocument);
+                });
             }
 
             function resetSpaceSvgToOriginal() {
-                if (spaceMarkerOverlayContainer) {
-                    spaceMarkerOverlayContainer.innerHTML = '';
-                }
+                hideBuildingSpaceOverlay();
 
                 if (spaceSvgObject) {
                     spaceSvgObject.setAttribute('data', originalBuildingSvgPath);
@@ -975,12 +1014,12 @@
                 const svgPath = spaceToSvgMap[spaceKey];
                 if (!svgPath) return;
 
-                loadBuildingSvg(svgPath);
+                showBuildingSpaceOverlay(svgPath);
             }
 
             // Restore original building SVG
             function restoreBuildingSvg() {
-                loadBuildingSvg(originalBuildingSvgPath);
+                hideBuildingSpaceOverlay();
             }
 
             // Handle SVG pin click
@@ -1088,50 +1127,16 @@
                 }
             }
 
-            // Load space SVG with marker overlay
+            // Load space SVG
             function loadSpaceSvg(spaceKey) {
                 const svgPath = spaceToSvgMap[spaceKey];
                 if (!svgPath || !spaceSvgObject) return;
-
-                // Clear previous overlay
-                spaceMarkerOverlayContainer.innerHTML = '';
 
                 // Set new SVG source
                 spaceSvgObject.setAttribute('data', svgPath);
 
                 // Handle SVG load
                 function onSpaceSvgLoad() {
-                    const markerInfo = markerData[spaceKey];
-                    if (!markerInfo) return;
-
-                    // Create marker overlay
-                    const marker = document.createElement('div');
-                    const markerLeft = `calc(${markerInfo.svgX * 100}% + ${SPACE_MARKER_OFFSET_X}px)`;
-                    const markerTop = `calc(${markerInfo.svgY * 100}% + ${SPACE_MARKER_OFFSET_Y}px)`;
-                    marker.className = 'space-marker';
-                    marker.style.position = 'absolute';
-                    marker.style.left = markerLeft;
-                    marker.style.top = markerTop;
-                    marker.style.transform = 'translate(-50%, -50%)';
-                    marker.style.zIndex = '20';
-
-                    const icon = document.createElement('div');
-                    icon.className = 'space-icon';
-
-                    marker.appendChild(icon);
-                    spaceMarkerOverlayContainer.appendChild(marker);
-
-                    // Create title overlay
-                    const title = document.createElement('div');
-                    title.className = 'space-title-overlay';
-                    title.textContent = markerInfo.title;
-                    title.style.position = 'absolute';
-                    title.style.left = markerLeft;
-                    title.style.top = markerTop;
-                    title.style.transform = 'translate(-50%, calc(-50% + 30px))';
-                    title.style.zIndex = '20';
-                    spaceMarkerOverlayContainer.appendChild(title);
-
                     const svgDoc = spaceSvgObject.contentDocument;
                     attachSpaceSvgCloseInteraction(svgDoc);
                 }
@@ -1142,29 +1147,6 @@
                 } else {
                     spaceSvgObject.addEventListener('load', onSpaceSvgLoad, { once: true });
                 }
-            }
-
-            // Update space SVG marker positions on resize
-            function updateSpaceSvgMarkerPositions() {
-                if (!spaceMarkerOverlayContainer) return;
-
-                const marker = spaceMarkerOverlayContainer.querySelector('.space-marker');
-                const title = spaceMarkerOverlayContainer.querySelector('.space-title-overlay');
-
-                if (!marker || !title) return;
-
-                const spaceKey = currentSpace;
-                const markerInfo = markerData[spaceKey];
-                if (!markerInfo) return;
-
-                // Positions are already percentage-based, so they should scale automatically
-                // But we can ensure they're set correctly
-                const markerLeft = `calc(${markerInfo.svgX * 100}% + ${SPACE_MARKER_OFFSET_X}px)`;
-                const markerTop = `calc(${markerInfo.svgY * 100}% + ${SPACE_MARKER_OFFSET_Y}px)`;
-                marker.style.left = markerLeft;
-                marker.style.top = markerTop;
-                title.style.left = markerLeft;
-                title.style.top = markerTop;
             }
 
             // Resize handler with debouncing

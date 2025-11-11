@@ -597,33 +597,6 @@
     display: block;
   }
   
-  .space-marker-overlay-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-  
-  .space-marker {
-    position: absolute;
-    z-index: 20;
-  }
-  
-  .space-title-overlay {
-    background-color: rgba(255, 255, 255, 0.95);
-    color: var(--color-gray);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-family: var(--font-family-medium);
-    font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    pointer-events: none;
-  }
-  
   /* Exploded 3D View (kept for backward compatibility if needed) */
   .exploded-view-container {
     width: 100%;
@@ -874,6 +847,21 @@
     width: 100%;
     height: auto;
     display: block;
+  }
+
+  .school-building-overlay-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    pointer-events: none;
+  }
+
+  .school-building-overlay-image.is-visible {
+    display: block;
+    pointer-events: auto;
   }
   
   .school-building-image object {
