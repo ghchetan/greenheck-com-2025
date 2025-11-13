@@ -6,7 +6,7 @@
   }
   
   // Navigation data
-  const response = await fetch('/Content/js/header-data.json');
+  const response = await fetch('./Content/js/header-data.json');
   const navigationData = await response.json();
 
   // MenuBuilder class
