@@ -1,5 +1,15 @@
 /* Font Definitions */
 @font-face {
+  font-family: 'Helvetica-Regular';
+  src: url('../font/Helvetica.otf') format('opentype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica-Medium';
+  src: url('../font/Helvetica.otf') format('opentype');
+  font-display: swap;
+}
+@font-face {
   font-family: 'Helvetica-Bold';
   src: url('../font/Helvetica-Bold.ttf') format('truetype');
   font-display: swap;
@@ -313,7 +323,285 @@ main {
   text-align: left;
   width: 100%;
 }
+/* Delete from here */
+.typography-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin: 40px auto;
+  max-width: 920px;
+  padding: 0 24px;
+}
 
+.typography-group {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.typography-group-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: var(--text-secondary, #4f4f4f);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 2px solid var(--border-light, #d9d9d9);
+  padding-bottom: 12px;
+  background-color: var(--color-bg-lightest);
+  border: 1px solid var(--border-light, #d9d9d9);
+  border-radius: 8px;
+  padding-top: 16px;
+  padding-right: 24px;
+  padding-left: 24px;
+}
+
+.typography-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-light, #d9d9d9);
+  padding-bottom: 24px;
+}
+
+.typography-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.typography-item-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 8px;
+  color: var(--text-secondary, #4f4f4f);
+  letter-spacing: 0.03em;
+}
+
+.typography-item-header span {
+  min-width: 120px;
+}
+
+.typography-label {
+  flex: 1 1 200px;
+}
+
+.typography-size,
+.typography-class {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.typography-class {
+  text-transform: none;
+  background-color: #2c3e50;
+  color: #fff !important;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: none;
+  text-decoration: none;
+  cursor: copy;
+  transition: all 0.3s ease;
+}
+.typography-class.is-copied {
+  background-color: #16a34a;
+}
+.typography-class.has-copy-error {
+  background-color: #dc2626;
+}
+/* Delete till here */
+.h1-42px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.h2-32px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.h3-22px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.sub-title-18px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sub-title-16px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sub-title-14px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.paragraph-15px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.paragraph-14px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.paragraph-13px-bold {
+  color: var(--text-primary);
+  font-family: "Helvetica-Bold";
+  font-size: 13px;
+  font-weight: 500;
+}
+/* Medium font */
+.h1-42px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 42px;
+  font-weight: 500;
+}
+
+.h2-32px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 32px;
+  font-weight: 500;
+}
+
+.h3-22px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.sub-title-18px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.sub-title-16px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sub-title-14px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.paragraph-15px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.paragraph-14px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.paragraph-13px-medium {
+  color: var(--text-primary);
+  font-family: "Helvetica-Medium";
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Regular font */
+.h1-42px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 42px;
+  font-weight: 400;
+}
+
+.h2-32px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.h3-22px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.sub-title-18px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.sub-title-16px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.sub-title-14px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.paragraph-15px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.paragraph-14px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.paragraph-13px-regular {
+  color: var(--text-primary);
+  font-family: "Helvetica-Regular";
+  font-size: 13px;
+  font-weight: 400;
+}
 /* ==========================================================================
    Scroll to Top Button
    ========================================================================== */
