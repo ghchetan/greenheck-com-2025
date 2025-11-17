@@ -689,20 +689,137 @@
               </div>
             </div>
             <div class="product-detail-feature-selector">
+              <div class="product-detail-feature-select">
+                <button
+                  type="button"
+                  id="feature-select-trigger"
+                  class="product-detail-feature-select-button"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  aria-controls="feature-select-menu"
+                >
+                  <span class="product-detail-feature-select-text"
+                    >Select a Feature</span
+                  >
+                </button>
+                <ul
+                  id="feature-select-menu"
+                  class="product-detail-feature-select-menu"
+                  role="listbox"
+                  hidden
+                >
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value=""
+                      role="option"
+                      aria-selected="true"
+                    >
+                      Select a Feature
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value="wheel"
+                      role="option"
+                    >
+                      Wheel
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value="motor-cooling-tube"
+                      role="option"
+                    >
+                      Motor Cooling Tube
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value="motor"
+                      role="option"
+                    >
+                      Motor
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value="fan-shaft"
+                      role="option"
+                    >
+                      Fan Shaft
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value="drive-assembly"
+                      role="option"
+                    >
+                      Drive Assembly
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value="bearings"
+                      role="option"
+                    >
+                      Bearings
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value="motor-cover"
+                      role="option"
+                    >
+                      Motor Cover
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      class="product-detail-feature-option"
+                      data-value="stainless-fasteners"
+                      role="option"
+                    >
+                      Stainless Steel Fasteners
+                    </button>
+                  </li>
+                </ul>
+              </div>
               <label for="feature-dropdown" class="product-detail-sr-only"
                 >Select a feature to highlight</label
               >
               <select
                 id="feature-dropdown"
-                class="product-detail-feature-dropdown"
+                class="product-detail-feature-dropdown product-detail-feature-dropdown--native"
                 aria-describedby="feature-instructions"
               >
                 <option value="">Select a Feature</option>
-                <option value="motor">Motor Assembly</option>
-                <option value="housing">Housing Structure</option>
-                <option value="impeller">Impeller System</option>
-                <option value="mounting">Mounting Base</option>
-                <option value="wiring">Electrical Wiring</option>
+                <option value="wheel">Wheel</option>
+                <option value="motor-cooling-tube">Motor Cooling Tube</option>
+                <option value="motor">Motor</option>
+                <option value="fan-shaft">Fan Shaft</option>
+                <option value="drive-assembly">Drive Assembly</option>
+                <option value="bearings">Bearings</option>
+                <option value="motor-cover">Motor Cover</option>
+                <option value="stainless-fasteners">
+                  Stainless Steel Fasteners
+                </option>
               </select>
             </div>
             <p
@@ -1135,7 +1252,7 @@
             <div class="product-detail-media-item product-detail-video-item">
               <div class="product-detail-media-thumbnail">
                 <img
-                  src="./Content/imgs/video-thumbnail.jpg"
+                  src="./Content/imgs/prd-1.png"
                   alt="Centrifugal Upblast Exhaust Fan overview video"
                   width="300"
                   height="200"
@@ -1192,7 +1309,7 @@
                 <div class="product-detail-card">
                   <div class="product-detail-card-image">
                     <img
-                      src="./Content/imgs/usgf-product.jpg"
+                      src="./Content/imgs/prd-1.png"
                       alt="USGF product"
                       width="200"
                       height="150"
@@ -1203,7 +1320,7 @@
                 <div class="product-detail-card">
                   <div class="product-detail-card-image">
                     <img
-                      src="./Content/imgs/cue-product.jpg"
+                      src="./Content/imgs/prd-2.png"
                       alt="CUE product"
                       width="200"
                       height="150"
@@ -1214,7 +1331,7 @@
                 <div class="product-detail-card">
                   <div class="product-detail-card-image">
                     <img
-                      src="./Content/imgs/vari-green-motor.jpg"
+                      src="./Content/imgs/prd-1.png"
                       alt="Vari-Green Motor"
                       width="200"
                       height="150"
@@ -1227,7 +1344,7 @@
                 <div class="product-detail-card">
                   <div class="product-detail-card-image">
                     <img
-                      src="./Content/imgs/grease-trap.jpg"
+                      src="./Content/imgs/prd-2.png"
                       alt="Grease Trap"
                       width="200"
                       height="150"
@@ -1238,7 +1355,7 @@
                 <div class="product-detail-card">
                   <div class="product-detail-card-image">
                     <img
-                      src="./Content/imgs/additional-product-1.jpg"
+                      src="./Content/imgs/prd-1.png"
                       alt="Additional Product 1"
                       width="200"
                       height="150"
@@ -1251,7 +1368,7 @@
                 <div class="product-detail-card">
                   <div class="product-detail-card-image">
                     <img
-                      src="./Content/imgs/additional-product-2.jpg"
+                      src="./Content/imgs/prd-2.png"
                       alt="Additional Product 2"
                       width="200"
                       height="150"
@@ -1312,7 +1429,7 @@
                 <article class="product-detail-blog-card">
                   <div class="product-detail-blog-image">
                     <img
-                      src="./Content/imgs/fei-performance-curve.jpg"
+                      src="./Content/imgs/Fans.png"
                       width="300"
                       height="200"
                     />
@@ -1370,7 +1487,7 @@
                 <article class="product-detail-blog-card">
                   <div class="product-detail-blog-image">
                     <img
-                      src="./Content/imgs/ul-standards-fans.jpg"
+                      src="./Content/imgs/Fans.png"
                       width="300"
                       height="200"
                     />
@@ -1421,7 +1538,7 @@
                 <article class="product-detail-blog-card">
                   <div class="product-detail-blog-image">
                     <img
-                      src="./Content/imgs/fan-troubleshooting.jpg"
+                      src="./Content/imgs/Fans.png"
                       width="300"
                       height="200"
                     />
@@ -1476,7 +1593,7 @@
                 <article class="product-detail-blog-card">
                   <div class="product-detail-blog-image">
                     <img
-                      src="./Content/imgs/fan-system-effects.jpg"
+                      src="./Content/imgs/Fans.png"
                       width="300"
                       height="200"
                     />
@@ -1664,6 +1781,18 @@
         const featureInstructions = document.getElementById(
           "feature-instructions"
         );
+        const featureSelectTrigger = document.getElementById(
+          "feature-select-trigger"
+        );
+        const featureSelectMenu = document.getElementById(
+          "feature-select-menu"
+        );
+        const featureSelectText = document.querySelector(
+          ".product-detail-feature-select-text"
+        );
+        const featureSelectContainer = document.querySelector(
+          ".product-detail-feature-select"
+        );
 
         if (featureDropdown && featureInstructions) {
           featureDropdown.addEventListener("change", function () {
@@ -1677,6 +1806,118 @@
             } else {
               featureInstructions.textContent =
                 "Select from the menu to highlight a feature";
+            }
+          });
+        }
+
+        if (
+          featureSelectTrigger &&
+          featureSelectMenu &&
+          featureSelectText &&
+          featureSelectContainer
+        ) {
+          const featureOptions = featureSelectMenu.querySelectorAll(
+            ".product-detail-feature-option"
+          );
+
+          function closeFeatureMenu() {
+            featureSelectMenu.hidden = true;
+            featureSelectTrigger.setAttribute("aria-expanded", "false");
+            featureSelectTrigger.classList.remove("is-open");
+          }
+
+          function openFeatureMenu() {
+            featureSelectMenu.hidden = false;
+            featureSelectTrigger.setAttribute("aria-expanded", "true");
+            featureSelectTrigger.classList.add("is-open");
+            const selectedOption = featureSelectMenu.querySelector(
+              '.product-detail-feature-option[aria-selected="true"]'
+            );
+            (selectedOption || featureOptions[0]).focus();
+          }
+
+          function setFeatureSelection(button) {
+            const value = button.getAttribute("data-value") || "";
+            const label = button.textContent.trim();
+
+            featureOptions.forEach(function (option) {
+              option.setAttribute(
+                "aria-selected",
+                option === button ? "true" : "false"
+              );
+            });
+
+            featureSelectText.textContent = label;
+
+            if (featureDropdown) {
+              featureDropdown.value = value;
+              const changeEvent = new Event("change", { bubbles: true });
+              featureDropdown.dispatchEvent(changeEvent);
+            }
+
+            closeFeatureMenu();
+            featureSelectTrigger.focus();
+          }
+
+          featureSelectTrigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            if (featureSelectMenu.hidden) {
+              openFeatureMenu();
+            } else {
+              closeFeatureMenu();
+            }
+          });
+
+          featureOptions.forEach(function (option) {
+            option.addEventListener("click", function (event) {
+              event.stopPropagation();
+              setFeatureSelection(this);
+            });
+
+            option.addEventListener("keydown", function (event) {
+              const currentIndex = Array.prototype.indexOf.call(
+                featureOptions,
+                this
+              );
+
+              if (event.key === "ArrowDown") {
+                event.preventDefault();
+                const nextIndex =
+                  currentIndex + 1 < featureOptions.length
+                    ? currentIndex + 1
+                    : 0;
+                featureOptions[nextIndex].focus();
+              } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                const prevIndex =
+                  currentIndex - 1 >= 0
+                    ? currentIndex - 1
+                    : featureOptions.length - 1;
+                featureOptions[prevIndex].focus();
+              } else if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                setFeatureSelection(this);
+              } else if (event.key === "Escape") {
+                event.preventDefault();
+                closeFeatureMenu();
+                featureSelectTrigger.focus();
+              }
+            });
+          });
+
+          document.addEventListener("click", function (event) {
+            if (!featureSelectContainer.contains(event.target)) {
+              closeFeatureMenu();
+            }
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (
+              event.key === "Escape" &&
+              featureSelectTrigger.getAttribute("aria-expanded") === "true"
+            ) {
+              closeFeatureMenu();
+              featureSelectTrigger.focus();
             }
           });
         }
