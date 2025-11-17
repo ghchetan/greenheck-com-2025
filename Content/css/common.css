@@ -102,6 +102,8 @@
   --text-light: #6b7280;
   --link-color: #999999;
 
+  --icon-color: #5F6368;
+
   /* Background Colors */
   --background-color: #ffffff;
   --background-light: #fafafa;
@@ -156,7 +158,7 @@
   --font-family-bold: 'Helvetica-Bold', sans-serif;
   --font-family-footer: 'Inter', Arial, sans-serif;
   --font-family-heading: "Helvetica-Bold", -apple-system, sans-serif;
-  --font-family-body: "HelveticaNeue-Medium", -apple-system, sans-serif;
+  --font-family-medium: "Helvetica-Medium", -apple-system, sans-serif;
   --font-size-base: 14px;
   --font-size-nav: 18px;
   --line-height-relaxed: 1.6;
@@ -203,15 +205,7 @@
        -moz-osx-font-smoothing: grayscale;
      }
 
-.page-title {
-  color: var(--color-gray);
-  font-family: var(--font-family-base);
-  font-size: 40px;
-  font-weight: 500;
-  max-width: var(--max-width-container);
-  margin: 0 auto;
-  padding: 0 0 28px 0;
-}
+ 
 
 /* ==========================================================================
    Common Styles - Shared Base Styles
@@ -302,17 +296,25 @@ main {
    Page Header
    ========================================================================== */
 .page-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 32px;
 }
 
 .page-header h1 {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-medium);
   font-size: clamp(24px, 5vw, 40px);
   font-weight: 500;
   color: var(--text-primary);
   margin-bottom: 5px;
   text-align: left;
+}
+
+.page-header h2{
+  color: var(--text-primary);
+  font-family: var(--font-family-medium);
+  font-size: 22px;
+  font-weight: 500;
+  font-style: medium;
 }
 
 .page-header p {
@@ -324,285 +326,7 @@ main {
   text-align: left;
   width: 100%;
 }
-/* Delete from here */
-.typography-demo {
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-  margin: 40px auto;
-  max-width: 920px;
-  padding: 0 24px;
-}
 
-.typography-group {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.typography-group-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  color: var(--text-secondary, #4f4f4f);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border-bottom: 2px solid var(--border-light, #d9d9d9);
-  padding-bottom: 12px;
-  background-color: var(--color-bg-lightest);
-  border: 1px solid var(--border-light, #d9d9d9);
-  border-radius: 8px;
-  padding-top: 16px;
-  padding-right: 24px;
-  padding-left: 24px;
-}
-
-.typography-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border-bottom: 1px solid var(--border-light, #d9d9d9);
-  padding-bottom: 24px;
-}
-
-.typography-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.typography-item-header {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  column-gap: 24px;
-  row-gap: 8px;
-  color: var(--text-secondary, #4f4f4f);
-  letter-spacing: 0.03em;
-}
-
-.typography-item-header span {
-  min-width: 120px;
-}
-
-.typography-label {
-  flex: 1 1 200px;
-}
-
-.typography-size,
-.typography-class {
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
-
-.typography-class {
-  text-transform: none;
-  background-color: #2c3e50;
-  color: #fff !important;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: none;
-  text-decoration: none;
-  cursor: copy;
-  transition: all 0.3s ease;
-}
-.typography-class.is-copied {
-  background-color: #16a34a;
-}
-.typography-class.has-copy-error {
-  background-color: #dc2626;
-}
-/* Delete till here */
-.h1-42px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 42px;
-  font-weight: 700;
-}
-
-.h2-32px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 32px;
-  font-weight: 700;
-}
-
-.h3-22px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.sub-title-18px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.sub-title-16px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.sub-title-14px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.paragraph-15px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.paragraph-14px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.paragraph-13px-bold {
-  color: var(--text-primary);
-  font-family: "Helvetica-Bold";
-  font-size: 13px;
-  font-weight: 500;
-}
-/* Medium font */
-.h1-42px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 42px;
-  font-weight: 500;
-}
-
-.h2-32px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 32px;
-  font-weight: 500;
-}
-
-.h3-22px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 22px;
-  font-weight: 500;
-}
-
-.sub-title-18px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.sub-title-16px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.sub-title-14px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.paragraph-15px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.paragraph-14px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.paragraph-13px-medium {
-  color: var(--text-primary);
-  font-family: "Helvetica-Medium";
-  font-size: 13px;
-  font-weight: 500;
-}
-
-/* Regular font */
-.h1-42px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 42px;
-  font-weight: 400;
-}
-
-.h2-32px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 32px;
-  font-weight: 400;
-}
-
-.h3-22px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 22px;
-  font-weight: 400;
-}
-
-.sub-title-18px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 18px;
-  font-weight: 400;
-}
-
-.sub-title-16px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.sub-title-14px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.paragraph-15px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 15px;
-  font-weight: 400;
-}
-
-.paragraph-14px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.paragraph-13px-regular {
-  color: var(--text-primary);
-  font-family: "Helvetica-Regular";
-  font-size: 13px;
-  font-weight: 400;
-}
 /* ==========================================================================
    Scroll to Top Button
    ========================================================================== */
@@ -713,4 +437,137 @@ main {
   .scroll-to-top {
     display: none;
   }
+}
+.btn-default-primary, button[type="submit"] {
+     
+  align-items: center;
+  appearance: none;
+  background-color: rgba(7, 86, 151, 1);
+  border-radius: 21px;
+  border-radius: 21px;
+  border: 0;
+  box-shadow: none;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 1);
+  cursor: pointer;
+  display: flex;
+  font-family: HelveticaNeue-Medium;
+  font-size: 15px;
+  font-weight: 500;
+  gap:7px;
+  height: 36px;
+  outline: none;
+  padding: 0 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  user-select: none;
+  width: fit-content;
+  -moz-appearance: none;
+  -moz-border-radius: 21px;
+  -moz-box-shadow: none;
+  -moz-transition: all 0.3s ease;
+  -moz-user-select: none;
+  -ms-transition: all 0.3s ease;
+  -ms-user-select: none;
+  -o-transition: all 0.3s ease;
+  -webkit-appearance: none;
+  -webkit-border-radius: 21px;
+  -webkit-box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-transition: all 0.3s ease;
+  -webkit-user-drag: none;
+  -webkit-user-select: auto;
+  -webkit-user-select: auto;
+  -webkit-user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-select: text;
+}
+
+  .btn-default-primary:hover, button[type="submit"]:hover {
+      background-color: #00A8E4;
+      text-decoration: none;
+      
+  }
+
+  .btn-default-primary:disabled, .btn-default-primary[disabled], .btn-default-primary.disabled,
+  button[type="submit"]:disabled, button[type="submit"][disabled] {
+      background-color: #A7A9AC;
+      cursor: not-allowed;
+  }
+
+/* ==========================================================================
+   Grid Layout - 2 columns desktop, 1 column mobile/tablet
+   ========================================================================== */
+.grid-d2-tm1 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .grid-d2-tm1 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Card with Icon Component
+   ========================================================================== */
+.card-with-icon {
+  border: 1px solid rgba(150, 150, 150, 1);
+  background-color: rgba(255, 255, 255, 1);
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-icon {
+  font-size: 34px !important;
+  flex-shrink: 0;
+  color: var(--icon-color);
+}
+
+.card-with-icon h3 {
+  color: rgba(51, 51, 51, 1);
+  font-family: var(--font-family-bold);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+ 
+
+.card-with-icon p {
+  color: rgba(51, 51, 51, 1);
+  font-family: var(--font-family-medium);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: var(--line-height-relaxed);
+  margin: 0 0 24px 0;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.card-with-icon .btn-default-primary {
+  align-self: flex-start;
+  margin-top: 0;
 }
