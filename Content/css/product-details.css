@@ -616,8 +616,6 @@ main {
 
 .product-detail-document-list {
   margin-top: var(--spacing-sm);
-  max-height: 200px;
-  overflow-y: auto;
 }
 
 .product-detail-document-list ul {
@@ -638,8 +636,9 @@ main {
 
 .product-detail-document-list li.document-subheading {
   display: block;
-  padding: 16px 12px 6px;
-  font-weight: 600;
+  padding: 0px 12px 0px 21px;
+  font-weight: 500;
+  font-size: 18px;
   color: var(--text-primary);
   background: transparent;
 }
@@ -657,8 +656,9 @@ main {
   background: transparent;
 }
 
-.product-detail-document-section.catalogs {
-  max-height: 330px;
+.product-detail-document-section.catalogs .product-detail-document-list {
+  max-height: 281px;
+  overflow-y: auto;
 }
 
 .product-detail-document-section.catalogs
@@ -683,7 +683,12 @@ main {
   .product-detail-document-list
   li:nth-child(even of :not(.document-subheading)) {
   background: rgba(246, 246, 246, 1);
-  padding: 18px 34px;
+}
+
+.product-detail-document-section.instruction-manuals
+  .product-detail-document-list {
+  max-height: 356px;
+  overflow-y: auto;
 }
 
 /* Instruction Manuals - no alternating colors, all white background */
@@ -701,8 +706,8 @@ main {
 .product-detail-document-list a:visited {
   color: #0b5394;
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 400;
+  font-size: 15px;
+  font-weight: 500;
   font-family: var(--font-family);
 }
 
