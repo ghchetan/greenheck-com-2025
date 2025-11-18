@@ -524,7 +524,7 @@ a.ecaps-header-nav img {
 }
 #mobile-nav-toggle .material-symbols-outlined {
   font-size: 40px !important;
-  color: var(--color-white);
+  color: var(--color-primary);
 }
 #mobile-nav {
   display: none;
@@ -980,9 +980,9 @@ a.ecaps-header-nav img {
     top: 0;
     left: 0;
     width: 100vw;
-    background: var(--color-primary);
+    background: var(--color-white);
     z-index: 2100;
-    padding: 40px 18px;
+    padding: 25px 18px;
   }
   .mobile-header-logo {
     height: 60px;
