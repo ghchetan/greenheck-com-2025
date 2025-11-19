@@ -640,6 +640,7 @@ main {
   font-size: 18px;
   color: var(--text-primary);
   background: transparent;
+  margin-bottom: 0px;
 }
 
 .product-detail-document-list li.document-subheading-blue {
@@ -684,9 +685,8 @@ main {
   background: rgba(246, 246, 246, 1);
 }
 
-.product-detail-document-section.instruction-manuals
-  .product-detail-document-list {
-  max-height: 356px;
+.instruction-manual-items {
+  max-height: 376px;
   overflow-y: auto;
 }
 
@@ -695,6 +695,15 @@ main {
   .product-detail-document-list
   li:not(.document-subheading) {
   background: rgba(255, 255, 255, 1);
+}
+
+.instruction-manual-items {
+  line-height: 12px;
+}
+
+.instruction-manual-item {
+  padding: 9px 18px !important;
+  margin-bottom: 0 !important;
 }
 
 .product-detail-document-list li:last-child {
