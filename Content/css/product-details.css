@@ -625,13 +625,12 @@ main {
 }
 
 .product-detail-document-list li {
-  margin-bottom: 4px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 34px;
+  gap: 7px;
+  padding: 10px 34px;
   border-radius: 4px;
-  letter-spacing: 0.3px;
 }
 
 .product-detail-document-list li.document-subheading {
@@ -657,7 +656,7 @@ main {
 }
 
 .product-detail-document-section.catalogs .product-detail-document-list {
-  max-height: 281px;
+  max-height: 276px;
   overflow-y: auto;
 }
 
