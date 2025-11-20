@@ -688,6 +688,8 @@ main {
 .instruction-manual-items {
   max-height: 376px;
   overflow-y: auto;
+  margin-bottom: 25px;
+  line-height: 12px;
 }
 
 /* Instruction Manuals - no alternating colors, all white background */
@@ -695,10 +697,6 @@ main {
   .product-detail-document-list
   li:not(.document-subheading) {
   background: rgba(255, 255, 255, 1);
-}
-
-.instruction-manual-items {
-  line-height: 12px;
 }
 
 .instruction-manual-item {
