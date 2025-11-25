@@ -758,6 +758,7 @@ main {
 
 .product-detail-static-model-download {
   margin-bottom: var(--spacing-xl);
+  margin-top: 15px;
 }
 
 /* .product-detail-static-model-download h4,
@@ -770,6 +771,7 @@ main {
 } */
 
 .product-detail-drawings-table {
+  max-width: 584px;
   width: 100%;
   border-collapse: collapse;
   border: 1px solid var(--border-color);
@@ -777,9 +779,12 @@ main {
   overflow: hidden;
 }
 
+product-detail-drawing-type {
+  padding-left: 31px;
+}
+
 .product-detail-drawings-table th {
-  background: #f8f9fa;
-  padding: 12px 16px;
+  padding: 12px 0px;
   text-align: left;
   font-weight: 500;
   font-size: 15px;
@@ -789,13 +794,11 @@ main {
 }
 
 .product-detail-drawings-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border-color);
-  vertical-align: middle;
   font-size: 15px;
   font-weight: 500;
   font-family: var(--font-family);
   color: var(--text-primary);
+  padding-top: 16px;
 }
 
 .product-detail-drawings-table tbody tr:last-child td {
@@ -805,13 +808,32 @@ main {
 .product-detail-drawings-table td:first-child {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 3px;
+  padding-top: 16px;
 }
 
-.product-detail-drawing-badge {
+.product-detail-drawings-table th:nth-child(2),
+.product-detail-drawings-table th:nth-child(3),
+.product-detail-drawings-table td:nth-child(2) {
+  width: 31%;
+}
+
+.product-detail-drawing-icon {
+  display: inline-block;
   width: 20px;
   height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.product-detail-cad-icon {
   display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(216, 216, 216, 1);
+  margin-right: 8px;
+  vertical-align: middle;
   flex-shrink: 0;
 }
 
@@ -821,7 +843,7 @@ main {
   gap: 6px;
   color: var(--primary-color);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 16px;
   font-weight: 500;
   font-family: var(--font-family);
 }
@@ -831,8 +853,6 @@ main {
 }
 
 .product-detail-action-icon {
-  width: 16px;
-  height: 16px;
   display: inline-block;
 }
 
@@ -842,8 +862,6 @@ main {
 }
 
 .product-detail-action-icon {
-  width: 16px;
-  height: 16px;
   flex-shrink: 0;
 }
 
