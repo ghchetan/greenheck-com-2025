@@ -872,7 +872,8 @@ product-detail-drawing-type {
 .product-detail-supplement-links {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding-top: 26px;
+  line-height: 28px;
 }
 
 .product-detail-supplement-links li {
@@ -902,36 +903,30 @@ product-detail-drawing-type {
 
 /* Media Panel */
 .product-detail-media-content {
-  background: var(--white);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: var(--spacing-lg);
 }
 
 .product-detail-media-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-xl);
-  align-items: start;
+  display: flex;
+
+  gap: 29px;
 }
 
 .product-detail-media-item {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  padding: 27px 7px;
 }
 
 .product-detail-media-thumbnail {
   position: relative;
-  border-radius: 8px;
   overflow: hidden;
-  background: #f8f9fa;
   border: 1px solid var(--border-color);
 }
 
 .product-detail-media-thumbnail img {
   width: 100%;
-  height: 200px;
+  height: 258px;
   object-fit: cover;
   display: block;
 }
@@ -943,6 +938,12 @@ product-detail-drawing-type {
   transform: translate(-50%, -50%);
   cursor: pointer;
   transition: transform var(--transition-fast);
+}
+
+.product-detail-play-button img {
+  display: block;
+  width: auto;
+  height: auto;
 }
 
 .product-detail-play-button:hover {
@@ -965,6 +966,12 @@ product-detail-drawing-type {
   border: 1px solid var(--border-color);
 }
 
+.product-detail-podcast-placeholder img {
+  display: block;
+  width: auto;
+  height: auto;
+}
+
 .product-detail-media-info h4 {
   font-size: 13px;
   font-weight: 500;
@@ -976,6 +983,11 @@ product-detail-drawing-type {
 
 .product-detail-video-item .product-detail-media-info h4 {
   color: var(--text-primary);
+}
+
+.product-detail-podcast-item {
+  max-width: 406px;
+  width: 100%;
 }
 
 .product-detail-podcast-item .product-detail-media-info h4 {
@@ -1343,13 +1355,6 @@ product-detail-drawing-type {
 
   .product-detail-media-grid {
     grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .product-detail-media-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
   }
 }
 
