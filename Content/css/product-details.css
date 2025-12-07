@@ -1189,6 +1189,9 @@ product-detail-drawing-type {
 }
 
 .product-detail-blog-track .product-detail-blog-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
   flex: 0 0 300px;
 }
 
@@ -1198,10 +1201,7 @@ product-detail-drawing-type {
   width: 100%;
 }
 
-.product-detail-blog-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+ 
 
 .product-detail-blog-image {
   height: 260px;
@@ -1218,6 +1218,7 @@ product-detail-drawing-type {
 }
 
 .product-detail-blog-content-text {
+  flex: 1;
 }
 
 .product-detail-blog-content-text h4 {
