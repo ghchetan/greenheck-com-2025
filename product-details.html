@@ -824,6 +824,20 @@
                 </option>
               </select>
             </div>
+            <div
+              id="feature-content"
+              class="product-detail-feature-content"
+              hidden
+            >
+              <h3
+                id="feature-heading"
+                class="product-detail-feature-heading"
+              ></h3>
+              <p
+                id="feature-description"
+                class="product-detail-feature-description"
+              ></p>
+            </div>
             <p
               id="feature-instructions"
               class="product-detail-feature-instructions"
@@ -1784,6 +1798,11 @@
         const featureInstructions = document.getElementById(
           "feature-instructions"
         );
+        const featureContent = document.getElementById("feature-content");
+        const featureHeading = document.getElementById("feature-heading");
+        const featureDescription = document.getElementById(
+          "feature-description"
+        );
         const featureSelectTrigger = document.getElementById(
           "feature-select-trigger"
         );
@@ -1797,19 +1816,78 @@
           ".product-detail-feature-select"
         );
 
-        if (featureDropdown && featureInstructions) {
-          featureDropdown.addEventListener("change", function () {
-            const selectedValue = this.value;
-            if (selectedValue) {
-              featureInstructions.textContent = `Highlighting: ${
-                this.options[this.selectedIndex].text
-              }`;
-              // Here you would add logic to highlight features on the image
-              // For now, we'll just update the instruction text
-            } else {
+        // Feature data with descriptions
+        const featureData = {
+          wheel: {
+            name: "Wheel",
+            description:
+              "A backward-inclined, non-overloading centrifugal wheel is utilized to generate high efficiency and minimal sound. Wheel cones are carefully matched to the venturi for maximum efficiency. Each wheel is statically and dynamically balanced for long life and quiet operation.",
+          },
+          "motor-cooling-tube": {
+            name: "Motor Cooling Tube",
+            description:
+              "The motor cooling tube provides efficient air circulation to maintain optimal motor temperature, ensuring reliable performance and extended motor life.",
+          },
+          motor: {
+            name: "Motor",
+            description:
+              "High-quality motor designed for reliable operation and energy efficiency. Engineered to meet industry standards for performance and durability.",
+          },
+          "fan-shaft": {
+            name: "Fan Shaft",
+            description:
+              "Precision-machined fan shaft ensures smooth operation and minimal vibration. Designed for long-lasting performance and reliability.",
+          },
+          "drive-assembly": {
+            name: "Drive Assembly",
+            description:
+              "Robust drive assembly provides efficient power transmission with minimal energy loss. Engineered for durability and consistent performance.",
+          },
+          bearings: {
+            name: "Bearings",
+            description:
+              "High-quality bearings ensure smooth rotation and extended service life. Designed to minimize friction and reduce maintenance requirements.",
+          },
+          "motor-cover": {
+            name: "Motor Cover",
+            description:
+              "Protective motor cover shields the motor from environmental factors while maintaining proper ventilation for optimal performance.",
+          },
+          "stainless-fasteners": {
+            name: "Stainless Steel Fasteners",
+            description:
+              "Corrosion-resistant stainless steel fasteners ensure long-term reliability and structural integrity in various environmental conditions.",
+          },
+        };
+
+        function displayFeatureContent(value) {
+          if (value && featureData[value]) {
+            const feature = featureData[value];
+            if (featureContent && featureHeading && featureDescription) {
+              featureHeading.textContent = feature.name;
+              featureDescription.textContent = feature.description;
+              featureContent.hidden = false;
+              if (featureInstructions) {
+                featureInstructions.hidden = true;
+              }
+            }
+          } else {
+            if (featureContent) {
+              featureContent.hidden = true;
+            }
+            if (featureInstructions) {
+              featureInstructions.hidden = false;
               featureInstructions.textContent =
                 "Select from the menu to highlight a feature";
             }
+          }
+        }
+
+        if (featureDropdown && featureInstructions) {
+          featureDropdown.addEventListener("change", function () {
+            const selectedValue = this.value;
+            displayFeatureContent(selectedValue);
+            // Here you would add logic to highlight features on the image
           });
         }
 
@@ -1866,6 +1944,8 @@
               const changeEvent = new Event("change", { bubbles: true });
               featureDropdown.dispatchEvent(changeEvent);
             }
+
+            displayFeatureContent(value);
 
             closeFeatureMenu();
             featureSelectTrigger.focus();

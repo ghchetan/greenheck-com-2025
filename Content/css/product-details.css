@@ -292,7 +292,7 @@ article.product-detail-card {
 #features-panel h3 {
   font-size: 22px;
   font-weight: 500;
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-medium);
 }
 
 .product-detail-features-layout {
@@ -365,8 +365,9 @@ article.product-detail-card {
 
 .product-detail-feature-selector {
   position: relative;
-  width: 262px;
-  margin-bottom: 65px;
+  width: 270px;
+  margin-bottom: 29px;
+  padding-left: 7px;
 }
 
 .product-detail-feature-select {
@@ -524,6 +525,28 @@ article.product-detail-card {
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+.product-detail-feature-content {
+  margin-top: 0;
+  padding-left: 10px;
+}
+
+.product-detail-feature-heading {
+  font-size: 22px;
+  font-weight: 500;
+  font-family: var(--font-family-body);
+  color: rgba(51, 51, 51, 1);
+  margin: 0 0 var(--spacing-md);
+}
+
+.product-detail-feature-description {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-family-medium);
+  color: rgba(51, 51, 51, 1);
+  line-height: 1.6;
+  margin: 0;
 }
 
 .product-detail-feature-instructions {
@@ -1087,7 +1110,7 @@ product-detail-drawing-type {
 }
 
 .product-detail-tab-panel {
-  max-width: 1301px;
+  max-width: 1250px;
   width: 100%;
   margin: 0 auto;
 }
