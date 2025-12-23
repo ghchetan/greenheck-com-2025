@@ -91,15 +91,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-    <!-- Preconnect for Performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://www.google-analytics.com" />
-
-    <!-- DNS Prefetch -->
-    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="//www.google-analytics.com" />
-
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="./Content/imgs/favicon.ico" />
     <link
@@ -124,7 +115,7 @@
     <!-- Material Symbols -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&URL_ADDRESS"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
     />
 
     <!-- External CSS -->
@@ -1065,6 +1056,18 @@
                 <li class="instruction-manual-item">
                   <a href="#">Manual 2</a>
                 </li>
+                <li class="instruction-manual-item">
+                  <a href="#">Installation Guide #481319 IOM</a>
+                </li>
+                <li class="instruction-manual-item">
+                  <a href="#">Maintenance Procedures #481320 IOM</a>
+                </li>
+                <li class="instruction-manual-item">
+                  <a href="#">Troubleshooting Guide #481321 IOM</a>
+                </li>
+                <li class="instruction-manual-item">
+                  <a href="#">Safety Instructions #481322 IOM</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -1720,9 +1723,6 @@
       // Product navigation tabs
       document.addEventListener("DOMContentLoaded", function () {
         const navItems = document.querySelectorAll(".product-detail-nav-item");
-        const tabPanels = document.querySelectorAll(
-          ".product-detail-tab-panel"
-        );
 
         navItems.forEach(function (item) {
           item.addEventListener("click", function () {

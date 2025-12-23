@@ -1,77 +1,77 @@
 /* Font Definitions */
 @font-face {
-  font-family: 'Helvetica-Regular';
-  src: url('../font/Helvetica.otf') format('opentype');
+  font-family: "Helvetica-Regular";
+  src: url("../font/Helvetica.otf") format("opentype");
   font-display: swap;
 }
 @font-face {
-  font-family: 'Helvetica-Medium';
-  src: url('../font/Helvetica.otf') format('opentype');
+  font-family: "Helvetica-Medium";
+  src: url("../font/Helvetica.otf") format("opentype");
   font-display: swap;
 }
 @font-face {
-  font-family: 'Helvetica-Bold';
-  src: url('../font/Helvetica-Bold.ttf') format('truetype');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Helvetica-Condensed-Black';
-  src: url('../font/Helvetica-Condensed-Black.otf') format('opentype');
+  font-family: "Helvetica-Bold";
+  src: url("../font/Helvetica-Bold.ttf") format("truetype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Helvetica-Condensed-Bold';
-  src: url('../font/Helvetica-Condensed-Bold.otf') format('opentype');
+  font-family: "Helvetica-Condensed-Black";
+  src: url("../font/Helvetica-Condensed-Black.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Helvetica-Condensed';
-  src: url('../font/Helvetica-Condensed.otf') format('opentype');
+  font-family: "Helvetica-Condensed-Bold";
+  src: url("../font/Helvetica-Condensed-Bold.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Helvetica-Narrow-Bold';
-  src: url('../font/Helvetica-Narrow-Bold.otf') format('opentype');
+  font-family: "Helvetica-Condensed";
+  src: url("../font/Helvetica-Condensed.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Helvetica-Narrow-Oblique';
-  src: url('../font/Helvetica-Narrow-Oblique.otf') format('opentype');
+  font-family: "Helvetica-Narrow-Bold";
+  src: url("../font/Helvetica-Narrow-Bold.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Helvetica-Medium';
-  src: url('../font/Helvetica.otf') format('opentype');
+  font-family: "Helvetica-Narrow-Oblique";
+  src: url("../font/Helvetica-Narrow-Oblique.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'HelveticaCE-CondBold';
-  src: url('../font/HelveticaCE-CondBold.otf') format('opentype');
+  font-family: "Helvetica-Medium";
+  src: url("../font/Helvetica.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'HelveticaCE-Narrow';
-  src: url('../font/HelveticaCE-Narrow.otf') format('opentype');
+  font-family: "HelveticaCE-CondBold";
+  src: url("../font/HelveticaCE-CondBold.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'HelveticaCE';
-  src: url('../font/HelveticaCE.otf') format('opentype');
+  font-family: "HelveticaCE-Narrow";
+  src: url("../font/HelveticaCE-Narrow.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'HelveticaConBQ-Medium';
-  src: url('../font/HelveticaConBQ-Medium.otf') format('opentype');
+  font-family: "HelveticaCE";
+  src: url("../font/HelveticaCE.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HelveticaConBQ-Medium";
+  src: url("../font/HelveticaConBQ-Medium.otf") format("opentype");
   font-display: swap;
 }
 /* ==========================================================================
@@ -93,7 +93,7 @@
   --primary-hover: rgba(7, 86, 151, 0.9);
   --secondary-color: #1d4ed8;
   --color-primary: #075697;
-  --color-primary-light: #34A8F6;
+  --color-primary-light: #34a8f6;
 
   /* Text Colors */
   --text-color: #1f2937;
@@ -102,7 +102,7 @@
   --text-light: #6b7280;
   --link-color: #999999;
 
-  --icon-color: #5F6368;
+  --icon-color: #5f6368;
 
   /* Background Colors */
   --background-color: #ffffff;
@@ -148,15 +148,17 @@
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
   --box-shadow-base: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --box-shadow-dropdown: 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --box-shadow-dropdown: 0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --box-shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.18);
 
   /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-family-base: 'HelveticaCE', sans-serif;
-  --font-family-medium: 'Helvetica-Medium', sans-serif;
-  --font-family-bold: 'Helvetica-Bold', sans-serif;
-  --font-family-footer: 'Inter', Arial, sans-serif;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-family-base: "HelveticaCE", sans-serif;
+  --font-family-medium: "Helvetica-Medium", sans-serif;
+  --font-family-bold: "Helvetica-Bold", sans-serif;
+  --font-family-footer: "Inter", Arial, sans-serif;
   --font-family-heading: "Helvetica-Bold", -apple-system, sans-serif;
   --font-family-medium: "Helvetica-Medium", -apple-system, sans-serif;
   --font-size-base: 14px;
@@ -180,32 +182,30 @@
 /* ==========================================================================
      CSS Reset
      ========================================================================== */
-     *,
-     *::before,
-     *::after {
-       box-sizing: border-box;
-       margin: 0;
-       padding: 0;
-     }
-     
-     html {
-       font-size: 16px;
-       scroll-behavior: smooth;
-       -webkit-text-size-adjust: 100%;
-       -ms-text-size-adjust: 100%;
-     }
-     
-     body {
-       font-family: var(--font-family);
-       font-size: 15px;
-       line-height: var(--line-height-relaxed);
-       color: var(--text-color);
-       background-color: var(--background-white);
-       -webkit-font-smoothing: antialiased;
-       -moz-osx-font-smoothing: grayscale;
-     }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
- 
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 15px;
+  line-height: var(--line-height-relaxed);
+  color: var(--text-color);
+  background-color: var(--background-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 /* ==========================================================================
    Common Styles - Shared Base Styles
@@ -309,12 +309,12 @@ main {
   text-align: left;
 }
 
-.page-header h2, .account-sidebar h3 {
+.page-header h2,
+.account-sidebar h3 {
   color: var(--text-primary);
   font-family: var(--font-family-medium);
   font-size: 22px;
   font-weight: 500;
-  
 }
 
 .page-header p {
@@ -445,8 +445,8 @@ main {
 /* ==========================================================================
    Accessibility Features
    ========================================================================== */
-.btn-default-primary, button[type="submit"] {
-     
+.btn-default-primary,
+button[type="submit"] {
   align-items: center;
   appearance: none;
   background-color: rgba(7, 86, 151, 1);
@@ -461,7 +461,7 @@ main {
   font-family: HelveticaNeue-Medium;
   font-size: 15px;
   font-weight: 500;
-  gap:7px;
+  gap: 7px;
   height: 36px;
   outline: none;
   padding: 0 20px;
@@ -492,17 +492,20 @@ main {
   -webkit-user-select: text;
 }
 
-  .btn-default-primary:hover, button[type="submit"]:hover {
-      background-color: #00A8E4;
-      text-decoration: none;
-      
-  }
+.btn-default-primary:hover,
+button[type="submit"]:hover {
+  background-color: #00a8e4;
+  text-decoration: none;
+}
 
-  .btn-default-primary:disabled, .btn-default-primary[disabled], .btn-default-primary.disabled,
-  button[type="submit"]:disabled, button[type="submit"][disabled] {
-      background-color: #A7A9AC;
-      cursor: not-allowed;
-  }
+.btn-default-primary:disabled,
+.btn-default-primary[disabled],
+.btn-default-primary.disabled,
+button[type="submit"]:disabled,
+button[type="submit"][disabled] {
+  background-color: #a7a9ac;
+  cursor: not-allowed;
+}
 
 /* ==========================================================================
    Grid Layout - 2 columns desktop, 1 column mobile/tablet
@@ -553,8 +556,6 @@ main {
   line-height: 1.2;
 }
 
- 
-
 .card-with-icon p {
   color: rgba(51, 51, 51, 1);
   font-family: var(--font-family-medium);
@@ -576,7 +577,8 @@ main {
 /* ==========================================================================
    Link Styles
    ========================================================================== */
-.link-tertiary, a.link-tertiary {
+.link-tertiary,
+a.link-tertiary {
   color: rgba(0, 85, 150, 1);
   font-family: HelveticaNeue-Medium;
   font-size: 15px;
@@ -585,8 +587,10 @@ main {
   transition: var(--transition);
 }
 
-.link-tertiary:hover, a.link-tertiary:hover, 
-.link-tertiary:focus, a.link-tertiary:focus {
+.link-tertiary:hover,
+a.link-tertiary:hover,
+.link-tertiary:focus,
+a.link-tertiary:focus {
   text-decoration: underline;
   outline: none;
 }
@@ -595,7 +599,13 @@ main {
    Responsive Media Queries
    ========================================================================== */
 
-@media (max-width: 768px) {
+/* Tablet: >= 768px and < 1024px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific styles can be added here if needed */
+}
+
+/* Mobile: < 768px */
+@media (max-width: 767px) {
   main {
     padding: 62px 16px 24px;
   }
@@ -610,11 +620,13 @@ main {
   }
 }
 
-@media (max-width: 480px) {
+/* Small Mobile: < 480px */
+@media (max-width: 479px) {
   .page-header h1 {
     font-size: 32px;
   }
-  .page-header h2, .account-sidebar h3{
+  .page-header h2,
+  .account-sidebar h3 {
     font-size: 20px;
     line-height: 1.2;
     margin-bottom: 10px;
@@ -623,7 +635,7 @@ main {
   .page-header p {
     font-size: 15px;
   }
-  .card-with-icon{
+  .card-with-icon {
     padding: 30px;
   }
   .grid-d2-tm1 {
