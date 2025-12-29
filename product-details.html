@@ -383,6 +383,12 @@
                   />
                 </svg>
               </button>
+              <div
+                class="product-detail-dots-container"
+                id="product-dots-container"
+              >
+                <!-- Dots will be generated dynamically -->
+              </div>
             </div>
           </section>
           <section
@@ -435,37 +441,42 @@
               </a>
             </div>
 
-            <h3 class="product-detail-highlights-heading">
-              Product Highlights
-            </h3>
-            <table class="product-detail-highlights-table">
-              <tbody>
-                <tr>
-                  <th scope="row">Application</th>
-                  <td>Supply or Exhaust</td>
-                </tr>
-                <tr>
-                  <th scope="row">Airflow Range</th>
-                  <td>Up to 160,000 cfm</td>
-                </tr>
-                <tr>
-                  <th scope="row">Static Pressure Rating</th>
-                  <td>Up to 21 in. wg. ESP</td>
-                </tr>
-                <tr>
-                  <th scope="row">Arrangements</th>
-                  <td>1, 4, 8, 10</td>
-                </tr>
-                <tr>
-                  <th scope="row">Construction</th>
-                  <td>Steel | Aluminum | Stainless Steel | Spark A, B, or C</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="product-detail-highlights-container">
+              <h3 class="product-detail-highlights-heading">
+                Product Highlights
+              </h3>
+              <table class="product-detail-highlights-table">
+                <tbody>
+                  <tr>
+                    <th scope="row">Application</th>
+                    <td>Supply or Exhaust</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Airflow Range</th>
+                    <td>Up to 160,000 cfm</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Static Pressure Rating</th>
+                    <td>Up to 21 in. wg. ESP</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Arrangements</th>
+                    <td>1, 4, 8, 10</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Construction</th>
+                    <td>
+                      Steel | Aluminum | Stainless Steel |<br />
+                      Spark A, B, or C
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
 
-            <a class="product-detail-view-more" href="#"
-              >View more details &gt;</a
-            >
+              <a class="product-detail-view-more" href="#"
+                >View more details &gt;
+              </a>
+            </div>
           </section>
         </div>
       </article>
@@ -579,7 +590,8 @@
         role="tablist"
         aria-label="Product information sections"
       >
-        <div class="product-detail-nav">
+        <!-- Desktop Navigation: Horizontal Tabs -->
+        <div class="product-detail-nav product-detail-nav-desktop">
           <button
             class="product-detail-nav-item is-active"
             role="tab"
@@ -643,6 +655,119 @@
           >
             Blog Highlights
           </button>
+        </div>
+
+        <!-- Mobile/Tablet Navigation: Dropdown -->
+        <div class="product-detail-nav-dropdown product-detail-nav-mobile">
+          <div class="product-detail-nav-dropdown-select">
+            <button
+              type="button"
+              id="product-detail-nav-dropdown-trigger"
+              class="product-detail-nav-dropdown-button"
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              aria-controls="product-detail-nav-dropdown-menu"
+              aria-label="Select product information section"
+            >
+              <span class="product-detail-nav-dropdown-text">Jump to...</span>
+            </button>
+            <div
+              class="product-detail-nav-dropdown-menu-wrapper"
+              id="product-detail-nav-dropdown-menu-wrapper"
+              hidden
+            >
+              <ul
+                id="product-detail-nav-dropdown-menu"
+                class="product-detail-nav-dropdown-menu"
+                role="listbox"
+              >
+                <li>
+                  <button
+                    type="button"
+                    class="product-detail-nav-dropdown-option is-active"
+                    data-panel="features-panel"
+                    role="option"
+                    aria-selected="true"
+                    id="dropdown-features-tab"
+                  >
+                    Features
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    class="product-detail-nav-dropdown-option"
+                    data-panel="product-details-panel"
+                    role="option"
+                    aria-selected="false"
+                    id="dropdown-product-details-tab"
+                  >
+                    Product Details
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    class="product-detail-nav-dropdown-option"
+                    data-panel="documents-panel"
+                    role="option"
+                    aria-selected="false"
+                    id="dropdown-documents-tab"
+                  >
+                    Documents
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    class="product-detail-nav-dropdown-option"
+                    data-panel="drawings-panel"
+                    role="option"
+                    aria-selected="false"
+                    id="dropdown-drawings-tab"
+                  >
+                    Drawings
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    class="product-detail-nav-dropdown-option"
+                    data-panel="media-panel"
+                    role="option"
+                    aria-selected="false"
+                    id="dropdown-media-tab"
+                  >
+                    Media
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    class="product-detail-nav-dropdown-option"
+                    data-panel="related-products-panel"
+                    role="option"
+                    aria-selected="false"
+                    id="dropdown-related-products-tab"
+                  >
+                    Related Products
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    class="product-detail-nav-dropdown-option"
+                    data-panel="blog-highlights-panel"
+                    role="option"
+                    aria-selected="false"
+                    id="dropdown-blog-highlights-tab"
+                  >
+                    Blog Highlights
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </nav>
 
@@ -1722,6 +1847,7 @@
     <script>
       // Product navigation tabs
       document.addEventListener("DOMContentLoaded", function () {
+        // Desktop navigation tabs
         const navItems = document.querySelectorAll(".product-detail-nav-item");
 
         navItems.forEach(function (item) {
@@ -1735,6 +1861,9 @@
             // Add active class to clicked item
             this.classList.add("is-active");
             this.setAttribute("aria-selected", "true");
+
+            // Update dropdown to match
+            updateDropdownFromDesktopTab(this);
 
             // Scroll to corresponding panel
             const panelId = this.getAttribute("aria-controls");
@@ -1762,6 +1891,197 @@
           firstNavItem.classList.add("is-active");
           firstNavItem.setAttribute("aria-selected", "true");
         }
+
+        // Mobile/Tablet dropdown navigation
+        const dropdownTrigger = document.getElementById(
+          "product-detail-nav-dropdown-trigger"
+        );
+        const dropdownMenuWrapper = document.getElementById(
+          "product-detail-nav-dropdown-menu-wrapper"
+        );
+        const dropdownMenu = document.getElementById(
+          "product-detail-nav-dropdown-menu"
+        );
+        const dropdownOptions = document.querySelectorAll(
+          ".product-detail-nav-dropdown-option"
+        );
+        const dropdownText = dropdownTrigger
+          ? dropdownTrigger.querySelector(".product-detail-nav-dropdown-text")
+          : null;
+
+        // Define helper functions that will be used by event handlers
+        function updateDropdownFromDesktopTab(desktopTab) {
+          if (!dropdownText || !dropdownOptions) return;
+          const panelId = desktopTab.getAttribute("aria-controls");
+          const matchingOption = Array.from(dropdownOptions).find(function (
+            opt
+          ) {
+            return opt.getAttribute("data-panel") === panelId;
+          });
+          if (matchingOption) {
+            dropdownText.textContent = matchingOption.textContent.trim();
+            dropdownOptions.forEach(function (opt) {
+              opt.classList.remove("is-active");
+              opt.setAttribute("aria-selected", "false");
+            });
+            matchingOption.classList.add("is-active");
+            matchingOption.setAttribute("aria-selected", "true");
+          }
+        }
+
+        function updateDesktopTabsFromDropdown(dropdownOption) {
+          const panelId = dropdownOption.getAttribute("data-panel");
+          const matchingTab = Array.from(navItems).find(function (tab) {
+            return tab.getAttribute("aria-controls") === panelId;
+          });
+          if (matchingTab) {
+            navItems.forEach(function (tab) {
+              tab.classList.remove("is-active");
+              tab.setAttribute("aria-selected", "false");
+            });
+            matchingTab.classList.add("is-active");
+            matchingTab.setAttribute("aria-selected", "true");
+          }
+        }
+
+        function openDropdown() {
+          if (dropdownTrigger && dropdownMenuWrapper) {
+            dropdownTrigger.classList.add("is-open");
+            dropdownTrigger.setAttribute("aria-expanded", "true");
+            dropdownMenuWrapper.hidden = false;
+          }
+        }
+
+        function closeDropdown() {
+          if (dropdownTrigger && dropdownMenuWrapper) {
+            dropdownTrigger.classList.remove("is-open");
+            dropdownTrigger.setAttribute("aria-expanded", "false");
+            dropdownMenuWrapper.hidden = true;
+          }
+        }
+
+        function toggleDropdown() {
+          const isOpen =
+            dropdownTrigger.getAttribute("aria-expanded") === "true";
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            openDropdown();
+          }
+        }
+
+        function selectDropdownOption(option) {
+          // Remove active class from all options
+          dropdownOptions.forEach(function (opt) {
+            opt.classList.remove("is-active");
+            opt.setAttribute("aria-selected", "false");
+          });
+
+          // Add active class to selected option
+          option.classList.add("is-active");
+          option.setAttribute("aria-selected", "true");
+
+          // Update dropdown button text
+          if (dropdownText) {
+            dropdownText.textContent = option.textContent.trim();
+          }
+
+          // Update desktop tabs to match
+          updateDesktopTabsFromDropdown(option);
+
+          // Scroll to corresponding panel
+          const panelId = option.getAttribute("data-panel");
+          const targetPanel = document.getElementById(panelId);
+          if (targetPanel) {
+            closeDropdown();
+            targetPanel.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }
+
+        // Dropdown trigger click handler
+        if (dropdownTrigger) {
+          dropdownTrigger.addEventListener("click", function (e) {
+            e.stopPropagation();
+            toggleDropdown();
+          });
+
+          // Keyboard navigation for dropdown trigger
+          dropdownTrigger.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+              e.preventDefault();
+              if (e.key === "ArrowDown" && !dropdownMenuWrapper.hidden) {
+                // Focus first option if dropdown is already open
+                const firstOption = dropdownOptions[0];
+                if (firstOption) {
+                  firstOption.focus();
+                }
+              } else {
+                openDropdown();
+                // Focus first option
+                const firstOption = dropdownOptions[0];
+                if (firstOption) {
+                  setTimeout(function () {
+                    firstOption.focus();
+                  }, 0);
+                }
+              }
+            } else if (e.key === "Escape") {
+              closeDropdown();
+            }
+          });
+        }
+
+        // Dropdown option click handlers
+        dropdownOptions.forEach(function (option) {
+          option.addEventListener("click", function (e) {
+            e.stopPropagation();
+            selectDropdownOption(this);
+          });
+
+          // Keyboard navigation for dropdown options
+          option.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              selectDropdownOption(this);
+            } else if (e.key === "ArrowDown") {
+              e.preventDefault();
+              const currentIndex = Array.from(dropdownOptions).indexOf(this);
+              const nextIndex = (currentIndex + 1) % dropdownOptions.length;
+              dropdownOptions[nextIndex].focus();
+            } else if (e.key === "ArrowUp") {
+              e.preventDefault();
+              const currentIndex = Array.from(dropdownOptions).indexOf(this);
+              const prevIndex =
+                currentIndex === 0
+                  ? dropdownOptions.length - 1
+                  : currentIndex - 1;
+              dropdownOptions[prevIndex].focus();
+            } else if (e.key === "Escape") {
+              closeDropdown();
+              if (dropdownTrigger) {
+                dropdownTrigger.focus();
+              }
+            }
+          });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+          if (
+            dropdownMenuWrapper &&
+            !dropdownMenuWrapper.contains(e.target) &&
+            dropdownTrigger &&
+            !dropdownTrigger.contains(e.target)
+          ) {
+            closeDropdown();
+          }
+        });
+
+        // Initialize dropdown - keep "Jump to..." as default text
+        // Don't set any option as active initially - user must make a selection
 
         // Document toggle functionality
         const documentToggles = document.querySelectorAll(
@@ -2109,6 +2429,54 @@
           const totalThumbs = productThumbsTrack.children.length;
           const maxPosition = Math.max(0, totalThumbs - visibleThumbs);
 
+          // Dots functionality
+          const dotsContainer = document.getElementById(
+            "product-dots-container"
+          );
+          let dotButtons = [];
+
+          function createDots() {
+            if (!dotsContainer) return;
+
+            // Clear existing dots
+            dotsContainer.innerHTML = "";
+
+            // Create dots based on number of thumbnails
+            for (let i = 0; i < totalThumbs; i++) {
+              const dot = document.createElement("button");
+              dot.className = "product-detail-dot";
+              if (i === 0) {
+                dot.classList.add("active");
+              }
+              dot.setAttribute("aria-label", `Go to image ${i + 1}`);
+              dot.setAttribute("data-index", i);
+              dot.addEventListener("click", function () {
+                selectThumbByIndex(i);
+              });
+              dotsContainer.appendChild(dot);
+              dotButtons.push(dot);
+            }
+          }
+
+          function updateActiveDot(activeIndex) {
+            dotButtons.forEach(function (dot, index) {
+              if (index === activeIndex) {
+                dot.classList.add("active");
+              } else {
+                dot.classList.remove("active");
+              }
+            });
+          }
+
+          function selectThumbByIndex(index) {
+            if (thumbButtons[index]) {
+              selectThumb(thumbButtons[index]);
+            }
+          }
+
+          // Initialize dots
+          createDots();
+
           function updateThumbsPosition() {
             const translateX = -(currentPosition * (thumbWidth + gap));
             productThumbsTrack.style.transform = `translateX(${translateX}px)`;
@@ -2175,6 +2543,8 @@
             // Select the new thumbnail and update main image
             if (thumbButtons[newActiveIndex]) {
               selectThumb(thumbButtons[newActiveIndex]);
+              // Update active dot
+              updateActiveDot(newActiveIndex);
             }
           }
 
@@ -2192,6 +2562,12 @@
             if (imgSrc && imgAlt) {
               mainProductImage.src = imgSrc;
               mainProductImage.alt = imgAlt;
+            }
+
+            // Update active dot
+            const btnIndex = Array.from(thumbButtons).indexOf(btn);
+            if (btnIndex !== -1) {
+              updateActiveDot(btnIndex);
             }
           }
 
