@@ -214,7 +214,7 @@
             </g>
         </g>
         <rect id="Rectangle" stroke="#979797" stroke-width="1" fill="#FFFFFF" fill-rule="evenodd" x="145.5" y="168.5" width="274" height="155"></rect>
-        <g id="close-me" stroke-width="1" fill-rule="evenodd" transform="translate(391, 183)" fill="#333333">
+        <g id="close-btn" stroke-width="1" fill-rule="evenodd" transform="translate(391, 183)" fill="#333333">
             <polygon id="Path" fill-rule="nonzero" points="1.4 14 0 12.6 5.6 7 0 1.4 1.4 0 7 5.6 12.6 0 14 1.4 8.4 7 14 12.6 12.6 14 7 8.4"></polygon>
         </g>
         <g id="Group-23" stroke-width="1" fill-rule="evenodd" transform="translate(262, 188)" fill="#333333" font-family="HelveticaNeue-Medium, Helvetica Neue" font-size="22" font-weight="400" line-spacing="21">
@@ -228,16 +228,12 @@
             <tspan x="194.145" y="229">Dedicated Outdoor Air System </tspan>
             <tspan x="261.693" y="248">(DOAS)</tspan>
         </text>
-        <g id="view-default" stroke-width="1" fill-rule="evenodd" transform="translate(251, 267)">
-            <rect id="Rectangle" stroke="#34A8F6" fill="#FFFFFF" x="0.5" y="0.5" width="73" height="36" rx="18"></rect>
-            <text id="View" font-family="HelveticaNeue-Medium, Helvetica Neue" font-size="15" font-weight="400" line-spacing="21" fill="#34A8F6">
-                <tspan x="20" y="21">View</tspan>
+        <g id="view-btn" stroke-width="1" fill-rule="evenodd" transform="translate(251, 267)">
+            <rect id="Rectangle" fill="#34A8F6" fill-rule="evenodd" x="0" y="0" width="74" height="37" rx="18.5"></rect>
+            <text id="View" font-family="HelveticaNeue-Medium, Helvetica Neue" font-size="15" font-weight="400" line-spacing="21" fill="#FFFFFF">
+                <tspan x="20" y="23">View</tspan>
             </text>
         </g>
-        <rect id="Rectangle" fill="#34A8F6" fill-rule="evenodd" x="251" y="267" width="74" height="37" rx="18.5"></rect>
-        <text id="View" font-family="HelveticaNeue-Medium, Helvetica Neue" font-size="15" font-weight="400" line-spacing="21" fill="#FFFFFF">
-            <tspan x="271" y="290">View</tspan>
-        </text>
         <g id="Group-28" stroke-width="1" fill-rule="evenodd" transform="translate(274, 320)">
             <path d="M14,3.81441102 L26.9776803,20.5 L1.02231968,20.5 L14,3.81441102 Z" id="Triangle" stroke="#979797" fill="#D8D8D8" transform="translate(14, 12) scale(1, -1) translate(-14, -12)"></path>
             <path d="M14,-0.814411018 L29.0223197,18.5 L-1.02231968,18.5 L14,-0.814411018 Z" id="Triangle" stroke="#FFFFFF" fill="#FFFFFF" transform="translate(14, 9) scale(1, -1) translate(-14, -9)"></path>
