@@ -47,13 +47,13 @@ class SpaceService {
                                 <li>Secondary HVAC system (not provided by Greenheck)</li>
                             </ul>
                         `,
-                        bgImg: ""
+                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/classroom-overview.png"
                     },
                     systemEquipment: [
                         {
                             id: "rve-85",
                             title: "RVE-85",
-                            slideImg: "", // Placeholder for 3D view
+                            slideImg: "./Content/imgs/prd-1.png", // Placeholder for 3D view
                             body: `
                                 <ul class="product-features">
                                     <li>Direct drive plenum supply and optional exhaust fans with neoprene isolation and factory-provided variable frequency drive.</li>
@@ -61,12 +61,12 @@ class SpaceService {
                                 </ul>
                             `,
                             productDetailsUrl: "#",
-                            bgImg: ""
+                            bgImg: "./Content/imgs/RooftopUnits.png"
                         },
                         {
                             id: "atu-xg-th-500",
                             title: "ATU - XG-TH-500",
-                            slideImg: "",
+                            slideImg: "./Content/imgs/prd-2.png",
                             body: `
                                 <ul class="product-features">
                                     <li>Damper rotates in a self-lubricating, long-life, low-friction thermoplastic bearing</li>
@@ -75,7 +75,7 @@ class SpaceService {
                                 </ul>
                             `,
                             productDetailsUrl: "#",
-                            bgImg: ""
+                            bgImg: "./Content/imgs/AirTerminalUnits.png"
                         }
                     ],
                     designNarrative: {
@@ -85,7 +85,7 @@ class SpaceService {
                             <p>The unit includes <strong>modulating, inverter scroll compressors</strong>, <strong>electronically commutated (EC) on all condenser fan motors</strong>, and <strong>modulating hot gas reheat</strong>. Supply and exhaust fans are controlled by <strong>factory provided, field mounted duct static pressure sensors</strong>.</p>
                             <p>Each room features <strong>motorized, single duct VAV boxes, Greenheck model XG-TH-500</strong>, which open/close based on occupancy to maintain ventilation. Air terminal units have <strong>1" fiberglass insulation with 1 1/2 lb weight</strong> and connect to a <strong>Greenheck XG-5750 air diffuser</strong>.</p>
                         `,
-                        img: ""
+                        img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
                 {
@@ -103,13 +103,13 @@ class SpaceService {
                                 <li>Demand-controlled ventilation system</li>
                             </ul>
                         `,
-                        bgImg: ""
+                        bgImg: "./Content/imgs/k-12-hero-bg.png"
                     },
                     systemEquipment: [
                          {
                             id: "hvls-fan",
                             title: "HVLS Fan",
-                            slideImg: "",
+                            slideImg: "./Content/imgs/Fans.png",
                             body: `
                                 <ul class="product-features">
                                     <li>High-volume, low-speed fan for large open spaces.</li>
@@ -117,13 +117,13 @@ class SpaceService {
                                 </ul>
                             `,
                             productDetailsUrl: "#",
-                            bgImg: ""
+                            bgImg: "./Content/imgs/Fans.png"
                         }
                     ],
                     designNarrative: {
                         title: "Gym Design Narrative",
                         body: `<p>The gym design narrative is coming soon.</p>`,
-                        img: ""
+                        img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
                 {
@@ -134,13 +134,13 @@ class SpaceService {
                     overview: {
                         title: "Admin Offices Overview",
                         body: `<p>Efficient climate control for administrative areas.</p>`,
-                        bgImg: ""
+                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/admin-offices-overview.png"
                     },
                     systemEquipment: [],
                     designNarrative: {
                         title: "Admin Offices Design Narrative",
                         body: `<p>Narrative coming soon.</p>`,
-                        img: ""
+                        img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
                 {
@@ -151,13 +151,13 @@ class SpaceService {
                     overview: {
                         title: "Cafeteria Overview",
                         body: `<p>Ventilation solutions for dining areas.</p>`,
-                        bgImg: ""
+                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/cafeteria-overview.png"
                     },
                     systemEquipment: [],
                     designNarrative: {
                         title: "Cafeteria Design Narrative",
                         body: `<p>Narrative coming soon.</p>`,
-                        img: ""
+                        img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
                 {
@@ -168,13 +168,13 @@ class SpaceService {
                     overview: {
                         title: "Kitchen Overview",
                         body: `<p>High-performance kitchen ventilation systems.</p>`,
-                        bgImg: ""
+                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/kitchen-overview.png"
                     },
                     systemEquipment: [],
                     designNarrative: {
                         title: "Kitchen Design Narrative",
                         body: `<p>Narrative coming soon.</p>`,
-                        img: ""
+                        img: "./Content/imgs/Exhuast Hoods.png"
                     }
                 },
                 {
@@ -185,13 +185,13 @@ class SpaceService {
                     overview: {
                         title: "Lobby Overview",
                         body: `<p>Welcoming and comfortable entryways.</p>`,
-                        bgImg: ""
+                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/lobby-overhead-overview.png"
                     },
                     systemEquipment: [],
                     designNarrative: {
                         title: "Lobby Design Narrative",
                         body: `<p>Narrative coming soon.</p>`,
-                        img: ""
+                        img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
                 {
@@ -202,13 +202,13 @@ class SpaceService {
                     overview: {
                         title: "Locker Room Overview",
                         body: `<p>Effective moisture and odor control.</p>`,
-                        bgImg: ""
+                        bgImg: "./Content/imgs/k-12-hero-bg.png"
                     },
                     systemEquipment: [],
                     designNarrative: {
                         title: "Locker Room Design Narrative",
                         body: `<p>Narrative coming soon.</p>`,
-                        img: ""
+                        img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
                 {
@@ -219,13 +219,13 @@ class SpaceService {
                     overview: {
                         title: "Science Lab Overview",
                         body: `<p>Safe ventilation for laboratory environments.</p>`,
-                        bgImg: ""
+                        bgImg: "./Content/imgs/HealthcareLaboratoriesCleanrooms.png"
                     },
                     systemEquipment: [],
                     designNarrative: {
                         title: "Science Lab Design Narrative",
                         body: `<p>Narrative coming soon.</p>`,
-                        img: ""
+                        img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 }
             ]
