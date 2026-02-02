@@ -154,7 +154,7 @@ class SpaceService {
                          {
                             id: "hvls-fan",
                             title: "HVLS Fan",
-                            slideImg: "./Content/imgs/Fans.png",
+                            slideImg: "./Content/imgs/prd-1.png",
                             body: `
                                 <ul class="product-features">
                                     <li>High-volume, low-speed fan for large open spaces.</li>
@@ -163,11 +163,24 @@ class SpaceService {
                             `,
                             productDetailsUrl: "#",
                             bgImg: "./Content/imgs/Fans.png"
+                        },
+                        {
+                            id: "rv-110",
+                            title: "RV-110",
+                            slideImg: "./Content/imgs/prd-2.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Rooftop ventilation unit optimized for large spaces.</li>
+                                    <li>Energy-efficient operation with advanced controls.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/RooftopUnits.png"
                         }
                     ],
                     designNarrative: {
                         title: "Gym Design Narrative",
-                        body: `<p>The gym design narrative is coming soon.</p>`,
+                        body: `<p>The gymnasium features a single-zone, variable airflow system designed for high occupancy and activity levels. The design centers on a <strong>Greenheck model RV-110 rooftop unit</strong> for ventilation, supplemented by <strong>high-volume, low-speed (HVLS) fans</strong> to ensure optimal air circulation and occupant comfort.</p>`,
                         img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
@@ -181,10 +194,37 @@ class SpaceService {
                         body: `<p>Efficient climate control for administrative areas.</p>`,
                         bgImg: "./Content/imgs/Space Pins and Labels with Popover/admin-offices-overview.png"
                     },
-                    systemEquipment: [],
+                    systemEquipment: [
+                        {
+                            id: "vav-box",
+                            title: "VAV Box",
+                            slideImg: "./Content/imgs/prd-2.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Precision airflow control for individual zones.</li>
+                                    <li>Quiet operation suitable for office environments.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/AirTerminalUnits.png"
+                        },
+                        {
+                            id: "diffuser",
+                            title: "Air Diffuser",
+                            slideImg: "./Content/imgs/prd-1.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Ensures proper air distribution within the office space.</li>
+                                    <li>Aesthetically designed to blend with ceiling grids.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/GrillesRegistersDiffusers.png"
+                        }
+                    ],
                     designNarrative: {
                         title: "Admin Offices Design Narrative",
-                        body: `<p>Narrative coming soon.</p>`,
+                        body: `<p>Administrative areas utilize a <strong>Multi-zone Variable Air Volume (VAV) system</strong>. This setup allows for individual temperature control in different offices using <strong>Greenheck VAV boxes</strong> and <strong>air diffusers</strong>, ensuring comfort while maximizing energy efficiency.</p>`,
                         img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
@@ -198,10 +238,37 @@ class SpaceService {
                         body: `<p>Ventilation solutions for dining areas.</p>`,
                         bgImg: "./Content/imgs/Space Pins and Labels with Popover/cafeteria-overview.png"
                     },
-                    systemEquipment: [],
+                    systemEquipment: [
+                        {
+                            id: "makeup-air",
+                            title: "Make-Up Air",
+                            slideImg: "./Content/imgs/prd-1.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Replaces exhausted air to maintain pressure balance.</li>
+                                    <li>Tempered air for occupant comfort.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/100OutdoorAir.png"
+                        },
+                        {
+                            id: "exhaust-fan",
+                            title: "Exhaust Fan",
+                            slideImg: "./Content/imgs/prd-2.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Removes stale air and odors.</li>
+                                    <li>High efficiency and low sound levels.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/Fans.png"
+                        }
+                    ],
                     designNarrative: {
                         title: "Cafeteria Design Narrative",
-                        body: `<p>Narrative coming soon.</p>`,
+                        body: `<p>The cafeteria ventilation system is designed to handle variable occupancy loads and food odors. It integrates <strong>Greenheck make-up air units</strong> with the kitchen's exhaust system to maintain pressure balance and prevent odor migration into adjacent spaces.</p>`,
                         img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
@@ -215,10 +282,37 @@ class SpaceService {
                         body: `<p>High-performance kitchen ventilation systems.</p>`,
                         bgImg: "./Content/imgs/Space Pins and Labels with Popover/kitchen-overview.png"
                     },
-                    systemEquipment: [],
+                    systemEquipment: [
+                        {
+                            id: "kitchen-hood",
+                            title: "Vari-Flow Hood",
+                            slideImg: "./Content/imgs/prd-1.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>High-efficiency grease extraction and containment.</li>
+                                    <li>Integrated LED lighting and fire suppression.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/Exhuast Hoods.png"
+                        },
+                        {
+                            id: "pcu",
+                            title: "Pollution Control",
+                            slideImg: "./Content/imgs/prd-2.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Removes grease and odors from exhaust air.</li>
+                                    <li>Ensures compliance with environmental regulations.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/Pollution Control.png"
+                        }
+                    ],
                     designNarrative: {
                         title: "Kitchen Design Narrative",
-                        body: `<p>Narrative coming soon.</p>`,
+                        body: `<p>The kitchen requires a robust ventilation system to capture heat, grease, and odors. A dedicated <strong>Greenheck Make-Up Air Unit</strong> pairs with <strong>Vari-Flow Exhaust Hoods</strong> and a <strong>Pollution Control Unit</strong> to ensure safety, compliance, and comfort for kitchen staff.</p>`,
                         img: "./Content/imgs/Exhuast Hoods.png"
                     }
                 },
@@ -232,10 +326,37 @@ class SpaceService {
                         body: `<p>Welcoming and comfortable entryways.</p>`,
                         bgImg: "./Content/imgs/Space Pins and Labels with Popover/lobby-overhead-overview.png"
                     },
-                    systemEquipment: [],
+                    systemEquipment: [
+                        {
+                            id: "air-curtain",
+                            title: "Air Curtain",
+                            slideImg: "./Content/imgs/prd-1.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Creates an air seal to prevent infiltration.</li>
+                                    <li>Keeps conditioned air inside and pests outside.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/AirTerminalUnits.png"
+                        },
+                        {
+                            id: "doas-unit",
+                            title: "DOAS Unit",
+                            slideImg: "./Content/imgs/prd-2.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Supplies conditioned outdoor air.</li>
+                                    <li>Maintains optimal indoor air quality.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/RooftopUnits.png"
+                        }
+                    ],
                     designNarrative: {
                         title: "Lobby Design Narrative",
-                        body: `<p>Narrative coming soon.</p>`,
+                        body: `<p>The lobby serves as a transition space, requiring a system that can handle rapid load changes. <strong>Greenheck Air Curtains</strong> protect against infiltration at the entry, while a dedicated <strong>DOAS unit</strong> maintains a comfortable, conditioned environment for occupants.</p>`,
                         img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
@@ -249,10 +370,24 @@ class SpaceService {
                         body: `<p>Effective moisture and odor control.</p>`,
                         bgImg: "./Content/imgs/k-12-hero-bg.png"
                     },
-                    systemEquipment: [],
+                    systemEquipment: [
+                        {
+                            id: "erv",
+                            title: "Energy Recovery",
+                            slideImg: "./Content/imgs/prd-1.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Transfers heat and moisture between airstreams.</li>
+                                    <li>Reduces heating and cooling loads.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/EnergyRecovery.png"
+                        }
+                    ],
                     designNarrative: {
                         title: "Locker Room Design Narrative",
-                        body: `<p>Narrative coming soon.</p>`,
+                        body: `<p>Locker rooms require high ventilation rates to effectively control humidity and odors. A <strong>Greenheck Energy Recovery Ventilator (ERV)</strong> provides ample fresh air while recovering energy from the exhaust stream to minimize operating costs.</p>`,
                         img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 },
@@ -266,10 +401,37 @@ class SpaceService {
                         body: `<p>Safe ventilation for laboratory environments.</p>`,
                         bgImg: "./Content/imgs/HealthcareLaboratoriesCleanrooms.png"
                     },
-                    systemEquipment: [],
+                    systemEquipment: [
+                        {
+                            id: "fume-exhaust",
+                            title: "Fume Exhaust",
+                            slideImg: "./Content/imgs/prd-1.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>High-velocity discharge to safely disperse fumes.</li>
+                                    <li>Corrosion-resistant construction.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/Fans.png"
+                        },
+                        {
+                            id: "venturi-valve",
+                            title: "Venturi Valve",
+                            slideImg: "./Content/imgs/prd-2.png",
+                            body: `
+                                <ul class="product-features">
+                                    <li>Maintains precise airflow and room pressurization.</li>
+                                    <li>Fast response to changing conditions.</li>
+                                </ul>
+                            `,
+                            productDetailsUrl: "#",
+                            bgImg: "./Content/imgs/AirTerminalUnits.png"
+                        }
+                    ],
                     designNarrative: {
                         title: "Science Lab Design Narrative",
-                        body: `<p>Narrative coming soon.</p>`,
+                        body: `<p>Safety is paramount in science labs. The ventilation system uses <strong>Greenheck high-plume exhaust fans</strong> to safely disperse fumes and <strong>Venturi valves</strong> to maintain precise room pressurization and containment of hazardous substances.</p>`,
                         img: "./Content/imgs/k-12-hero-bg.png"
                     }
                 }
