@@ -1,78 +1,51 @@
 /* Font Definitions */
 @font-face {
-  font-family: "Helvetica-Regular";
-  src: url("../font/Helvetica.otf") format("opentype");
+  font-family: "SharpSans-Regular";
+  src: url("../font/SharpSans-Book.otf") format("opentype");
   font-display: swap;
-}
-@font-face {
-  font-family: "Helvetica-Medium";
-  src: url("../font/Helvetica.otf") format("opentype");
-  font-display: swap;
-}
-@font-face {
-  font-family: "Helvetica-Bold";
-  src: url("../font/Helvetica-Bold.ttf") format("truetype");
-  font-display: swap;
+  font-weight: 400;
 }
 
 @font-face {
-  font-family: "Helvetica-Condensed-Black";
-  src: url("../font/Helvetica-Condensed-Black.otf") format("opentype");
+  font-family: "SharpSans-Medium";
+  src: url("../font/SharpSans-Medium.otf") format("opentype");
   font-display: swap;
+  font-weight: 500;
 }
 
 @font-face {
-  font-family: "Helvetica-Condensed-Bold";
-  src: url("../font/Helvetica-Condensed-Bold.otf") format("opentype");
+  font-family: "SharpSans-Bold";
+  src: url("../font/SharpSans-Bold.otf") format("opentype");
   font-display: swap;
+  font-weight: 700;
 }
 
 @font-face {
-  font-family: "Helvetica-Condensed";
-  src: url("../font/Helvetica-Condensed.otf") format("opentype");
+  font-family: "SharpSans-Light";
+  src: url("../font/SharpSans-Light.otf") format("opentype");
   font-display: swap;
+  font-weight: 300;
 }
 
 @font-face {
-  font-family: "Helvetica-Narrow-Bold";
-  src: url("../font/Helvetica-Narrow-Bold.otf") format("opentype");
+  font-family: "SharpSans-Thin";
+  src: url("../font/SharpSans-Thin.otf") format("opentype");
   font-display: swap;
+  font-weight: 100;
 }
 
 @font-face {
-  font-family: "Helvetica-Narrow-Oblique";
-  src: url("../font/Helvetica-Narrow-Oblique.otf") format("opentype");
+  font-family: "SharpSans-SemiBold";
+  src: url("../font/SharpSans-SemiBold.otf") format("opentype");
   font-display: swap;
+  font-weight: 600;
 }
 
 @font-face {
-  font-family: "Helvetica-Medium";
-  src: url("../font/Helvetica.otf") format("opentype");
+  font-family: "SharpSans-ExtraBold";
+  src: url("../font/SharpSans-ExtraBold.otf") format("opentype");
   font-display: swap;
-}
-
-@font-face {
-  font-family: "HelveticaCE-CondBold";
-  src: url("../font/HelveticaCE-CondBold.otf") format("opentype");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "HelveticaCE-Narrow";
-  src: url("../font/HelveticaCE-Narrow.otf") format("opentype");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "HelveticaCE";
-  src: url("../font/HelveticaCE.otf") format("opentype");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "HelveticaConBQ-Medium";
-  src: url("../font/HelveticaConBQ-Medium.otf") format("opentype");
-  font-display: swap;
+  font-weight: 800;
 }
 /* ==========================================================================
    CSS Custom Properties - Design System
@@ -153,14 +126,21 @@
   --box-shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.18);
 
   /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  --font-family-base: "HelveticaCE", sans-serif;
-  --font-family-medium: "Helvetica-Medium", sans-serif;
-  --font-family-bold: "Helvetica-Bold", sans-serif;
+  --font-family-thin: "SharpSans-Thin", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-light: "SharpSans-Light", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-book: "SharpSans-Regular", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-regular: "SharpSans-Regular", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-medium: "SharpSans-Medium", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-semi-bold: "SharpSans-SemiBold", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-bold: "SharpSans-Bold", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-extra-bold: "SharpSans-ExtraBold", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+
+  --font-family: var(--font-family-regular);
+  --font-family-base: var(--font-family-regular);
+  --font-family-medium: var(--font-family-medium);
+  --font-family-bold: var(--font-family-bold);
   --font-family-footer: "Inter", Arial, sans-serif;
-  --font-family-heading: "Helvetica-Bold", -apple-system, sans-serif;
-  --font-family-medium: "Helvetica-Medium", -apple-system, sans-serif;
+  --font-family-heading: var(--font-family-bold);
   --font-size-base: 14px;
   --font-size-nav: 18px;
   --line-height-relaxed: 1.6;
@@ -262,7 +242,7 @@ main {
 .breadcrumb-item {
   display: flex;
   align-items: center;
-  font-family: "Helvetica", var(--font-family);
+  font-family: var(--font-family);
   font-size: 13px;
   font-weight: 400;
   color: var(--text-primary);
@@ -458,7 +438,7 @@ button[type="submit"] {
   color: rgba(255, 255, 255, 1);
   cursor: pointer;
   display: flex;
-  font-family: HelveticaNeue-Medium;
+  font-family: var(--font-family-medium);
   font-size: 15px;
   font-weight: 500;
   gap: 7px;
@@ -580,7 +560,7 @@ button[type="submit"][disabled] {
 .link-tertiary,
 a.link-tertiary {
   color: rgba(0, 85, 150, 1);
-  font-family: HelveticaNeue-Medium;
+  font-family: var(--font-family-medium);
   font-size: 15px;
   font-weight: 500;
   text-decoration: none;

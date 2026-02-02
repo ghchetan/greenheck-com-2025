@@ -190,17 +190,18 @@
             </ol>
         </nav>
 
-        <h1 class="page-title">K-12 School</h1>
+        <h1 class="page-title" id="page-title">K-12 School</h1>
         <section class="hero-section">
-            <img src="./Content/imgs/k-12-hero-bg.png" alt="Building exterior view of Greenheck High School" class="hero-background" />
+            <img src="./Content/imgs/k-12-hero-bg.png" alt="Building exterior view of Greenheck High School" class="hero-background" id="hero-bg-img" />
             <div class="hero-overlay">
                 <div class="hero-content">
-                    <h2 class="hero-title">SHARE</h2>
-                    <p class="hero-description">
+                    <h2 class="hero-title" id="hero-title">SHARE</h2>
+                    <p class="hero-description" id="hero-description">
                         THIS INFORMATIVE, USEFUL<br>
                         & ENGAGING EXPERIENCE
                     </p>
-                    <div class="hero-buttons">
+                    <div class="hero-buttons" id="hero-buttons-container">
+                        <!-- Buttons will be injected dynamically -->
                         <button class="hero-btn hero-btn-primary" id="select-space-btn">
                             <img src="./Content/imgs/icons/select-a-space.svg" alt="Select a Space" />
                             Select a Space
@@ -245,12 +246,11 @@
                         </button>
                     </div>
                 </div>
-
+                <button class="space-selection-modal-close-btn" id="modal-close-btn">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
                 <!-- Modal Content -->
                 <div class="space-selection-modal-content">
-                    <button class="space-selection-modal-close-btn" id="modal-close-btn">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
                     <!-- Building Overview Scene -->
                     <div id="building-overview-scene" class="scene active">
                         <div class="school-building-container">
@@ -375,11 +375,11 @@
                             </div>
 
                             <!-- Right Panel - Space SVG View -->
-                            <div class="detail-right-panel">
+                            <!-- <div class="detail-right-panel">
                                 <div class="space-svg-container">
                                     <object id="space-svg-object" data="" type="image/svg+xml" class="space-svg-image"></object>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

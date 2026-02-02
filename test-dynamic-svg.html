@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic SVG Processing Tests</title>
+    <link rel="shortcut icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/4.5.0/jasmine_favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/4.5.0/jasmine.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/4.5.0/jasmine.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/4.5.0/jasmine-html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/4.5.0/boot.min.js"></script>
+    
+    <style>
+        #test-container { display: none; }
+    </style>
+</head>
+<body>
+    <div id="test-container">
+        <!-- Mock DOM needed for Controller initialization -->
+        <object id="building-svg-object"></object>
+        <object id="building-space-overlay-object"></object>
+        <object id="space-svg-object"></object>
+        <div id="space-selection-modal"></div>
+        <div class="space-selection-modal-space-name"></div>
+        <div id="modal-system-name"></div>
+        <div id="detail-title"></div>
+        <div id="detail-description"></div>
+        <div id="design-narrative-content"></div>
+        <div class="product-carousel"></div>
+        <div id="space-popover"></div>
+    </div>
+
+    <script src="Content/js/k-12-app.js"></script>
+
+    <script>
+        describe("SpaceController Dynamic SVG Handling", function() {
+            let service, model, view, controller;
+            let mockSvgObject, mockDoc, mockDynamicEl, mockLegacyEl, mockHybridEl;
+
+            beforeEach(function() {
+                service = new SpaceService();
+                model = new SpaceModel();
+                view = new SpaceView();
+                controller = new SpaceController(service, model, view);
+
+                // Mock SVG DOM
+                mockDynamicEl = document.createElement('g');
+                mockDynamicEl.setAttribute('data-space-id', 'dynamic-space');
+                
+                mockLegacyEl = document.createElement('g');
+                mockLegacyEl.id = 'Gym-marker'; // Matches existing map key
+
+                mockHybridEl = document.createElement('g');
+                mockHybridEl.id = 'Lobby-marker'; // Matches existing map key
+                mockHybridEl.setAttribute('data-space-id', 'new-lobby'); // Overrides legacy 'lobby'
+
+                // Mock Document
+                mockDoc = document.implementation.createHTMLDocument();
+                mockDoc.body.appendChild(mockDynamicEl);
+                mockDoc.body.appendChild(mockLegacyEl);
+                mockDoc.body.appendChild(mockHybridEl);
+
+                // Mock Object Element
+                mockSvgObject = {
+                    contentDocument: mockDoc
+                };
+
+                // Spy on the handler
+                spyOn(controller, 'handleMarkerClick');
+            });
+
+            it("should attach handlers to elements with data-space-id", function() {
+                controller.attachSvgHandlers(mockSvgObject);
+                
+                // Simulate click
+                mockDynamicEl.dispatchEvent(new Event('click'));
+                
+                expect(controller.handleMarkerClick).toHaveBeenCalledWith('dynamic-space');
+            });
+
+            it("should fallback to legacy ID mapping for elements without data-space-id", function() {
+                controller.attachSvgHandlers(mockSvgObject);
+                
+                // Simulate click
+                mockLegacyEl.dispatchEvent(new Event('click'));
+                
+                // 'Gym-marker' maps to 'gym' in the controller's hardcoded map
+                expect(controller.handleMarkerClick).toHaveBeenCalledWith('gym');
+            });
+
+            it("should prioritize data-space-id over legacy ID mapping", function() {
+                controller.attachSvgHandlers(mockSvgObject);
+                
+                // Simulate click
+                mockHybridEl.dispatchEvent(new Event('click'));
+                
+                // Should be 'new-lobby' (dynamic), NOT 'lobby' (legacy map)
+                expect(controller.handleMarkerClick).toHaveBeenCalledWith('new-lobby');
+            });
+
+            it("should set cursor to pointer for interactive elements", function() {
+                controller.attachSvgHandlers(mockSvgObject);
+                
+                expect(mockDynamicEl.style.cursor).toBe('pointer');
+                expect(mockLegacyEl.style.cursor).toBe('pointer');
+            });
+            
+            it("should handle visual feedback (opacity) on hover", function() {
+                controller.attachSvgHandlers(mockSvgObject);
+                
+                // Mouse Enter
+                mockDynamicEl.dispatchEvent(new Event('mouseenter'));
+                expect(mockDynamicEl.style.opacity).toBe('0.8');
+                
+                // Mouse Leave
+                mockDynamicEl.dispatchEvent(new Event('mouseleave'));
+                expect(mockDynamicEl.style.opacity).toBe('1');
+            });
+        });
+    </script>
+</body>
+</html>

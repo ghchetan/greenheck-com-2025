@@ -1,41 +1,86 @@
 /**
  * K-12 School Experience Application
- * Implements MVC Architecture:
- * - Service: Fetches data (Mocked for now)
- * - Model: Manages state
- * - View: Handles DOM and SVG manipulation
- * - Controller: Orchestrates logic and events
+ * 
+ * Architecture: Model-View-Controller (MVC)
+ * -----------------------------------------
+ * This application allows users to explore different spaces within a K-12 school environment.
+ * It uses an interactive SVG map to select spaces and view detailed information about
+ * HVAC systems and Greenheck products.
+ * 
+ * Components:
+ * - SpaceService: Handles data fetching (currently uses mock data).
+ * - SpaceModel: Manages the application state (current space, list of spaces, etc.).
+ * - SpaceView: Handles all DOM manipulations, SVG interactions, and UI rendering.
+ * - SpaceController: Connects the Model and View, handling user inputs and application logic.
  */
 
 /* ==========================================================================
    Service Layer
    ========================================================================== */
+/**
+ * Service class responsible for data retrieval.
+ * In a real-world scenario, this would make HTTP requests to a backend API.
+ */
 class SpaceService {
     constructor() {
-        this.dataUrl = '/api/k-12-data'; // Mock URL
+        this.dataUrl = '/api/k-12-data'; // Placeholder for API endpoint
     }
 
     /**
-     * Simulates fetching data from an API
-     * @returns {Promise<Object>} The full JSON data structure
+     * Fetches the K-12 space data.
+     * Currently simulates an asynchronous network request with a delay.
+     * 
+     * @param {string} buildingType - Optional building type to fetch data for.
+     * @returns {Promise<Object>} A promise that resolves to the data object containing spaces and page metadata.
      */
-    async fetchData() {
-        // Simulate network delay
+    async fetchData(buildingType = 'k-12') {
+        // Simulate network delay to mimic real API behavior
         return new Promise((resolve) => {
             setTimeout(() => {
-                resolve(this.getMockData());
+                resolve(this.getMockData(buildingType));
             }, 500);
         });
     }
 
-    getMockData() {
+    /**
+     * Returns the hardcoded mock data used for the application.
+     * This data structure defines all spaces, their content, and related products.
+     * 
+     * @param {string} buildingType - The type of building to retrieve data for.
+     * @returns {Object} The mock data object.
+     */
+    getMockData(buildingType) {
+        // Enhanced Data Structure
         return {
+            pageMetadata: {
+                title: "K-12 School Pradeep",
+                heroSection: {
+                    backgroundImage: "./Content/imgs/k-12-hero-bg.png",
+                    title: "SHARE 1",
+                    description: "THIS INFORMATIVE, USEFUL<br>& ENGAGING EXPERIENCE",
+                    actions: [
+                        {
+                            type: "primary",
+                            label: "Select a Space",
+                            iconClass: "./Content/imgs/icons/select-a-space.svg",
+                            actionId: "select-space-btn"
+                        },
+                        {
+                            type: "secondary",
+                            label: "Share",
+                            iconClass: "./Content/imgs/icons/share.svg",
+                            actionId: "share-btn"
+                        }
+                    ]
+                },
+                modalLandingImage: "./Content/imgs/Space Pins and Labels with Popover/K-12-Pins-Roof-Closed.svg"
+            },
             spaces: [
                 {
                     id: "classrooms",
                     name: "Classrooms",
                     systemName: "Dedicated Outdoor Air System (DOAS)",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/K-12-Classrooms.svg",
+                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/classrooms.svg",
                     overview: {
                         title: "Classroom Overview",
                         body: `
@@ -92,7 +137,7 @@ class SpaceService {
                     id: "gym",
                     name: "Gym",
                     systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/K-12-Gym.svg",
+                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/gym.svg",
                     overview: {
                         title: "Gym Overview",
                         body: `
@@ -130,7 +175,7 @@ class SpaceService {
                     id: "admin-offices",
                     name: "Admin Offices",
                     systemName: "Multi-zone variable air volume",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/K-12-Admin.svg",
+                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/admin-offices.svg",
                     overview: {
                         title: "Admin Offices Overview",
                         body: `<p>Efficient climate control for administrative areas.</p>`,
@@ -147,7 +192,7 @@ class SpaceService {
                     id: "cafeteria",
                     name: "Cafeteria",
                     systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/K-12-Cafeteria.svg",
+                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/cafeteria.svg",
                     overview: {
                         title: "Cafeteria Overview",
                         body: `<p>Ventilation solutions for dining areas.</p>`,
@@ -164,7 +209,7 @@ class SpaceService {
                     id: "kitchen",
                     name: "Kitchen",
                     systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/K-12-Kitchen.svg",
+                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/kitchen.svg",
                     overview: {
                         title: "Kitchen Overview",
                         body: `<p>High-performance kitchen ventilation systems.</p>`,
@@ -181,7 +226,7 @@ class SpaceService {
                     id: "lobby",
                     name: "Lobby",
                     systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/K-12-Lobby.svg",
+                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/lobby.svg",
                     overview: {
                         title: "Lobby Overview",
                         body: `<p>Welcoming and comfortable entryways.</p>`,
@@ -198,7 +243,7 @@ class SpaceService {
                     id: "locker-room",
                     name: "Locker Room",
                     systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/K-12-LockerRoom.svg",
+                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/locker-room.svg",
                     overview: {
                         title: "Locker Room Overview",
                         body: `<p>Effective moisture and odor control.</p>`,
@@ -215,7 +260,7 @@ class SpaceService {
                     id: "science-lab",
                     name: "Science Lab",
                     systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/K-12-ScienceLab.svg",
+                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/science-lab.svg",
                     overview: {
                         title: "Science Lab Overview",
                         body: `<p>Safe ventilation for laboratory environments.</p>`,
@@ -236,31 +281,73 @@ class SpaceService {
 /* ==========================================================================
    Model Layer
    ========================================================================== */
+/**
+ * Model class responsible for managing the application's state.
+ * Stores the list of spaces and the currently selected space.
+ */
 class SpaceModel {
     constructor() {
-        this.spaces = [];
-        this.currentSpaceId = null;
-        this.currentTab = 'overview';
-        this.currentProductIndex = 0;
-        this.markerData = {}; // Stores SVG marker coordinates
+        this.spaces = [];             // List of all available spaces
+        this.pageMetadata = null;     // Page-specific metadata (hero, title, etc.)
+        this.currentSpaceId = null;   // ID of the currently selected space
+        this.currentTab = 'overview'; // Default active tab in the detail modal
+        this.currentProductIndex = 0; // Index of the currently visible product in the carousel
+        this.markerData = {};         // Stores SVG marker coordinates
     }
 
+    /**
+     * Updates the list of spaces.
+     * @param {Array<Object>} spaces - Array of space objects.
+     */
     setSpaces(spaces) {
         this.spaces = spaces;
     }
 
+    /**
+     * Sets the page metadata.
+     * @param {Object} metadata - The page metadata object.
+     */
+    setPageMetadata(metadata) {
+        this.pageMetadata = metadata;
+    }
+
+    /**
+     * Retrieves the page metadata.
+     * @returns {Object|null} The page metadata object.
+     */
+    getPageMetadata() {
+        return this.pageMetadata;
+    }
+
+    /**
+     * Retrieves a specific space by its ID.
+     * @param {string} id - The unique identifier of the space.
+     * @returns {Object|undefined} The space object if found, otherwise undefined.
+     */
     getSpace(id) {
         return this.spaces.find(s => s.id === id);
     }
 
+    /**
+     * Retrieves all available spaces.
+     * @returns {Array<Object>} Array of all space objects.
+     */
     getAllSpaces() {
         return this.spaces;
     }
 
+    /**
+     * Sets the currently active space ID.
+     * @param {string} id - The unique identifier of the space to select.
+     */
     setCurrentSpace(id) {
         this.currentSpaceId = id;
     }
 
+    /**
+     * Retrieves the currently active space object.
+     * @returns {Object|undefined} The currently selected space object.
+     */
     getCurrentSpace() {
         return this.getSpace(this.currentSpaceId);
     }
@@ -269,79 +356,195 @@ class SpaceModel {
 /* ==========================================================================
    View Layer
    ========================================================================== */
+/**
+ * View class responsible for UI updates and DOM interaction.
+ * Handles rendering of modals, popovers, SVGs, and dynamic content.
+ */
 class SpaceView {
     constructor() {
-        // DOM Elements
+        // --- DOM Elements ---
+        // Modal elements
         this.modal = document.getElementById('space-selection-modal');
         this.modalTitle = document.querySelector('.space-selection-modal-space-name');
         this.modalSystemName = document.getElementById('modal-system-name');
         this.modalTabs = document.querySelectorAll('.space-selection-modal-tab');
         this.tabContents = document.querySelectorAll('.tab-content');
         
+        // Detail section elements
         this.detailTitle = document.getElementById('detail-title');
         this.detailDescription = document.getElementById('detail-description');
         this.narrativeContent = document.getElementById('design-narrative-content');
         
+        // Product Carousel
         this.productCarousel = document.querySelector('.product-carousel');
         
+        // SVG Object Containers
         this.buildingSvgObject = document.getElementById('building-svg-object');
         this.spaceSvgObject = document.getElementById('space-svg-object');
+        
+        // Popover element
         this.popover = document.getElementById('space-popover');
         
-        // State for popover positioning
+        // --- State ---
         this.isPopoverVisible = false;
         
-        // Constants
+        // --- Constants ---
         this.SPACE_POPOVER_OFFSET_X = 160;
         this.SPACE_POPOVER_OFFSET_Y = 10;
     }
 
+    /**
+     * Renders the dynamic page content including hero section.
+     * @param {Object} metadata - The page metadata object.
+     */
+    renderPageContent(metadata) {
+        if (!metadata) return;
+
+        // Update Page Title
+        const pageTitle = document.getElementById('page-title');
+        if (pageTitle) pageTitle.textContent = metadata.title;
+        document.title = `${metadata.title} | Greenheck`;
+
+        // Update Hero Section
+        const hero = metadata.heroSection;
+        if (hero) {
+            const bgImg = document.getElementById('hero-bg-img');
+            if (bgImg) bgImg.src = hero.backgroundImage;
+
+            const heroTitle = document.getElementById('hero-title');
+            if (heroTitle) heroTitle.textContent = hero.title;
+
+            const heroDesc = document.getElementById('hero-description');
+            if (heroDesc) heroDesc.innerHTML = hero.description;
+
+            // Render Hero Buttons
+            const btnContainer = document.getElementById('hero-buttons-container');
+            if (btnContainer) {
+                btnContainer.innerHTML = ''; // Clear existing
+
+                hero.actions.forEach(action => {
+                    const btn = document.createElement('button');
+                    btn.className = `hero-btn ${action.type === 'primary' ? 'hero-btn-primary' : ''}`;
+                    if (action.actionId) btn.id = action.actionId;
+
+                    const img = document.createElement('img');
+                    img.src = action.iconClass;
+                    img.alt = action.label;
+                    
+                    btn.appendChild(img);
+                    btn.appendChild(document.createTextNode(`\u00A0${action.label}`)); // Add non-breaking space
+                    
+                    btnContainer.appendChild(btn);
+                });
+            }
+        }
+        
+        // Update Modal Landing Image
+        if (metadata.modalLandingImage) {
+            const svgObj = document.getElementById('building-svg-object');
+            if (svgObj) {
+                // Only update if different to avoid reload loop
+                const currentData = svgObj.getAttribute('data');
+                if (currentData !== metadata.modalLandingImage) {
+                    svgObj.setAttribute('data', metadata.modalLandingImage);
+                }
+            }
+        }
+    }
+
+    /**
+     * Displays the space selection modal and prevents background scrolling.
+     */
     showModal() {
         this.modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
 
+    /**
+     * Hides the space selection modal and restores background scrolling.
+     * Also ensures any active popover is hidden.
+     */
     hideModal() {
         this.modal.style.display = 'none';
         document.body.style.overflow = 'auto';
         this.hidePopover();
     }
 
+    /**
+     * Renders the details for a specific space into the modal.
+     * Updates titles, descriptions, and handles tab content switching.
+     * 
+     * @param {Object} space - The space object containing details to render.
+     * @param {string} tab - The ID of the tab to display (default: 'overview').
+     */
     renderSpaceDetails(space, tab = 'overview') {
         if (!space) return;
 
-        // Header
+        // Update Header Information
         this.modalTitle.textContent = space.name;
         this.modalSystemName.textContent = space.systemName;
         this.modalSystemName.style.display = 'block';
 
-        // Tabs
+        // Update Tab States (Active/Inactive)
         this.modalTabs.forEach(t => {
             t.classList.toggle('active', t.dataset.tab === tab);
             t.disabled = false;
         });
 
-        // Content Areas
+        // Hide all tab contents first
         this.tabContents.forEach(c => c.classList.remove('active'));
         
+        // Render specific tab content based on selection
         if (tab === 'overview') {
             document.getElementById('overview-content').classList.add('active');
-            // We need to inject the raw HTML for overview. 
-            // The original HTML structure had title/desc separate from body. 
-            // Our JSON has "body" which includes the description and lists.
-            // We'll replace the innerHTML of the overview content container.
+            
+            // Inject Overview Content
+            // The JSON structure includes HTML in 'body', which allows for rich text.
             const container = document.getElementById('overview-content');
-            container.innerHTML = `<h3>${space.overview.title}</h3>${space.overview.body}`;
+            
+            // Use bgImg from data or fallback to empty string
+            const bgImg = space.overview.bgImg || '';
+            
+            container.innerHTML = `
+                <div class="overview-full-layout" style="background-image: url('${bgImg}')">
+                    <div class="overview-overlay-card">
+                        <h2>${space.overview.title}</h2>
+                        ${space.overview.body}
+                    </div>
+                </div>
+            `;
         } else if (tab === 'system-equipment') {
             document.getElementById('system-equipment-content').classList.add('active');
             this.renderProductCarousel(space.systemEquipment);
         } else if (tab === 'design-narrative') {
             const container = document.getElementById('design-narrative-content');
             container.classList.add('active');
-            container.innerHTML = `<h3>${space.designNarrative.title}</h3>${space.designNarrative.body}`;
+            
+            const bgImg = space.designNarrative.img || '';
+            
+            container.innerHTML = `
+                <div class="design-narrative-layout">
+                    <h2>${space.designNarrative.title}</h2>
+                    <div class="design-narrative-split">
+                        <div class="design-narrative-text">
+                            ${space.designNarrative.body}
+                        </div>
+                        <div class="design-narrative-image">
+                             <img src="${bgImg}" alt="${space.name} Design Narrative" />
+                        </div>
+                    </div>
+                </div>
+            `;
         }
     }
 
+    /**
+     * Renders the product carousel for the "System Equipment" tab.
+     * Generates HTML slides for each product, handles accessibility attributes,
+     * and sets up dot navigation.
+     * 
+     * @param {Array<Object>} products - Array of product objects to display.
+     */
     renderProductCarousel(products) {
         const container = document.querySelector('.product-carousel');
         if (!products || products.length === 0) {
@@ -349,45 +552,127 @@ class SpaceView {
             return;
         }
 
-        // Generate HTML for products
-        let html = '';
+        // Accessibility: Define the container as a region
+        container.setAttribute('role', 'region');
+        container.setAttribute('aria-roledescription', 'carousel');
+        container.setAttribute('aria-label', 'System Equipment Carousel');
+        
+        // Preload images to ensure smooth transitions
+        this.preloadImages(products);
+
+        // Create a live region for screen reader announcements
+        let html = '<div class="carousel-live-region visually-hidden" aria-live="polite"></div>';
+        
+        // Generate HTML for each product slide
         products.forEach((product, index) => {
             const activeClass = index === 0 ? 'active' : '';
+            const bgImg = product.bgImg || '';
+            const bgStyle = bgImg ? `background-image: url('${bgImg}');` : 'background-color: #f0f0f0;';
+
             html += `
-                <div class="product-card ${activeClass}" data-index="${index}">
-                    <h3>${product.title}</h3>
-                    <div class="product-image-container">
-                        <button class="carousel-prev">‹</button>
-                        <div class="product-image">
-                            <div class="hvac-unit-3d">${product.title} 3D View</div> 
+                <div class="product-slide ${activeClass}" 
+                     style="${bgStyle}" 
+                     data-index="${index}"
+                     role="group" 
+                     aria-roledescription="slide" 
+                     aria-label="${index + 1} of ${products.length}">
+                     
+                    <div class="product-overlay-card">
+                        <div class="product-card-header">
+                            <h3>${product.title}</h3>
                         </div>
-                        <button class="carousel-next">›</button>
+                        
+                        <div class="product-visual-section">
+                            <button class="carousel-nav-btn prev" aria-label="Previous product">
+                                <span class="material-symbols-outlined">arrow_back_ios_new</span>
+                            </button>
+                            
+                            <div class="product-image-wrapper">
+                                ${product.slideImg ? 
+                                    `<img src="${product.slideImg}" alt="${product.title}" loading="eager">` : 
+                                    `<div class="hvac-unit-3d">${product.title} 3D View</div>`
+                                }
+                            </div>
+                            
+                            <button class="carousel-nav-btn next" aria-label="Next product">
+                                <span class="material-symbols-outlined">arrow_forward_ios</span>
+                            </button>
+                            
+                            <div class="carousel-dots">
+                                ${products.map((_, i) => `
+                                    <button class="dot ${i === index ? 'active' : ''}" 
+                                            aria-label="Go to slide ${i+1}"
+                                            aria-current="${i === index ? 'true' : 'false'}"
+                                            data-index="${i}">
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="product-info-section">
+                            <div class="product-body-content">
+                                ${product.body}
+                            </div>
+                            <button class="view-product-details-btn">View Product Details</button>
+                        </div>
                     </div>
-                    <div class="carousel-dots">
-                        ${products.map((_, i) => `<span class="dot ${i === index ? 'active' : ''}"></span>`).join('')}
-                    </div>
-                    ${product.body}
-                    <button class="view-product-details-btn">View Product Details</button>
                 </div>
             `;
         });
         container.innerHTML = html;
+        
+        // Attach click listeners to the navigation dots
+        const dots = container.querySelectorAll('.dot');
+        dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(e.target.dataset.index);
+                this.model.currentProductIndex = idx;
+                this.updateProductVisibility(idx, 'dot');
+            });
+        });
     }
 
+    /**
+     * Preloads background and slide images to prevent flickering during carousel navigation.
+     * @param {Array<Object>} products - Array of product objects containing image URLs.
+     */
+    preloadImages(products) {
+        products.forEach(product => {
+            if (product.bgImg) {
+                const img = new Image();
+                img.src = product.bgImg;
+            }
+            if (product.slideImg) {
+                const img = new Image();
+                img.src = product.slideImg;
+            }
+        });
+    }
+
+    /**
+     * Loads the SVG for a specific space into the detail view.
+     * @param {string} markerImg - The path to the SVG file.
+     */
     loadSpaceSvg(markerImg) {
         if (this.spaceSvgObject) {
-            // Force reload by removing and re-adding if needed, or just set data
+            // Force reload by setting data attribute
             this.spaceSvgObject.setAttribute('data', markerImg);
             
-            // Log for debugging
+            // Log for debugging purposes
             console.log('Loading Space SVG:', markerImg);
         } else {
             console.error('Space SVG Object not found in DOM');
         }
     }
 
+    /**
+     * Shows the overlay SVG on the main building view when a space is selected.
+     * This highlights the selected area on the main map.
+     * 
+     * @param {string} markerImg - The path to the overlay SVG file.
+     */
     replaceLandingSvg(markerImg) {
-        // This is the overlay logic from the original code
         const overlay = document.getElementById('building-space-overlay-object');
         if (overlay) {
             overlay.classList.add('is-visible');
@@ -395,14 +680,26 @@ class SpaceView {
         }
     }
 
+    /**
+     * Hides the overlay SVG and resets the main building view.
+     */
     restoreLandingSvg() {
         const overlay = document.getElementById('building-space-overlay-object');
         if (overlay) {
             overlay.classList.remove('is-visible');
+            // Small delay to ensure transition completes before clearing data
             setTimeout(() => overlay.removeAttribute('data'), 100);
         }
     }
 
+    /**
+     * Displays a popover with space information at specific coordinates.
+     * 
+     * @param {Object} space - The space object to display information for.
+     * @param {number} x - The X coordinate for the popover (left position).
+     * @param {number} y - The Y coordinate for the popover (top position).
+     * @param {number|null} pointerLeft - Optional custom position for the popover arrow/pointer.
+     */
     showPopover(space, x, y, pointerLeft) {
         if (!space) return;
         
@@ -412,7 +709,7 @@ class SpaceView {
         nameEl.textContent = space.name;
         sysEl.textContent = space.systemName;
         
-        // Ensure popover is in body
+        // Ensure popover is appended to body to avoid z-index/clipping issues
         if (this.popover.parentElement !== document.body) {
             document.body.appendChild(this.popover);
         }
@@ -421,6 +718,7 @@ class SpaceView {
         this.popover.style.left = `${x}px`;
         this.popover.style.top = `${y}px`;
 
+        // Handle custom pointer position if provided
         if (pointerLeft !== null) {
             this.popover.style.setProperty('--pointer-left', `${pointerLeft}px`);
             this.popover.setAttribute('data-pointer-left', pointerLeft);
@@ -432,28 +730,57 @@ class SpaceView {
         this.isPopoverVisible = true;
     }
 
+    /**
+     * Hides the space information popover.
+     */
     hidePopover() {
         this.popover.style.display = 'none';
         this.isPopoverVisible = false;
     }
 
+    /**
+     * Enables or disables the tabs in the modal.
+     * Used when switching between 'building' and 'detail' scenes within the modal.
+     * 
+     * @param {boolean} enabled - True to enable tabs, false to disable.
+     */
+    setTabsState(enabled) {
+        this.modalTabs.forEach(t => {
+            t.disabled = !enabled;
+            if (!enabled) {
+                t.style.opacity = '0.5';
+                t.style.cursor = 'not-allowed';
+                t.classList.remove('active');
+            } else {
+                t.style.opacity = '1';
+                t.style.cursor = 'pointer';
+            }
+        });
+    }
+
+    /**
+     * Switches between the main building view and the detailed space view within the modal.
+     * 
+     * @param {string} sceneName - 'detail' for the space detail view, 'building' (or others) for the main map.
+     */
     switchScene(sceneName) {
         const buildingScene = document.getElementById('building-overview-scene');
         const detailScene = document.getElementById('detail-scene');
         const backBtn = document.getElementById('modal-back-btn');
-        const modalTabs = document.getElementById('modal-tabs');
         
         if (sceneName === 'detail') {
             buildingScene.classList.remove('active');
             detailScene.classList.add('active');
             backBtn.style.display = 'flex';
+            this.setTabsState(true);
         } else {
             buildingScene.classList.add('active');
             detailScene.classList.remove('active');
             backBtn.style.display = 'none';
-            // Hide system name in overview
+            // Reset modal header for overview mode
             this.modalSystemName.style.display = 'none';
             this.modalTitle.textContent = '';
+            this.setTabsState(false);
         }
     }
 }
@@ -461,60 +788,84 @@ class SpaceView {
 /* ==========================================================================
    Controller Layer
    ========================================================================== */
+/**
+ * Controller class responsible for application logic and event handling.
+ * Coordinates interactions between the Model (state) and View (UI).
+ */
 class SpaceController {
+    /**
+     * @param {SpaceService} service - The data service instance.
+     * @param {SpaceModel} model - The state model instance.
+     * @param {SpaceView} view - The UI view instance.
+     */
     constructor(service, model, view) {
         this.service = service;
         this.model = model;
         this.view = view;
-        
-        // Maps ID from SVG groups to Space IDs
-        this.textIdToSpaceMap = {
-            'Gym-marker': 'gym',
-            'Lobby-marker': 'lobby',
-            'Admin-marker': 'admin-offices',
-            'LockerRoom-marker': 'locker-room',
-            'ScienceLab-marker': 'science-lab',
-            'Classrooms-marker': 'classrooms',
-            'Kitchen-marker': 'kitchen',
-            'cafeteria-marker': 'cafeteria'
-        };
     }
 
-    init() {
-        this.bindEvents();
-        // Initialize SVG handler for main building
-        const svgObj = document.getElementById('building-svg-object');
-        if (svgObj) {
-            svgObj.addEventListener('load', () => this.attachSvgHandlers(svgObj));
-            if (svgObj.contentDocument) {
-                this.attachSvgHandlers(svgObj);
+    /**
+     * Initializes the controller.
+     * Sets up event listeners and waits for SVGs to load.
+     */
+    async init() {
+        try {
+            // Fetch initial data for the page (Metadata + Spaces)
+            // In a real app, we might parse the URL or receive a building type config
+            const data = await this.service.fetchData();
+            
+            this.model.setSpaces(data.spaces);
+            this.model.setPageMetadata(data.pageMetadata);
+            
+            // Render the dynamic page content
+            this.view.renderPageContent(data.pageMetadata);
+            
+            // Bind events AFTER content is rendered (specifically for dynamic buttons)
+            this.bindEvents();
+            
+            // Initialize SVG handler for main building (Modal Landing)
+            // We need to wait for the 'load' event to access the SVG's internal DOM
+            const svgObj = document.getElementById('building-svg-object');
+            if (svgObj) {
+                // If the data attribute was just set in renderPageContent, it might take a moment to load
+                svgObj.addEventListener('load', () => this.attachSvgHandlers(svgObj));
+                // If already loaded (cached), attach immediately
+                if (svgObj.contentDocument) {
+                    this.attachSvgHandlers(svgObj);
+                }
+            }
+
+            // Initialize SVG handler for overlay (Space specific SVGs)
+            const overlayObj = document.getElementById('building-space-overlay-object');
+            if (overlayObj) {
+                overlayObj.addEventListener('load', () => this.attachOverlayHandlers(overlayObj));
+            }
+        } catch (error) {
+            console.error("Failed to initialize application:", error);
+            // Fallback or Error UI could be triggered here
+        }
+    }
+
+    /**
+     * Binds global DOM event listeners for the application.
+     * Includes modal controls, navigation buttons, and tab switching.
+     */
+    bindEvents() {
+        // Dynamic Hero Buttons
+        const heroActions = this.model.getPageMetadata()?.heroSection?.actions || [];
+        if (heroActions.length > 0) {
+            const firstActionId = heroActions[0].actionId;
+            const btn = document.getElementById(firstActionId);
+            
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    this.view.showModal();
+                    this.view.switchScene('overview');
+                });
             }
         }
 
-        // Initialize SVG handler for overlay (Space specific SVGs)
-        const overlayObj = document.getElementById('building-space-overlay-object');
-        if (overlayObj) {
-            overlayObj.addEventListener('load', () => this.attachOverlayHandlers(overlayObj));
-        }
-    }
-
-    bindEvents() {
-        // "Select a Space" Button
-        const btn = document.getElementById('select-space-btn');
-        if (btn) {
-            btn.addEventListener('click', async () => {
-                this.view.showModal();
-                // Fetch data if not loaded
-                if (this.model.getAllSpaces().length === 0) {
-                    // Show loading state if needed
-                    const data = await this.service.fetchData();
-                    this.model.setSpaces(data.spaces);
-                }
-                this.view.switchScene('overview');
-            });
-        }
-
-        // Modal Close
+        // Modal Close Button
         const closeBtn = document.getElementById('modal-close-btn');
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
@@ -523,7 +874,7 @@ class SpaceController {
             });
         }
 
-        // Back Button
+        // Back Button (Returns to Building Overview)
         const backBtn = document.getElementById('modal-back-btn');
         if (backBtn) {
             backBtn.addEventListener('click', () => {
@@ -532,7 +883,7 @@ class SpaceController {
             });
         }
 
-        // Popover View Button
+        // Popover "View" Button (Navigates to Space Detail)
         const popViewBtn = document.getElementById('popover-view-btn');
         if (popViewBtn) {
             popViewBtn.addEventListener('click', () => {
@@ -543,13 +894,13 @@ class SpaceController {
                     this.view.renderSpaceDetails(space, 'overview');
                     
                     // IMPORTANT: The "detail" scene has its own SVG container with ID "space-svg-object"
-                    // We need to make sure this object loads the correct SVG
+                    // We need to make sure this object loads the correct SVG for the selected space
                     this.view.loadSpaceSvg(space.markerImg);
                 }
             });
         }
 
-        // Popover Close
+        // Popover Close Button
         const popCloseBtn = document.getElementById('popover-close-btn');
         if (popCloseBtn) {
             popCloseBtn.addEventListener('click', () => {
@@ -558,7 +909,7 @@ class SpaceController {
             });
         }
 
-        // Tabs
+        // Modal Tabs (Overview, System Equipment, Design Narrative)
         const tabs = document.querySelectorAll('.space-selection-modal-tab');
         tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
@@ -569,17 +920,21 @@ class SpaceController {
         });
 
         // Product Carousel Delegation
+        // Uses event delegation to handle clicks on dynamic carousel elements
         document.querySelector('.product-carousel').addEventListener('click', (e) => {
-            if (e.target.closest('.carousel-next')) {
+            if (e.target.closest('.carousel-nav-btn.next')) {
                 this.nextProduct();
-            } else if (e.target.closest('.carousel-prev')) {
+            } else if (e.target.closest('.carousel-nav-btn.prev')) {
                 this.prevProduct();
             }
         });
     }
 
+    /**
+     * Advances the product carousel to the next item.
+     * Cycles back to the first item if currently at the end.
+     */
     nextProduct() {
-        // Simple carousel logic for the generated HTML
         const space = this.model.getCurrentSpace();
         if (!space || !space.systemEquipment.length) return;
         
@@ -587,9 +942,13 @@ class SpaceController {
         if (idx >= space.systemEquipment.length) idx = 0;
         this.model.currentProductIndex = idx;
         
-        this.updateProductVisibility(idx);
+        this.updateProductVisibility(idx, 'next');
     }
 
+    /**
+     * Moves the product carousel to the previous item.
+     * Cycles to the last item if currently at the beginning.
+     */
     prevProduct() {
         const space = this.model.getCurrentSpace();
         if (!space || !space.systemEquipment.length) return;
@@ -598,53 +957,148 @@ class SpaceController {
         if (idx < 0) idx = space.systemEquipment.length - 1;
         this.model.currentProductIndex = idx;
         
-        this.updateProductVisibility(idx);
+        this.updateProductVisibility(idx, 'prev');
     }
 
-    updateProductVisibility(index) {
-        const cards = document.querySelectorAll('.product-card');
-        cards.forEach((card, i) => {
-            card.classList.toggle('active', i === index);
+    /**
+     * Updates the visual state of the carousel to show the specified product.
+     * Handles CSS classes for slides and dots, and manages accessibility focus.
+     * 
+     * @param {number} index - The index of the product to show.
+     * @param {string|null} source - The source of the navigation action ('next', 'prev', 'dot', or null).
+     */
+    updateProductVisibility(index, source = null) {
+        const slides = document.querySelectorAll('.product-slide');
+        let newActiveSlide = null;
+        
+        // Toggle active class on slides
+        slides.forEach((slide, i) => {
+            const isActive = i === index;
+            slide.classList.toggle('active', isActive);
+            if (isActive) newActiveSlide = slide;
         });
+        
+        // Update dots in ALL slides (since they are replicated in each slide)
+        // This is necessary because each slide contains its own set of navigation dots
+        const allDotContainers = document.querySelectorAll('.carousel-dots');
+        allDotContainers.forEach(container => {
+            const dots = container.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                const isActive = i === index;
+                dot.classList.toggle('active', isActive);
+                dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+            });
+        });
+
+        // Accessibility: Announce slide change to screen readers
+        const liveRegion = document.querySelector('.carousel-live-region');
+        if (liveRegion && newActiveSlide) {
+            const title = newActiveSlide.querySelector('h3')?.textContent || `Slide ${index + 1}`;
+            liveRegion.textContent = `Showing ${title}`;
+        }
+
+        // Accessibility: Manage Focus if triggered by user interaction
+        if (source && newActiveSlide) {
+            if (source === 'next') {
+                const nextBtn = newActiveSlide.querySelector('.carousel-nav-btn.next');
+                if (nextBtn) nextBtn.focus();
+            } else if (source === 'prev') {
+                const prevBtn = newActiveSlide.querySelector('.carousel-nav-btn.prev');
+                if (prevBtn) prevBtn.focus();
+            } else if (source === 'dot') {
+                // If clicked via dot, keep focus on the specific dot in the new slide
+                const dots = newActiveSlide.querySelectorAll('.dot');
+                if (dots[index]) dots[index].focus();
+            }
+        }
     }
 
-    // SVG Handling Logic
+    // --- SVG Handling Logic ---
+
+    /**
+     * Attaches click and hover handlers to the main building SVG.
+     * Identifies interactable elements based on dynamic metadata (data-space-id)
+     * and legacy ID mappings.
+     * 
+     * @param {HTMLObjectElement} svgObject - The <object> element containing the SVG.
+     */
     attachSvgHandlers(svgObject) {
         const doc = svgObject.contentDocument;
         if (!doc) return;
         
-        Object.keys(this.textIdToSpaceMap).forEach(svgId => {
-            let el = doc.getElementById(svgId);
+        const processedElements = new Set();
+
+        // 1. Dynamic Metadata Handling (New Standard)
+        // Scans for elements with 'data-space-id' attribute
+        const dynamicElements = doc.querySelectorAll('[data-space-id]');
+        dynamicElements.forEach(el => {
+            const spaceId = el.getAttribute('data-space-id');
+            if (spaceId) {
+                this.attachInteraction(el, spaceId);
+                processedElements.add(el);
+            }
+        });
+
+        // 2. ID Handling (Matches SVG IDs to Model IDs)
+        // Automatically maps elements whose ID matches a known space ID
+        const spaces = this.model.getAllSpaces();
+        spaces.forEach(space => {
+            let el = doc.getElementById(space.id);
             
             // Fallback: search by ID attribute manually if getElementById fails
-            // This helps if IDs are nested in a way that getElementById misses, 
-            // or if there are case sensitivity issues that getElementById is strict about
             if (!el) {
                 const groups = Array.from(doc.querySelectorAll('g'));
-                el = groups.find(g => g.id === svgId);
+                el = groups.find(g => g.id === space.id);
             }
 
-            if (el) {
-                el.style.cursor = 'pointer';
-                el.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const spaceId = this.textIdToSpaceMap[svgId];
-                    this.handleMarkerClick(spaceId);
-                });
-                
-                // Add hover effect for better feedback
-                el.addEventListener('mouseenter', () => {
-                    el.style.opacity = '0.8';
-                });
-                el.addEventListener('mouseleave', () => {
-                    el.style.opacity = '1';
-                });
-            } else {
-                console.warn(`Marker element not found: ${svgId}`);
+            // Special handling for singular/plural mismatch (e.g. classroom vs classrooms)
+            if (!el && space.id.endsWith('s')) {
+                const singularId = space.id.slice(0, -1);
+                el = doc.getElementById(singularId);
+                if (!el) {
+                    const groups = Array.from(doc.querySelectorAll('g'));
+                    el = groups.find(g => g.id === singularId);
+                }
+            }
+
+            // Only attach if not already processed by dynamic handler
+            if (el && !processedElements.has(el)) {
+                this.attachInteraction(el, space.id);
+                processedElements.add(el);
             }
         });
     }
 
+    /**
+     * Helper to attach standard interaction listeners to an SVG element.
+     * 
+     * @param {Element} el - The SVG element.
+     * @param {string} spaceId - The ID of the space to link to.
+     */
+    attachInteraction(el, spaceId) {
+        el.style.cursor = 'pointer';
+        
+        // Handle Click: Select the space
+        el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.handleMarkerClick(spaceId);
+        });
+        
+        // Handle Hover: Visual feedback
+        el.addEventListener('mouseenter', () => {
+            el.style.opacity = '0.8';
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.opacity = '1';
+        });
+    }
+
+    /**
+     * Attaches handlers to the overlay SVG (the highlighted space view).
+     * Manages "View Details" and "Close" buttons within the SVG.
+     * 
+     * @param {HTMLObjectElement} svgObject - The <object> element containing the overlay SVG.
+     */
     attachOverlayHandlers(svgObject) {
         const doc = svgObject.contentDocument;
         if (!doc) return;
@@ -659,7 +1113,7 @@ class SpaceController {
             return el;
         };
 
-        // View Button
+        // "View" Button in Overlay (Navigates to Detail Scene)
         const viewBtn = findElement('view-btn');
         if (viewBtn) {
             viewBtn.style.cursor = 'pointer';
@@ -683,7 +1137,7 @@ class SpaceController {
              console.warn('View button not found in overlay SVG');
         }
 
-        // Close Button
+        // "Close" Button in Overlay (Deselects space)
         const closeBtn = findElement('close-btn');
         if (closeBtn) {
             closeBtn.style.cursor = 'pointer';
@@ -703,6 +1157,12 @@ class SpaceController {
         }
     }
 
+    /**
+     * Handles the click event on a space marker in the main building SVG.
+     * Updates the model and triggers the view to show the overlay.
+     * 
+     * @param {string} spaceId - The ID of the selected space.
+     */
     handleMarkerClick(spaceId) {
         const space = this.model.getSpace(spaceId);
         if (!space) return;
@@ -712,7 +1172,7 @@ class SpaceController {
     }
 }
 
-// Initialize Application
+// Initialize Application when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     const app = new SpaceController(
         new SpaceService(),
