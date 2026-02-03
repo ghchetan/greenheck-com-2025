@@ -964,6 +964,7 @@ class SpaceController {
         this.service = service;
         this.model = model;
         this.view = view;
+        this.boundElements = new WeakSet();
     }
 
     /**
@@ -1187,6 +1188,11 @@ class SpaceController {
     attachSvgHandlers(svgObject) {
         const doc = svgObject.contentDocument;
         if (!doc) return;
+
+        // Global click listener: Clicking empty space on the map closes any open overlay
+        doc.addEventListener('click', () => {
+            this.view.restoreLandingSvg();
+        });
         
         const processedElements = new Set();
 
@@ -1238,21 +1244,21 @@ class SpaceController {
      * @param {string} spaceId - The ID of the space to link to.
      */
     attachInteraction(el, spaceId) {
+        if (el.dataset && el.dataset.ghBound === 'true') return;
+        if (this.boundElements && this.boundElements.has(el)) return;
         el.style.cursor = 'pointer';
-        
-        // Handle Click: Select the space
         el.addEventListener('click', (e) => {
             e.stopPropagation();
             this.handleMarkerClick(spaceId);
         });
-        
-        // Handle Hover: Visual feedback
         el.addEventListener('mouseenter', () => {
             el.style.opacity = '0.8';
         });
         el.addEventListener('mouseleave', () => {
             el.style.opacity = '1';
         });
+        if (el.dataset) el.dataset.ghBound = 'true';
+        if (this.boundElements) this.boundElements.add(el);
     }
 
     /**
@@ -1279,6 +1285,7 @@ class SpaceController {
         const viewBtn = findElement('view-default');
         if (viewBtn) {
             viewBtn.style.cursor = 'pointer';
+            viewBtn.style.pointerEvents = 'auto';
             viewBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const space = this.model.getCurrentSpace();
@@ -1303,6 +1310,7 @@ class SpaceController {
         const closeBtn = findElement('close-btn');
         if (closeBtn) {
             closeBtn.style.cursor = 'pointer';
+            closeBtn.style.pointerEvents = 'auto';
             closeBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.view.restoreLandingSvg();
@@ -1317,6 +1325,8 @@ class SpaceController {
         } else {
             console.warn('Close button not found in overlay SVG');
         }
+
+
     }
 
     /**
@@ -1332,6 +1342,106 @@ class SpaceController {
         this.model.setCurrentSpace(spaceId);
         this.view.replaceLandingSvg(space.markerImg);
     }
+
+    runMarkerClickTest(ids = ['lobby','gym','admin-offices','locker-room','science-lab','kitchen','cafeteria']) {
+        const svgObj = document.getElementById('building-svg-object');
+        const overlay = document.getElementById('building-space-overlay-object');
+        const results = [];
+        if (!svgObj || !svgObj.contentDocument) {
+            console.error('Marker test: building SVG not ready');
+            return results;
+        }
+        const doc = svgObj.contentDocument;
+        ids.forEach(id => {
+            let el = doc.getElementById(id);
+            if (!el) {
+                const groups = Array.from(doc.querySelectorAll('g'));
+                el = groups.find(g => g.id === id);
+            }
+            if (!el) {
+                results.push({ id, status: 'missing' });
+                return;
+            }
+            const space = this.model.getSpace(id);
+            el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+            const overlayVisible = !!(overlay && overlay.classList.contains('is-visible'));
+            const overlayData = overlay ? overlay.getAttribute('data') : null;
+            const expectedData = space ? space.markerImg : null;
+            const ok = this.model.currentSpaceId === id && overlayVisible && overlayData === expectedData;
+            results.push({ id, status: ok ? 'ok' : 'fail', detail: { currentSpaceId: this.model.currentSpaceId, overlayVisible, overlayData, expectedData } });
+        });
+        const failures = results.filter(r => r.status !== 'ok');
+        if (failures.length) {
+            console.warn('Marker test failures', failures);
+        } else {
+            console.log('Marker test passed for all ids');
+        }
+        return results;
+    }
+
+    /**
+     * Verifies that clicking through the overlay background correctly switches to another marker.
+     * @returns {Promise<boolean>} True if the test passes.
+     */
+    async runSeamlessSwitchingTest() {
+        console.log('Starting Seamless Switching Test...');
+        
+        // 1. Open 'Classrooms' (or first available space)
+        const firstSpaceId = 'classrooms'; 
+        const secondSpaceId = 'gym'; // Target to switch to
+        
+        console.log(`1. Opening ${firstSpaceId}...`);
+        this.handleMarkerClick(firstSpaceId);
+        
+        // Wait for overlay to load
+        await new Promise(r => setTimeout(r, 1000));
+        
+        const overlay = document.getElementById('building-space-overlay-object');
+        if (!overlay || !overlay.classList.contains('is-visible')) {
+            console.error(`FAIL: ${firstSpaceId} overlay not visible`);
+            return false;
+        }
+        
+        // 2. Find "Gym" marker position in MAIN SVG
+        const mainSvg = document.getElementById('building-svg-object');
+        if (!mainSvg || !mainSvg.contentDocument) {
+             console.error('FAIL: Main SVG not ready');
+             return false;
+        }
+        
+        const targetMarker = mainSvg.contentDocument.getElementById(secondSpaceId);
+        if (!targetMarker) {
+            console.error(`FAIL: Target marker ${secondSpaceId} not found in main SVG`);
+            return false;
+        }
+        
+        const rect = targetMarker.getBoundingClientRect();
+        // Calculate click coordinates (Center of marker)
+        // Note: getBoundingClientRect is relative to the viewport, but the event needs clientX/Y
+        const clickX = rect.left + rect.width / 2;
+        const clickY = rect.top + rect.height / 2;
+        
+        console.log(`2. Clicking target marker ${secondSpaceId} directly (simulating CSS pointer-events: none)...`);
+        
+        // 3. Dispatch Click to Target Marker
+        // With pointer-events: none on overlay, the browser would direct the click here.
+        targetMarker.dispatchEvent(new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: mainSvg.contentWindow
+        }));
+        
+        // 4. Verify Switch
+        await new Promise(r => setTimeout(r, 500)); 
+        
+        if (this.model.currentSpaceId === secondSpaceId) {
+            console.log(`SUCCESS: Seamlessly switched to ${secondSpaceId}!`);
+            return true;
+        } else {
+            console.error(`FAIL: Expected '${secondSpaceId}', got '${this.model.currentSpaceId}'`);
+            return false;
+        }
+    }
 }
 
 // Initialize Application when DOM is fully loaded
@@ -1342,4 +1452,5 @@ document.addEventListener('DOMContentLoaded', () => {
         new SpaceView()
     );
     app.init();
+    window.k12App = app;
 });

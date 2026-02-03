@@ -923,7 +923,7 @@
 
   .school-building-overlay-image.is-visible {
     display: block;
-    pointer-events: auto;
+    pointer-events: none;
   }
   
   .school-building-image object {
@@ -932,150 +932,6 @@
     display: block;
   }
   
-  .marker-overlay-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-  
-  .marker-overlay-container .clickable-area {
-    pointer-events: auto;
-  }
-  
-  .admin-office-overlay {
-    z-index: 2;
-    pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
-  }
-  
-  .building-name {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: var(--font-family-bold);
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--color-primary);
-    text-align: center;
-    z-index: 10;
-  }
-  
-  /* Clickable Areas */
-  .clickable-area {
-    position: absolute;
-    cursor: pointer;
-    transition: var(--transition-base);
-    z-index: 20;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .clickable-area:hover,
-  .clickable-area.hover-scale {
-    transform: scale(1.1);
-  }
-  
-  .clickable-area.selected {
-    transform: scale(1.1);
-  }
-  
-  .space-icon {
-    width: 41px;
-    height: 41px;
-    background: var(--color-primary-light);
-    border-radius: 50% 50% 50% 0; /* teardrop corner */
-    transform: rotate(-45deg); /* point down-left -> visually down */
-    box-shadow: 0 4px 12px rgba(7, 86, 151, 0.3);
-    transition: var(--transition-base);
-    position: relative;
-  }
-  
-  .space-icon::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 14px;
-    height: 13px;
-    background: url('../imgs/icons/plus.svg') no-repeat center / contain;
-    transform: translate(-50%, -50%) rotate(45deg); /* counter-rotate to keep plus upright */
-  }
-  
-  .clickable-area:hover .space-icon {
-    background-color: var(--color-primary);
-    box-shadow: 0 6px 16px rgba(7, 86, 151, 0.4);
-  }
-  
-  .clickable-area.selected .space-icon {
-    background-color: var(--color-primary);
-    box-shadow: 0 6px 16px rgba(7, 86, 151, 0.4);
-  }
-  
-  .space-label {
-    background-color: rgba(255, 255, 255, 0.95);
-    color: var(--color-gray);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-family: var(--font-family-medium);
-    font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: var(--transition-base);
-  }
-  
-  .clickable-area:hover .space-label {
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Position the clickable areas */
-  .classrooms {
-    top: 60px;
-    left: 50px;
-  }
-  
-  .science-lab {
-    top: 40px;
-    left: 200px;
-  }
-  
-  .locker-room {
-    top: 40px;
-    left: 350px;
-  }
-  
-  .admin-offices {
-    top: 200px;
-    left: 100px;
-  }
-  
-  .gym {
-    top: 40px;
-    right: 200px;
-  }
-  
-  .lobby {
-    top: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .cafeteria {
-    top: 200px;
-    right: 150px;
-  }
-  
-  .kitchen {
-    top: 200px;
-    right: 50px;
-  }
   
   /* Responsive Design for Modal */
   @media (max-width: 768px) {
@@ -1083,41 +939,11 @@
       width: 100%;
       height: 400px;
     }
-    
-    .building-name {
-      font-size: 18px;
-    }
-    
-    .space-icon {
-      width: 35px;
-      height: 35px;
-      font-size: 18px;
-    }
-    
-    .space-label {
-      font-size: 12px;
-      padding: 4px 8px;
-    }
   }
   
   @media (max-width: 480px) {
     .school-building {
       height: 350px;
-    }
-    
-    .building-name {
-      font-size: 16px;
-    }
-    
-    .space-icon {
-      width: 30px;
-      height: 30px;
-      font-size: 16px;
-    }
-    
-    .space-label {
-      font-size: 11px;
-      padding: 3px 6px;
     }
     
     /* Detail scene responsive */
@@ -1166,7 +992,6 @@
 @media (max-width: 768px) {
   .hero-section {
     height: 80vh;
-    /* min-height: 600px; */
   }
   
   .hero-title {
