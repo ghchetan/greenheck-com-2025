@@ -1276,7 +1276,7 @@ class SpaceController {
         };
 
         // "View" Button in Overlay (Navigates to Detail Scene)
-        const viewBtn = findElement('view-btn');
+        const viewBtn = findElement('view-default');
         if (viewBtn) {
             viewBtn.style.cursor = 'pointer';
             viewBtn.addEventListener('click', (e) => {
