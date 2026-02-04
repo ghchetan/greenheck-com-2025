@@ -1,6 +1,6 @@
 # SVG Metadata Guidelines for Dynamic Space Mapping
 
-This document outlines the standards for creating and tagging SVG files to ensure they work seamlessly with the K-12 School Experience application. Following these guidelines allows the application to automatically recognize and interact with new spaces without requiring code changes.
+This document outlines the standards for creating and tagging SVG files to ensure they work seamlessly with the K-12 Education application. Following these guidelines allows the application to automatically recognize and interact with new spaces without requiring code changes.
 
 ## Overview
 

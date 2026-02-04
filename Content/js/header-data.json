@@ -667,24 +667,24 @@
         "title": "Building Type",
         "layout": "standard",
         "items": [
-          { "title": "K-12 School", "url": "./k-12-school.html" },
+          { "title": "K-12 Education", "url": "./k-12-education.html" },
           {
             "title": "Higher Education",
             "url": "https://www.greenheck.com/building-type/higher-education"
           },
           {
-            "title": "Multi-Family",
+            "title": "Multi-Family Housing",
             "url": "https://www.greenheck.com/building-type/multi-family"
           },
           {
-            "title": "Healthcare Facility",
+            "title": "Healthcare",
             "url": "https://www.greenheck.com/building-type/healthcare-facility"
           },
           {
             "title": "Manufacturing",
             "url": "https://www.greenheck.com/building-type/manufacturing"
           },
-          { "title": "Laboratory", "url": "https://www.greenheck.com/building-type/laboratory" }
+          { "title": "Laboratories", "url": "https://www.greenheck.com/building-type/laboratory" }
         ]
       },
       {

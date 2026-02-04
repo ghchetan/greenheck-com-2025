@@ -1,4 +1,4 @@
-# K-12 School App API Data Structure Definition
+# K-12 Education App API Data Structure Definition
 
 This document outlines the data structure required for the K-12 School Application API. The API should return a JSON object containing the configuration and content for the interactive school map and its associated details.
 

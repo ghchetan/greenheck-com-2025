@@ -1,9 +1,9 @@
 /**
- * K-12 School Experience Application
+ * Building Experience Application
  * 
  * Architecture: Model-View-Controller (MVC)
  * -----------------------------------------
- * This application allows users to explore different spaces within a K-12 school environment.
+ * This application allows users to explore different spaces within a building environment.
  * It uses an interactive SVG map to select spaces and view detailed information about
  * HVAC systems and Greenheck products.
  * 
@@ -15,6 +15,94 @@
  */
 
 /* ==========================================================================
+   Configuration & Constants
+   ========================================================================== */
+const APP_CONFIG = {
+    // DOM Element IDs and Selectors
+    selectors: {
+        ids: {
+            // Modal Elements
+            modal: 'space-selection-modal',
+            modalTitle: 'space-selection-modal-space-name', // Note: This is actually a class in HTML but used as ID in some contexts? Checking usage below.
+            // Wait, looking at original code: document.querySelector('.space-selection-modal-space-name')
+            // So this is a class selector. Let's separate classes and IDs properly.
+            
+            modalSystemName: 'modal-system-name',
+            modalCloseBtn: 'modal-close-btn',
+            modalBackBtn: 'modal-back-btn',
+            
+            // Detail Section Elements
+            detailTitle: 'detail-title',
+            detailDescription: 'detail-description',
+            
+            // Tab Contents
+            overviewContent: 'overview-content',
+            systemEquipmentContent: 'system-equipment-content',
+            designNarrativeContent: 'design-narrative-content',
+            
+            // SVGs
+            buildingMapSvg: 'building-svg-map',
+            buildingMarkersSvg: 'building-svg-markers',
+            spaceSvg: 'space-svg-object',
+            overlaySvg: 'building-space-overlay-object',
+            
+            // Popover
+            popover: 'space-popover',
+            popoverSpaceName: 'popover-space-name',
+            popoverSystemName: 'popover-system-name',
+            popoverViewBtn: 'popover-view-btn',
+            popoverCloseBtn: 'popover-close-btn',
+            
+            // Scenes
+            buildingScene: 'building-overview-scene',
+            detailScene: 'detail-scene',
+            
+            // Page Metadata
+            pageTitle: 'page-title',
+            heroBgImg: 'hero-bg-img',
+            heroTitle: 'hero-title',
+            heroDescription: 'hero-description',
+            heroButtonsContainer: 'hero-buttons-container'
+        },
+        classes: {
+            modalSpaceName: '.space-selection-modal-space-name',
+            modalTab: '.space-selection-modal-tab',
+            tabContent: '.tab-content',
+            productCarousel: '.product-carousel',
+            productSlide: '.product-slide',
+            carouselDots: '.carousel-dots',
+            dot: '.dot',
+            navBtnNext: '.carousel-nav-btn.next',
+            navBtnPrev: '.carousel-nav-btn.prev',
+            liveRegion: '.carousel-live-region',
+            
+            // Marker Classes
+            markerGroup: 'gh-marker-group',
+            childVisible: 'gh-child-visible',
+            childHidden: 'gh-child-hidden',
+            markerDimmed: 'gh-marker-dimmed'
+        }
+    },
+    // SVG Internal IDs
+    svg: {
+        pinsGroup: 'K-12-Pins-Roof-Closed',
+        buildingRoof: 'school-roof',
+        overlayViewBtn: 'view-default', // Static ID defined inside the SVG file
+        overlayCloseBtn: 'close-btn'    // Static ID defined inside the SVG file
+    },
+    // Constants
+    constants: {
+        popoverOffsetX: 160,
+        popoverOffsetY: 10,
+        tabs: {
+            overview: 'overview',
+            equipment: 'system-equipment',
+            narrative: 'design-narrative'
+        }
+    }
+};
+
+/* ==========================================================================
    Service Layer
    ========================================================================== */
 /**
@@ -23,420 +111,30 @@
  */
 class SpaceService {
     constructor() {
-        this.dataUrl = '/api/k-12-data'; // Placeholder for API endpoint
+        this.dataUrl = '/api/building-data'; // Placeholder for API endpoint
     }
 
     /**
-     * Fetches the K-12 space data.
-     * Currently simulates an asynchronous network request with a delay.
+     * Fetches the building space data.
+     * Uses the local JSON file to simulate an API response.
      * 
      * @param {string} buildingType - Optional building type to fetch data for.
      * @returns {Promise<Object>} A promise that resolves to the data object containing spaces and page metadata.
      */
     async fetchData(buildingType = 'k-12') {
-        // Simulate network delay to mimic real API behavior
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(this.getMockData(buildingType));
-            }, 500);
-        });
-    }
-
-    /**
-     * Returns the hardcoded mock data used for the application.
-     * This data structure defines all spaces, their content, and related products.
-     * 
-     * @param {string} buildingType - The type of building to retrieve data for.
-     * @returns {Object} The mock data object.
-     */
-    getMockData(buildingType) {
-        // Enhanced Data Structure
-        return {
-            pageMetadata: {
-                title: "K-12 School Pradeep",
-                heroSection: {
-                    backgroundImage: "./Content/imgs/k-12-hero-bg.png",
-                    title: "SHARE 1",
-                    description: "THIS INFORMATIVE, USEFUL<br>& ENGAGING EXPERIENCE",
-                    actions: [
-                        {
-                            type: "primary",
-                            label: "Select a Space",
-                            iconClass: "./Content/imgs/icons/select-a-space.svg",
-                            actionId: "select-space-btn"
-                        },
-                        {
-                            type: "secondary",
-                            label: "Share",
-                            iconClass: "./Content/imgs/icons/share.svg",
-                            actionId: "share-btn"
-                        }
-                    ]
-                },
-                modalLandingImage: "./Content/imgs/Space Pins and Labels with Popover/K-12-Pins-Roof-Closed.svg"
-            },
-            spaces: [
-                {
-                    id: "classrooms",
-                    name: "Classrooms",
-                    systemName: "Dedicated Outdoor Air System (DOAS)",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/classrooms.svg",
-                    overview: {
-                        title: "Classroom Overview",
-                        body: `
-                            <p>The flexible design decouples ventilation air and loads, allowing the DOAS units to handle latent loads and condition air while secondary HVAC systems handle sensible loads. 
-                            This approach provides better control, energy efficiency, and comfort. Proper control is essential for maintaining comfort and extending equipment lifespan.</p>
-                            <h4>Featured Equipment</h4>
-                            <ul>
-                                <li>Dedicated Outdoor Air System (DOAS) with energy recovery</li>
-                                <li>Secondary HVAC system (not provided by Greenheck)</li>
-                            </ul>
-                        `,
-                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/classroom-overview.png"
-                    },
-                    systemEquipment: [
-                        {
-                            id: "rve-85",
-                            title: "RVE-85",
-                            slideImg: "./Content/imgs/prd-1.png", // Placeholder for 3D view
-                            body: `
-                                <ul class="product-features">
-                                    <li>Direct drive plenum supply and optional exhaust fans with neoprene isolation and factory-provided variable frequency drive.</li>
-                                    <li>2-inch double-wall cabinet with R13 injected foam insulation. R13 foam insulation thermally broken. Exterior Finish Permatector™ (2,500 hr salt spray rating under ASTM B117 testing conditions)</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/RooftopUnits.png"
-                        },
-                        {
-                            id: "atu-xg-th-500",
-                            title: "ATU - XG-TH-500",
-                            slideImg: "./Content/imgs/prd-2.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Damper rotates in a self-lubricating, long-life, low-friction thermoplastic bearing</li>
-                                    <li>Industry leading continuous welded primary inlet duct to minimize leakage with three stiffening beads for added rigidity</li>
-                                    <li>Mechanically fastened damper assembly shall be double layer, 18-gauge equivalent, galvanized</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/AirTerminalUnits.png"
-                        }
-                    ],
-                    designNarrative: {
-                        title: "Classroom Design Narrative",
-                        body: `
-                            <p>The <strong>Dedicated Outdoor Air System (DOAS)</strong> model handles latent loads and conditions air while secondary HVAC systems handle sensible loads. The design centers on a <strong>Greenheck model RVE-85, rooftop ventilator</strong> equipped with a <strong>polymer total energy recovery wheel</strong> and a <strong>packaged Air Source Heat Pump (ASHP)</strong> with electric secondary heating.</p>
-                            <p>The unit includes <strong>modulating, inverter scroll compressors</strong>, <strong>electronically commutated (EC) on all condenser fan motors</strong>, and <strong>modulating hot gas reheat</strong>. Supply and exhaust fans are controlled by <strong>factory provided, field mounted duct static pressure sensors</strong>.</p>
-                            <p>Each room features <strong>motorized, single duct VAV boxes, Greenheck model XG-TH-500</strong>, which open/close based on occupancy to maintain ventilation. Air terminal units have <strong>1" fiberglass insulation with 1 1/2 lb weight</strong> and connect to a <strong>Greenheck XG-5750 air diffuser</strong>.</p>
-                        `,
-                        img: "./Content/imgs/k-12-hero-bg.png"
-                    }
-                },
-                {
-                    id: "gym",
-                    name: "Gym",
-                    systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/gym.svg",
-                    overview: {
-                        title: "Gym Overview",
-                        body: `
-                            <p>The gymnasium features a single-zone, variable airflow system designed for high occupancy and activity levels. The system includes demand-controlled ventilation and high-volume, low-speed fans for optimal air circulation.</p>
-                            <h4>Featured Equipment</h4>
-                            <ul>
-                                <li>High Volume Low Speed (HVLS) fans</li>
-                                <li>Demand-controlled ventilation system</li>
-                            </ul>
-                        `,
-                        bgImg: "./Content/imgs/k-12-hero-bg.png"
-                    },
-                    systemEquipment: [
-                         {
-                            id: "hvls-fan",
-                            title: "HVLS Fan",
-                            slideImg: "./Content/imgs/prd-1.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>High-volume, low-speed fan for large open spaces.</li>
-                                    <li>Improves air circulation and comfort.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/Fans.png"
-                        },
-                        {
-                            id: "rv-110",
-                            title: "RV-110",
-                            slideImg: "./Content/imgs/prd-2.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Rooftop ventilation unit optimized for large spaces.</li>
-                                    <li>Energy-efficient operation with advanced controls.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/RooftopUnits.png"
-                        }
-                    ],
-                    designNarrative: {
-                        title: "Gym Design Narrative",
-                        body: `<p>The gymnasium features a single-zone, variable airflow system designed for high occupancy and activity levels. The design centers on a <strong>Greenheck model RV-110 rooftop unit</strong> for ventilation, supplemented by <strong>high-volume, low-speed (HVLS) fans</strong> to ensure optimal air circulation and occupant comfort.</p>`,
-                        img: "./Content/imgs/k-12-hero-bg.png"
-                    }
-                },
-                {
-                    id: "admin-offices",
-                    name: "Admin Offices",
-                    systemName: "Multi-zone variable air volume",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/admin-offices.svg",
-                    overview: {
-                        title: "Admin Offices Overview",
-                        body: `<p>Efficient climate control for administrative areas.</p>`,
-                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/admin-offices-overview.png"
-                    },
-                    systemEquipment: [
-                        {
-                            id: "vav-box",
-                            title: "VAV Box",
-                            slideImg: "./Content/imgs/prd-2.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Precision airflow control for individual zones.</li>
-                                    <li>Quiet operation suitable for office environments.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/AirTerminalUnits.png"
-                        },
-                        {
-                            id: "diffuser",
-                            title: "Air Diffuser",
-                            slideImg: "./Content/imgs/prd-1.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Ensures proper air distribution within the office space.</li>
-                                    <li>Aesthetically designed to blend with ceiling grids.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/GrillesRegistersDiffusers.png"
-                        }
-                    ],
-                    designNarrative: {
-                        title: "Admin Offices Design Narrative",
-                        body: `<p>Administrative areas utilize a <strong>Multi-zone Variable Air Volume (VAV) system</strong>. This setup allows for individual temperature control in different offices using <strong>Greenheck VAV boxes</strong> and <strong>air diffusers</strong>, ensuring comfort while maximizing energy efficiency.</p>`,
-                        img: "./Content/imgs/k-12-hero-bg.png"
-                    }
-                },
-                {
-                    id: "cafeteria",
-                    name: "Cafeteria",
-                    systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/cafeteria.svg",
-                    overview: {
-                        title: "Cafeteria Overview",
-                        body: `<p>Ventilation solutions for dining areas.</p>`,
-                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/cafeteria-overview.png"
-                    },
-                    systemEquipment: [
-                        {
-                            id: "makeup-air",
-                            title: "Make-Up Air",
-                            slideImg: "./Content/imgs/prd-1.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Replaces exhausted air to maintain pressure balance.</li>
-                                    <li>Tempered air for occupant comfort.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/100OutdoorAir.png"
-                        },
-                        {
-                            id: "exhaust-fan",
-                            title: "Exhaust Fan",
-                            slideImg: "./Content/imgs/prd-2.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Removes stale air and odors.</li>
-                                    <li>High efficiency and low sound levels.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/Fans.png"
-                        }
-                    ],
-                    designNarrative: {
-                        title: "Cafeteria Design Narrative",
-                        body: `<p>The cafeteria ventilation system is designed to handle variable occupancy loads and food odors. It integrates <strong>Greenheck make-up air units</strong> with the kitchen's exhaust system to maintain pressure balance and prevent odor migration into adjacent spaces.</p>`,
-                        img: "./Content/imgs/k-12-hero-bg.png"
-                    }
-                },
-                {
-                    id: "kitchen",
-                    name: "Kitchen",
-                    systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/kitchen.svg",
-                    overview: {
-                        title: "Kitchen Overview",
-                        body: `<p>High-performance kitchen ventilation systems.</p>`,
-                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/kitchen-overview.png"
-                    },
-                    systemEquipment: [
-                        {
-                            id: "kitchen-hood",
-                            title: "Vari-Flow Hood",
-                            slideImg: "./Content/imgs/prd-1.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>High-efficiency grease extraction and containment.</li>
-                                    <li>Integrated LED lighting and fire suppression.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/Exhuast Hoods.png"
-                        },
-                        {
-                            id: "pcu",
-                            title: "Pollution Control",
-                            slideImg: "./Content/imgs/prd-2.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Removes grease and odors from exhaust air.</li>
-                                    <li>Ensures compliance with environmental regulations.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/Pollution Control.png"
-                        }
-                    ],
-                    designNarrative: {
-                        title: "Kitchen Design Narrative",
-                        body: `<p>The kitchen requires a robust ventilation system to capture heat, grease, and odors. A dedicated <strong>Greenheck Make-Up Air Unit</strong> pairs with <strong>Vari-Flow Exhaust Hoods</strong> and a <strong>Pollution Control Unit</strong> to ensure safety, compliance, and comfort for kitchen staff.</p>`,
-                        img: "./Content/imgs/Exhuast Hoods.png"
-                    }
-                },
-                {
-                    id: "lobby",
-                    name: "Lobby",
-                    systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/lobby.svg",
-                    overview: {
-                        title: "Lobby Overview",
-                        body: `<p>Welcoming and comfortable entryways.</p>`,
-                        bgImg: "./Content/imgs/Space Pins and Labels with Popover/lobby-overhead-overview.png"
-                    },
-                    systemEquipment: [
-                        {
-                            id: "air-curtain",
-                            title: "Air Curtain",
-                            slideImg: "./Content/imgs/prd-1.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Creates an air seal to prevent infiltration.</li>
-                                    <li>Keeps conditioned air inside and pests outside.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/AirTerminalUnits.png"
-                        },
-                        {
-                            id: "doas-unit",
-                            title: "DOAS Unit",
-                            slideImg: "./Content/imgs/prd-2.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Supplies conditioned outdoor air.</li>
-                                    <li>Maintains optimal indoor air quality.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/RooftopUnits.png"
-                        }
-                    ],
-                    designNarrative: {
-                        title: "Lobby Design Narrative",
-                        body: `<p>The lobby serves as a transition space, requiring a system that can handle rapid load changes. <strong>Greenheck Air Curtains</strong> protect against infiltration at the entry, while a dedicated <strong>DOAS unit</strong> maintains a comfortable, conditioned environment for occupants.</p>`,
-                        img: "./Content/imgs/k-12-hero-bg.png"
-                    }
-                },
-                {
-                    id: "locker-room",
-                    name: "Locker Room",
-                    systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/locker-room.svg",
-                    overview: {
-                        title: "Locker Room Overview",
-                        body: `<p>Effective moisture and odor control.</p>`,
-                        bgImg: "./Content/imgs/k-12-hero-bg.png"
-                    },
-                    systemEquipment: [
-                        {
-                            id: "erv",
-                            title: "Energy Recovery",
-                            slideImg: "./Content/imgs/prd-1.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Transfers heat and moisture between airstreams.</li>
-                                    <li>Reduces heating and cooling loads.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/EnergyRecovery.png"
-                        }
-                    ],
-                    designNarrative: {
-                        title: "Locker Room Design Narrative",
-                        body: `<p>Locker rooms require high ventilation rates to effectively control humidity and odors. A <strong>Greenheck Energy Recovery Ventilator (ERV)</strong> provides ample fresh air while recovering energy from the exhaust stream to minimize operating costs.</p>`,
-                        img: "./Content/imgs/k-12-hero-bg.png"
-                    }
-                },
-                {
-                    id: "science-lab",
-                    name: "Science Lab",
-                    systemName: "DOAS",
-                    markerImg: "./Content/imgs/Space Pins and Labels with Popover/science-lab.svg",
-                    overview: {
-                        title: "Science Lab Overview",
-                        body: `<p>Safe ventilation for laboratory environments.</p>`,
-                        bgImg: "./Content/imgs/HealthcareLaboratoriesCleanrooms.png"
-                    },
-                    systemEquipment: [
-                        {
-                            id: "fume-exhaust",
-                            title: "Fume Exhaust",
-                            slideImg: "./Content/imgs/prd-1.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>High-velocity discharge to safely disperse fumes.</li>
-                                    <li>Corrosion-resistant construction.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/Fans.png"
-                        },
-                        {
-                            id: "venturi-valve",
-                            title: "Venturi Valve",
-                            slideImg: "./Content/imgs/prd-2.png",
-                            body: `
-                                <ul class="product-features">
-                                    <li>Maintains precise airflow and room pressurization.</li>
-                                    <li>Fast response to changing conditions.</li>
-                                </ul>
-                            `,
-                            productDetailsUrl: "#",
-                            bgImg: "./Content/imgs/AirTerminalUnits.png"
-                        }
-                    ],
-                    designNarrative: {
-                        title: "Science Lab Design Narrative",
-                        body: `<p>Safety is paramount in science labs. The ventilation system uses <strong>Greenheck high-plume exhaust fans</strong> to safely disperse fumes and <strong>Venturi valves</strong> to maintain precise room pressurization and containment of hazardous substances.</p>`,
-                        img: "./Content/imgs/k-12-hero-bg.png"
-                    }
-                }
-            ]
-        };
+        try {
+            // In a real application, buildingType could be used to construct the URL
+            // For this demo, we use a static JSON file based on building type
+            const response = await fetch(`./Content/js/${buildingType}-data.json`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            // Return empty structure on error to prevent app crash
+            return { pageMetadata: {}, spaces: [] };
+        }
     }
 }
 
@@ -452,7 +150,7 @@ class SpaceModel {
         this.spaces = [];             // List of all available spaces
         this.pageMetadata = null;     // Page-specific metadata (hero, title, etc.)
         this.currentSpaceId = null;   // ID of the currently selected space
-        this.currentTab = 'overview'; // Default active tab in the detail modal
+        this.currentTab = APP_CONFIG.constants.tabs.overview; // Default active tab in the detail modal
         this.currentProductIndex = 0; // Index of the currently visible product in the carousel
         this.markerData = {};         // Stores SVG marker coordinates
     }
@@ -526,33 +224,34 @@ class SpaceView {
     constructor() {
         // --- DOM Elements ---
         // Modal elements
-        this.modal = document.getElementById('space-selection-modal');
-        this.modalTitle = document.querySelector('.space-selection-modal-space-name');
-        this.modalSystemName = document.getElementById('modal-system-name');
-        this.modalTabs = document.querySelectorAll('.space-selection-modal-tab');
-        this.tabContents = document.querySelectorAll('.tab-content');
+        this.modal = document.getElementById(APP_CONFIG.selectors.ids.modal);
+        this.modalTitle = document.querySelector(APP_CONFIG.selectors.classes.modalSpaceName);
+        this.modalSystemName = document.getElementById(APP_CONFIG.selectors.ids.modalSystemName);
+        this.modalTabs = document.querySelectorAll(APP_CONFIG.selectors.classes.modalTab);
+        this.tabContents = document.querySelectorAll(APP_CONFIG.selectors.classes.tabContent);
         
         // Detail section elements
-        this.detailTitle = document.getElementById('detail-title');
-        this.detailDescription = document.getElementById('detail-description');
-        this.narrativeContent = document.getElementById('design-narrative-content');
+        this.detailTitle = document.getElementById(APP_CONFIG.selectors.ids.detailTitle);
+        this.detailDescription = document.getElementById(APP_CONFIG.selectors.ids.detailDescription);
+        this.narrativeContent = document.getElementById(APP_CONFIG.selectors.ids.designNarrativeContent);
         
         // Product Carousel
-        this.productCarousel = document.querySelector('.product-carousel');
+        this.productCarousel = document.querySelector(APP_CONFIG.selectors.classes.productCarousel);
         
         // SVG Object Containers
-        this.buildingSvgObject = document.getElementById('building-svg-object');
-        this.spaceSvgObject = document.getElementById('space-svg-object');
+        this.buildingMapObject = document.getElementById(APP_CONFIG.selectors.ids.buildingMapSvg);
+        this.buildingMarkersObject = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+        this.spaceSvgObject = document.getElementById(APP_CONFIG.selectors.ids.spaceSvg);
         
         // Popover element
-        this.popover = document.getElementById('space-popover');
+        this.popover = document.getElementById(APP_CONFIG.selectors.ids.popover);
         
         // --- State ---
         this.isPopoverVisible = false;
         
         // --- Constants ---
-        this.SPACE_POPOVER_OFFSET_X = 160;
-        this.SPACE_POPOVER_OFFSET_Y = 10;
+        this.SPACE_POPOVER_OFFSET_X = APP_CONFIG.constants.popoverOffsetX;
+        this.SPACE_POPOVER_OFFSET_Y = APP_CONFIG.constants.popoverOffsetY;
     }
 
     /**
@@ -563,24 +262,24 @@ class SpaceView {
         if (!metadata) return;
 
         // Update Page Title
-        const pageTitle = document.getElementById('page-title');
+        const pageTitle = document.getElementById(APP_CONFIG.selectors.ids.pageTitle);
         if (pageTitle) pageTitle.textContent = metadata.title;
         document.title = `${metadata.title} | Greenheck`;
 
         // Update Hero Section
         const hero = metadata.heroSection;
         if (hero) {
-            const bgImg = document.getElementById('hero-bg-img');
+            const bgImg = document.getElementById(APP_CONFIG.selectors.ids.heroBgImg);
             if (bgImg) bgImg.src = hero.backgroundImage;
 
-            const heroTitle = document.getElementById('hero-title');
+            const heroTitle = document.getElementById(APP_CONFIG.selectors.ids.heroTitle);
             if (heroTitle) heroTitle.textContent = hero.title;
 
-            const heroDesc = document.getElementById('hero-description');
+            const heroDesc = document.getElementById(APP_CONFIG.selectors.ids.heroDescription);
             if (heroDesc) heroDesc.innerHTML = hero.description;
 
             // Render Hero Buttons
-            const btnContainer = document.getElementById('hero-buttons-container');
+            const btnContainer = document.getElementById(APP_CONFIG.selectors.ids.heroButtonsContainer);
             if (btnContainer) {
                 btnContainer.innerHTML = ''; // Clear existing
 
@@ -601,15 +300,23 @@ class SpaceView {
             }
         }
         
-        // Update Modal Landing Image
-        if (metadata.modalLandingImage) {
-            const svgObj = document.getElementById('building-svg-object');
-            if (svgObj) {
-                // Only update if different to avoid reload loop
-                const currentData = svgObj.getAttribute('data');
-                if (currentData !== metadata.modalLandingImage) {
-                    svgObj.setAttribute('data', metadata.modalLandingImage);
-                }
+        // Update Modal SVGs (Map and Markers layers)
+        const mapObj = document.getElementById(APP_CONFIG.selectors.ids.buildingMapSvg);
+        const markersObj = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+
+        // Map Layer
+        const mapSrc = metadata.modalMapImage || metadata.modalLandingImage;
+        if (mapObj && mapSrc) {
+            if (mapObj.getAttribute('data') !== mapSrc) {
+                mapObj.setAttribute('data', mapSrc);
+            }
+        }
+
+        // Markers Layer
+        const markersSrc = metadata.modalMarkersImage || metadata.modalLandingImage;
+        if (markersObj && markersSrc) {
+            if (markersObj.getAttribute('data') !== markersSrc) {
+                markersObj.setAttribute('data', markersSrc);
             }
         }
     }
@@ -639,7 +346,7 @@ class SpaceView {
      * @param {Object} space - The space object containing details to render.
      * @param {string} tab - The ID of the tab to display (default: 'overview').
      */
-    renderSpaceDetails(space, tab = 'overview') {
+    renderSpaceDetails(space, tab = APP_CONFIG.constants.tabs.overview) {
         if (!space) return;
 
         // Update Header Information
@@ -657,12 +364,12 @@ class SpaceView {
         this.tabContents.forEach(c => c.classList.remove('active'));
         
         // Render specific tab content based on selection
-        if (tab === 'overview') {
-            document.getElementById('overview-content').classList.add('active');
+        if (tab === APP_CONFIG.constants.tabs.overview) {
+            document.getElementById(APP_CONFIG.selectors.ids.overviewContent).classList.add('active');
             
             // Inject Overview Content
             // The JSON structure includes HTML in 'body', which allows for rich text.
-            const container = document.getElementById('overview-content');
+            const container = document.getElementById(APP_CONFIG.selectors.ids.overviewContent);
             
             // Use bgImg from data or fallback to empty string
             const bgImg = space.overview.bgImg || '';
@@ -675,11 +382,11 @@ class SpaceView {
                     </div>
                 </div>
             `;
-        } else if (tab === 'system-equipment') {
-            document.getElementById('system-equipment-content').classList.add('active');
+        } else if (tab === APP_CONFIG.constants.tabs.equipment) {
+            document.getElementById(APP_CONFIG.selectors.ids.systemEquipmentContent).classList.add('active');
             this.renderProductCarousel(space.systemEquipment);
-        } else if (tab === 'design-narrative') {
-            const container = document.getElementById('design-narrative-content');
+        } else if (tab === APP_CONFIG.constants.tabs.narrative) {
+            const container = document.getElementById(APP_CONFIG.selectors.ids.designNarrativeContent);
             container.classList.add('active');
             
             const bgImg = space.designNarrative.img || '';
@@ -708,7 +415,7 @@ class SpaceView {
      * @param {Array<Object>} products - Array of product objects to display.
      */
     renderProductCarousel(products) {
-        const container = document.querySelector('.product-carousel');
+        const container = document.querySelector(APP_CONFIG.selectors.classes.productCarousel);
         if (!products || products.length === 0) {
             container.innerHTML = '<p>No equipment data available for this space.</p>';
             return;
@@ -784,7 +491,7 @@ class SpaceView {
         container.innerHTML = html;
         
         // Attach click listeners to the navigation dots
-        const dots = container.querySelectorAll('.dot');
+        const dots = container.querySelectorAll(APP_CONFIG.selectors.classes.dot);
         dots.forEach(dot => {
             dot.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -835,10 +542,16 @@ class SpaceView {
      * @param {string} markerImg - The path to the overlay SVG file.
      */
     replaceLandingSvg(markerImg) {
-        const overlay = document.getElementById('building-space-overlay-object');
+        const overlay = document.getElementById(APP_CONFIG.selectors.ids.overlaySvg);
         if (overlay) {
             overlay.classList.add('is-visible');
             overlay.setAttribute('data', markerImg);
+        }
+        
+        // Hide Markers Layer when overlay is visible
+        const markersLayer = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+        if (markersLayer) {
+            markersLayer.classList.add('is-hidden');
         }
     }
 
@@ -846,12 +559,21 @@ class SpaceView {
      * Hides the overlay SVG and resets the main building view.
      */
     restoreLandingSvg() {
-        const overlay = document.getElementById('building-space-overlay-object');
+        const overlay = document.getElementById(APP_CONFIG.selectors.ids.overlaySvg);
         if (overlay) {
             overlay.classList.remove('is-visible');
             // Small delay to ensure transition completes before clearing data
             setTimeout(() => overlay.removeAttribute('data'), 100);
         }
+        
+        // Restore Markers Layer visibility
+        const markersLayer = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+        if (markersLayer) {
+            markersLayer.classList.remove('is-hidden');
+        }
+
+        // Restore visibility of all markers
+        this.updateMarkerVisibility(null);
     }
 
     /**
@@ -865,8 +587,8 @@ class SpaceView {
     showPopover(space, x, y, pointerLeft) {
         if (!space) return;
         
-        const nameEl = document.getElementById('popover-space-name');
-        const sysEl = document.getElementById('popover-system-name');
+        const nameEl = document.getElementById(APP_CONFIG.selectors.ids.popoverSpaceName);
+        const sysEl = document.getElementById(APP_CONFIG.selectors.ids.popoverSystemName);
         
         nameEl.textContent = space.name;
         sysEl.textContent = space.systemName;
@@ -921,14 +643,114 @@ class SpaceView {
     }
 
     /**
+     * Initializes marker visibility logic for the main SVG.
+     * Ensures only the first child (pin) of each marker group is visible initially.
+     * 
+     * @param {Document} doc - The SVG document.
+     */
+    initMarkerVisibility(doc) {
+        console.log('initMarkerVisibility called');
+        if (!doc) return;
+
+        // Attempt to find the main container group
+        let container = doc.getElementById(APP_CONFIG.svg.pinsGroup);
+        if (!container) {
+             console.warn(`initMarkerVisibility: Container '${APP_CONFIG.svg.pinsGroup}' not found. Using root SVG.`);
+             container = doc.querySelector('svg'); 
+        }
+
+        if (!container) return;
+
+        // Get all direct <g> children that are potential marker groups
+        const groups = Array.from(container.children).filter(el => el.tagName === 'g');
+        console.log(`initMarkerVisibility: Found ${groups.length} groups to initialize`);
+
+        groups.forEach(group => {
+            // Exclusion Logic
+            if (group.id === APP_CONFIG.svg.buildingRoof) return;
+            
+            // Apply base class for transitions
+            group.classList.add(APP_CONFIG.selectors.classes.markerGroup);
+
+            // Process children of the marker group
+            const children = Array.from(group.children).filter(el => el.tagName === 'g');
+            
+            if (children.length > 0) {
+                // First child (Pin) -> Visible
+                children[0].classList.add(APP_CONFIG.selectors.classes.childVisible);
+                children[0].classList.remove(APP_CONFIG.selectors.classes.childHidden);
+                
+                // Subsequent children (Labels/Popovers) -> Hidden
+                for (let i = 1; i < children.length; i++) {
+                    children[i].classList.add(APP_CONFIG.selectors.classes.childHidden);
+                    children[i].classList.remove(APP_CONFIG.selectors.classes.childVisible);
+                }
+            }
+        });
+    }
+
+    /**
+     * Updates visibility of marker groups based on the active selection.
+     * Hides all other markers when one is active.
+     * 
+     * @param {string|null} activeId - The ID of the currently active space/marker. If null, shows all.
+     */
+    updateMarkerVisibility(activeId) {
+        console.group('updateMarkerVisibility');
+        console.log('Active ID:', activeId);
+
+        const svgObj = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+        if (!svgObj || !svgObj.contentDocument) {
+            console.error('Building SVG object or contentDocument not found');
+            console.groupEnd();
+            return;
+        }
+        const doc = svgObj.contentDocument;
+
+        let container = doc.getElementById(APP_CONFIG.svg.pinsGroup);
+        if (!container) {
+            console.warn(`Container with ID '${APP_CONFIG.svg.pinsGroup}' not found. Falling back to SVG root.`);
+            container = doc.querySelector('svg');
+        }
+        
+        if (!container) {
+            console.error('No container found for markers');
+            console.groupEnd();
+            return;
+        }
+
+        const groups = Array.from(container.children).filter(el => el.tagName === 'g');
+        console.log(`Found ${groups.length} marker groups`);
+
+        groups.forEach(group => {
+            if (group.id === APP_CONFIG.svg.buildingRoof) return;
+
+            if (activeId && group.id !== activeId) {
+                // If there is an active marker and this isn't it -> Dim/Hide it
+                if (!group.classList.contains(APP_CONFIG.selectors.classes.markerDimmed)) {
+                    console.log(`Dimming marker: ${group.id}`);
+                    group.classList.add(APP_CONFIG.selectors.classes.markerDimmed);
+                }
+            } else {
+                // If no active marker OR this is the active one -> Show it
+                if (group.classList.contains(APP_CONFIG.selectors.classes.markerDimmed)) {
+                    console.log(`Restoring marker: ${group.id}`);
+                    group.classList.remove(APP_CONFIG.selectors.classes.markerDimmed);
+                }
+            }
+        });
+        console.groupEnd();
+    }
+
+    /**
      * Switches between the main building view and the detailed space view within the modal.
      * 
      * @param {string} sceneName - 'detail' for the space detail view, 'building' (or others) for the main map.
      */
     switchScene(sceneName) {
-        const buildingScene = document.getElementById('building-overview-scene');
-        const detailScene = document.getElementById('detail-scene');
-        const backBtn = document.getElementById('modal-back-btn');
+        const buildingScene = document.getElementById(APP_CONFIG.selectors.ids.buildingScene);
+        const detailScene = document.getElementById(APP_CONFIG.selectors.ids.detailScene);
+        const backBtn = document.getElementById(APP_CONFIG.selectors.ids.modalBackBtn);
         
         if (sceneName === 'detail') {
             buildingScene.classList.remove('active');
@@ -986,20 +808,21 @@ class SpaceController {
             // Bind events AFTER content is rendered (specifically for dynamic buttons)
             this.bindEvents();
             
-            // Initialize SVG handler for main building (Modal Landing)
-            // We need to wait for the 'load' event to access the SVG's internal DOM
-            const svgObj = document.getElementById('building-svg-object');
-            if (svgObj) {
-                // If the data attribute was just set in renderPageContent, it might take a moment to load
-                svgObj.addEventListener('load', () => this.attachSvgHandlers(svgObj));
-                // If already loaded (cached), attach immediately
-                if (svgObj.contentDocument) {
-                    this.attachSvgHandlers(svgObj);
-                }
+            // Initialize SVG handlers for Map and Markers layers
+            const mapObj = document.getElementById(APP_CONFIG.selectors.ids.buildingMapSvg);
+            if (mapObj) {
+                mapObj.addEventListener('load', () => this.initMapLayer(mapObj));
+                if (mapObj.contentDocument) this.initMapLayer(mapObj);
+            }
+
+            const markersObj = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+            if (markersObj) {
+                markersObj.addEventListener('load', () => this.attachSvgHandlers(markersObj));
+                if (markersObj.contentDocument) this.attachSvgHandlers(markersObj);
             }
 
             // Initialize SVG handler for overlay (Space specific SVGs)
-            const overlayObj = document.getElementById('building-space-overlay-object');
+            const overlayObj = document.getElementById(APP_CONFIG.selectors.ids.overlaySvg);
             if (overlayObj) {
                 overlayObj.addEventListener('load', () => this.attachOverlayHandlers(overlayObj));
             }
@@ -1023,13 +846,13 @@ class SpaceController {
             if (btn) {
                 btn.addEventListener('click', () => {
                     this.view.showModal();
-                    this.view.switchScene('overview');
+                    this.view.switchScene(APP_CONFIG.constants.tabs.overview);
                 });
             }
         }
 
         // Modal Close Button
-        const closeBtn = document.getElementById('modal-close-btn');
+        const closeBtn = document.getElementById(APP_CONFIG.selectors.ids.modalCloseBtn);
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
                 this.view.hideModal();
@@ -1038,7 +861,7 @@ class SpaceController {
         }
 
         // Back Button (Returns to Building Overview)
-        const backBtn = document.getElementById('modal-back-btn');
+        const backBtn = document.getElementById(APP_CONFIG.selectors.ids.modalBackBtn);
         if (backBtn) {
             backBtn.addEventListener('click', () => {
                 this.view.switchScene('overview');
@@ -1047,14 +870,14 @@ class SpaceController {
         }
 
         // Popover "View" Button (Navigates to Space Detail)
-        const popViewBtn = document.getElementById('popover-view-btn');
+        const popViewBtn = document.getElementById(APP_CONFIG.selectors.ids.popoverViewBtn);
         if (popViewBtn) {
             popViewBtn.addEventListener('click', () => {
                 const space = this.model.getCurrentSpace();
                 if (space) {
                     this.view.hidePopover();
                     this.view.switchScene('detail');
-                    this.view.renderSpaceDetails(space, 'overview');
+                    this.view.renderSpaceDetails(space, APP_CONFIG.constants.tabs.overview);
                     
                     // IMPORTANT: The "detail" scene has its own SVG container with ID "space-svg-object"
                     // We need to make sure this object loads the correct SVG for the selected space
@@ -1064,7 +887,7 @@ class SpaceController {
         }
 
         // Popover Close Button
-        const popCloseBtn = document.getElementById('popover-close-btn');
+        const popCloseBtn = document.getElementById(APP_CONFIG.selectors.ids.popoverCloseBtn);
         if (popCloseBtn) {
             popCloseBtn.addEventListener('click', () => {
                 this.view.hidePopover();
@@ -1073,7 +896,7 @@ class SpaceController {
         }
 
         // Modal Tabs (Overview, System Equipment, Design Narrative)
-        const tabs = document.querySelectorAll('.space-selection-modal-tab');
+        const tabs = document.querySelectorAll(APP_CONFIG.selectors.classes.modalTab);
         tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
                 const tabName = e.target.dataset.tab;
@@ -1084,10 +907,10 @@ class SpaceController {
 
         // Product Carousel Delegation
         // Uses event delegation to handle clicks on dynamic carousel elements
-        document.querySelector('.product-carousel').addEventListener('click', (e) => {
-            if (e.target.closest('.carousel-nav-btn.next')) {
+        document.querySelector(APP_CONFIG.selectors.classes.productCarousel).addEventListener('click', (e) => {
+            if (e.target.closest(APP_CONFIG.selectors.classes.navBtnNext)) {
                 this.nextProduct();
-            } else if (e.target.closest('.carousel-nav-btn.prev')) {
+            } else if (e.target.closest(APP_CONFIG.selectors.classes.navBtnPrev)) {
                 this.prevProduct();
             }
         });
@@ -1131,7 +954,7 @@ class SpaceController {
      * @param {string|null} source - The source of the navigation action ('next', 'prev', 'dot', or null).
      */
     updateProductVisibility(index, source = null) {
-        const slides = document.querySelectorAll('.product-slide');
+        const slides = document.querySelectorAll(APP_CONFIG.selectors.classes.productSlide);
         let newActiveSlide = null;
         
         // Toggle active class on slides
@@ -1143,9 +966,9 @@ class SpaceController {
         
         // Update dots in ALL slides (since they are replicated in each slide)
         // This is necessary because each slide contains its own set of navigation dots
-        const allDotContainers = document.querySelectorAll('.carousel-dots');
+        const allDotContainers = document.querySelectorAll(APP_CONFIG.selectors.classes.carouselDots);
         allDotContainers.forEach(container => {
-            const dots = container.querySelectorAll('.dot');
+            const dots = container.querySelectorAll(APP_CONFIG.selectors.classes.dot);
             dots.forEach((dot, i) => {
                 const isActive = i === index;
                 dot.classList.toggle('active', isActive);
@@ -1154,7 +977,7 @@ class SpaceController {
         });
 
         // Accessibility: Announce slide change to screen readers
-        const liveRegion = document.querySelector('.carousel-live-region');
+        const liveRegion = document.querySelector(APP_CONFIG.selectors.classes.liveRegion);
         if (liveRegion && newActiveSlide) {
             const title = newActiveSlide.querySelector('h3')?.textContent || `Slide ${index + 1}`;
             liveRegion.textContent = `Showing ${title}`;
@@ -1163,14 +986,14 @@ class SpaceController {
         // Accessibility: Manage Focus if triggered by user interaction
         if (source && newActiveSlide) {
             if (source === 'next') {
-                const nextBtn = newActiveSlide.querySelector('.carousel-nav-btn.next');
+                const nextBtn = newActiveSlide.querySelector(APP_CONFIG.selectors.classes.navBtnNext);
                 if (nextBtn) nextBtn.focus();
             } else if (source === 'prev') {
-                const prevBtn = newActiveSlide.querySelector('.carousel-nav-btn.prev');
+                const prevBtn = newActiveSlide.querySelector(APP_CONFIG.selectors.classes.navBtnPrev);
                 if (prevBtn) prevBtn.focus();
             } else if (source === 'dot') {
                 // If clicked via dot, keep focus on the specific dot in the new slide
-                const dots = newActiveSlide.querySelectorAll('.dot');
+                const dots = newActiveSlide.querySelectorAll(APP_CONFIG.selectors.classes.dot);
                 if (dots[index]) dots[index].focus();
             }
         }
@@ -1179,7 +1002,23 @@ class SpaceController {
     // --- SVG Handling Logic ---
 
     /**
-     * Attaches click and hover handlers to the main building SVG.
+     * Initializes the Map Layer (Layer 1).
+     * Hides the interactive markers so only the background map is visible.
+     */
+    initMapLayer(svgObject) {
+        const doc = svgObject.contentDocument;
+        if (!doc) return;
+
+        // Map Layer should just show the map. 
+        // Since we are using a dedicated SVG (k-12-map.svg) which has markers removed,
+        // we do NOT need to hide the root group 'K-12-Pins-Roof-Closed'.
+        // Previous logic hiding APP_CONFIG.svg.pinsGroup was causing the entire map to disappear
+        // because the root group shared that ID.
+    }
+
+    /**
+     * Attaches click and hover handlers to the Markers SVG (Layer 2).
+     * Hides the map background so only markers are visible.
      * Identifies interactable elements based on dynamic metadata (data-space-id)
      * and legacy ID mappings.
      * 
@@ -1189,7 +1028,21 @@ class SpaceController {
         const doc = svgObject.contentDocument;
         if (!doc) return;
 
+        // Hide Map Background (Layer 2 should only show markers)
+        const mapGroup = doc.getElementById('Map');
+        if (mapGroup) {
+            mapGroup.style.display = 'none';
+        }
+
+        // Initialize Marker Visibility System
+        this.view.initMarkerVisibility(doc);
+
         // Global click listener: Clicking empty space on the map closes any open overlay
+        // Note: On Layer 2, empty space is transparent. 
+        // We might want to catch clicks on the wrapper or document if clicking "through" the markers?
+        // But doc.addEventListener('click') on the SVG document only catches clicks on elements if pointer-events are auto.
+        // If we set pointer-events: none on empty areas, this might not fire.
+        // However, let's keep it for now.
         doc.addEventListener('click', () => {
             this.view.restoreLandingSvg();
         });
@@ -1275,14 +1128,16 @@ class SpaceController {
         const findElement = (id) => {
             let el = doc.getElementById(id);
             if (!el) {
-                const groups = Array.from(doc.querySelectorAll('g'));
-                el = groups.find(g => g.id === id);
+                // Fallback: search by ID attribute manually
+                // Uses querySelector to find ANY element with the matching ID, 
+                // not just groups. Useful for text elements like 'view-default'.
+                el = doc.querySelector(`[id="${id}"]`);
             }
             return el;
         };
 
         // "View" Button in Overlay (Navigates to Detail Scene)
-        const viewBtn = findElement('view-default');
+        const viewBtn = findElement(APP_CONFIG.svg.overlayViewBtn);
         if (viewBtn) {
             viewBtn.style.cursor = 'pointer';
             viewBtn.style.pointerEvents = 'auto';
@@ -1291,7 +1146,7 @@ class SpaceController {
                 const space = this.model.getCurrentSpace();
                 if (space) {
                     this.view.switchScene('detail');
-                    this.view.renderSpaceDetails(space, 'overview');
+                    this.view.renderSpaceDetails(space, APP_CONFIG.constants.tabs.overview);
                     this.view.loadSpaceSvg(space.markerImg);
                 }
             });
@@ -1307,7 +1162,7 @@ class SpaceController {
         }
 
         // "Close" Button in Overlay (Deselects space)
-        const closeBtn = findElement('close-btn');
+        const closeBtn = findElement(APP_CONFIG.svg.overlayCloseBtn);
         if (closeBtn) {
             closeBtn.style.cursor = 'pointer';
             closeBtn.style.pointerEvents = 'auto';
@@ -1326,7 +1181,30 @@ class SpaceController {
             console.warn('Close button not found in overlay SVG');
         }
 
-
+        // Background Click Forwarding
+        // Allows clicking through the transparent parts of the overlay to the main map
+        doc.addEventListener('click', (e) => {
+            // 1. Try to identify what's under the cursor in the MAIN SVG
+            const mainSvg = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+            if (mainSvg && mainSvg.contentDocument) {
+                // Since overlay and main SVG are stacked perfectly, coordinates match
+                const targetUnderneath = mainSvg.contentDocument.elementFromPoint(e.clientX, e.clientY);
+                
+                if (targetUnderneath) {
+                    // Dispatch the click to the underlying element
+                    const newEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    targetUnderneath.dispatchEvent(newEvent);
+                    return; 
+                }
+            }
+            
+            // Fallback: Just close the overlay
+            this.view.restoreLandingSvg();
+        });
     }
 
     /**
@@ -1336,16 +1214,23 @@ class SpaceController {
      * @param {string} spaceId - The ID of the selected space.
      */
     handleMarkerClick(spaceId) {
+        console.log('handleMarkerClick called for:', spaceId);
         const space = this.model.getSpace(spaceId);
-        if (!space) return;
+        if (!space) {
+            console.error('Space not found in model:', spaceId);
+            return;
+        }
 
         this.model.setCurrentSpace(spaceId);
         this.view.replaceLandingSvg(space.markerImg);
+        
+        // Update marker visibility (dim others)
+        this.view.updateMarkerVisibility(spaceId);
     }
 
     runMarkerClickTest(ids = ['lobby','gym','admin-offices','locker-room','science-lab','kitchen','cafeteria']) {
-        const svgObj = document.getElementById('building-svg-object');
-        const overlay = document.getElementById('building-space-overlay-object');
+        const svgObj = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+        const overlay = document.getElementById(APP_CONFIG.selectors.ids.overlaySvg);
         const results = [];
         if (!svgObj || !svgObj.contentDocument) {
             console.error('Marker test: building SVG not ready');
@@ -1396,14 +1281,14 @@ class SpaceController {
         // Wait for overlay to load
         await new Promise(r => setTimeout(r, 1000));
         
-        const overlay = document.getElementById('building-space-overlay-object');
+        const overlay = document.getElementById(APP_CONFIG.selectors.ids.overlaySvg);
         if (!overlay || !overlay.classList.contains('is-visible')) {
             console.error(`FAIL: ${firstSpaceId} overlay not visible`);
             return false;
         }
         
         // 2. Find "Gym" marker position in MAIN SVG
-        const mainSvg = document.getElementById('building-svg-object');
+        const mainSvg = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
         if (!mainSvg || !mainSvg.contentDocument) {
              console.error('FAIL: Main SVG not ready');
              return false;
@@ -1442,6 +1327,111 @@ class SpaceController {
             return false;
         }
     }
+
+    /**
+     * Performance benchmark for visibility system.
+     * Simulates 100+ markers and measures toggle time.
+     */
+    runPerformanceTest() {
+        const svgObj = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+        if (!svgObj || !svgObj.contentDocument) {
+            console.error('Benchmark: building SVG not ready');
+            return;
+        }
+        const doc = svgObj.contentDocument;
+        let container = doc.getElementById(APP_CONFIG.svg.pinsGroup) || doc.querySelector('svg');
+        
+        // 1. Create 100 clones
+        const baseGroup = container.querySelector(`g.${APP_CONFIG.selectors.classes.markerGroup}`);
+        if (!baseGroup) {
+             console.error('Benchmark: No base marker found to clone');
+             return;
+        }
+        
+        console.log('Benchmark: Cloning 100 markers...');
+        const clones = [];
+        for (let i = 0; i < 100; i++) {
+            const clone = baseGroup.cloneNode(true);
+            clone.id = `bench-marker-${i}`;
+            container.appendChild(clone);
+            clones.push(clone);
+        }
+        
+        // 2. Measure init time (re-init)
+        const t0 = performance.now();
+        this.view.initMarkerVisibility(doc);
+        const t1 = performance.now();
+        console.log(`Benchmark: Init 100 markers took ${(t1-t0).toFixed(2)}ms`);
+        
+        // 3. Measure toggle time (hide all but one)
+        const t2 = performance.now();
+        this.view.updateMarkerVisibility(`bench-marker-50`);
+        const t3 = performance.now();
+        console.log(`Benchmark: Hide 99 markers took ${(t3-t2).toFixed(2)}ms`);
+        
+        // 4. Measure restore time (show all)
+        const t4 = performance.now();
+        this.view.updateMarkerVisibility(null);
+        const t5 = performance.now();
+        console.log(`Benchmark: Show 100 markers took ${(t5-t4).toFixed(2)}ms`);
+        
+        // Cleanup
+        clones.forEach(c => c.remove());
+        console.log('Benchmark: Cleanup complete');
+    }
+
+    /**
+     * Unit test for visibility logic.
+     * Verifies that CSS classes are correctly applied.
+     */
+    testVisibilityLogic() {
+        const svgObj = document.getElementById(APP_CONFIG.selectors.ids.buildingMarkersSvg);
+        if (!svgObj || !svgObj.contentDocument) {
+             console.error('Test: building SVG not ready');
+             return false;
+        }
+        const doc = svgObj.contentDocument;
+        
+        // 1. Verify Init
+        const lobby = doc.getElementById('lobby');
+        if (!lobby) {
+            console.error('Test: lobby marker not found');
+            return false;
+        }
+        
+        const hasGroupClass = lobby.classList.contains(APP_CONFIG.selectors.classes.markerGroup);
+        const children = Array.from(lobby.children).filter(el => el.tagName === 'g');
+        const child1Visible = children[0].classList.contains(APP_CONFIG.selectors.classes.childVisible);
+        const child2Hidden = children.length > 1 ? children[1].classList.contains(APP_CONFIG.selectors.classes.childHidden) : true;
+        
+        if (!hasGroupClass || !child1Visible || !child2Hidden) {
+            console.error('Test: Init logic failed', { hasGroupClass, child1Visible, child2Hidden });
+            return false;
+        }
+        
+        // 2. Verify Update (Dimming)
+        this.view.updateMarkerVisibility('gym');
+        const lobbyDimmed = lobby.classList.contains(APP_CONFIG.selectors.classes.markerDimmed);
+        const gym = doc.getElementById('gym');
+        const gymNotDimmed = !gym.classList.contains(APP_CONFIG.selectors.classes.markerDimmed);
+        
+        if (!lobbyDimmed || !gymNotDimmed) {
+             console.error('Test: Update logic failed (Dimming)', { lobbyDimmed, gymNotDimmed });
+             return false;
+        }
+        
+        // 3. Verify Restore
+        this.view.updateMarkerVisibility(null);
+        const lobbyRestored = !lobby.classList.contains(APP_CONFIG.selectors.classes.markerDimmed);
+        
+        if (!lobbyRestored) {
+            console.error('Test: Restore logic failed');
+            return false;
+        }
+        
+        console.log('Visibility Logic Unit Test: PASSED');
+        return true;
+    }
 }
 
 // Initialize Application when DOM is fully loaded
@@ -1452,5 +1442,5 @@ document.addEventListener('DOMContentLoaded', () => {
         new SpaceView()
     );
     app.init();
-    window.k12App = app;
+    window.buildingApp = app;
 });
