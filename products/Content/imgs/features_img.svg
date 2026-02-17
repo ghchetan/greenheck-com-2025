@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="330" height="336" viewBox="0 0 330 336">
+  <!-- Background -->
+  <rect width="330" height="336" fill="#f8f9fa"/>
+  
+  <!-- Placeholder text -->
+  <text x="165" y="168" font-family="Arial, sans-serif" font-size="16" fill="#666" text-anchor="middle">
+    Features Image
+  </text>
+  <text x="165" y="190" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="middle">
+    Add SVG content here
+  </text>
+</svg>

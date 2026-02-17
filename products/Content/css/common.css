@@ -1,0 +1,665 @@
+/* Font Definitions */
+@font-face {
+  font-family: "SharpSans-Regular";
+  src: url("../font/SharpSans-Book.otf") format("opentype");
+  font-display: swap;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "SharpSans-Medium";
+  src: url("../font/SharpSans-Medium.otf") format("opentype");
+  font-display: swap;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "SharpSans-Bold";
+  src: url("../font/SharpSans-Bold.otf") format("opentype");
+  font-display: swap;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "SharpSans-Light";
+  src: url("../font/SharpSans-Light.otf") format("opentype");
+  font-display: swap;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "SharpSans-Thin";
+  src: url("../font/SharpSans-Thin.otf") format("opentype");
+  font-display: swap;
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "SharpSans-SemiBold";
+  src: url("../font/SharpSans-SemiBold.otf") format("opentype");
+  font-display: swap;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "SharpSans-ExtraBold";
+  src: url("../font/SharpSans-ExtraBold.otf") format("opentype");
+  font-display: swap;
+  font-weight: 800;
+}
+/* ==========================================================================
+   CSS Custom Properties - Design System
+   ========================================================================== */
+:root {
+  /* Base Colors */
+  --color-black: #000;
+  --color-gray: #333;
+  --color-mid-gray: #666;
+  --color-light-gray: #979797;
+  --color-lighter-gray: #e5e5e5;
+  --color-hover-gray: rgb(87 88 90);
+  --color-white: #fff;
+  --white: #fff;
+
+  /* Brand Colors */
+  --primary-color: #075697;
+  --primary-hover: rgba(7, 86, 151, 0.9);
+  --secondary-color: #1d4ed8;
+  --color-primary: #075697;
+  --color-primary-light: #34a8f6;
+
+  /* Text Colors */
+  --text-color: #1f2937;
+  --text-primary: #333;
+  --text-secondary: #666;
+  --text-light: #6b7280;
+  --link-color: #999999;
+
+  --icon-color: #5f6368;
+
+  /* Background Colors */
+  --background-color: #ffffff;
+  --background-light: #fafafa;
+  --background-sidebar: #f9fafb;
+  --background-overlay: rgba(255, 255, 255, 0.95);
+  --background-hover: rgba(37, 99, 235, 0.05);
+  --background-button-hover: #f0f0f0;
+  --color-bg-light: #f4f4f4;
+  --color-bg-lighter: #f6f6f6;
+  --color-bg-lightest: #f7f8fa;
+
+  /* Border Colors */
+  --border-color: #e5e5e5;
+  --border-color-dark: #969696;
+  --card-border: #e5e5e5;
+  --checkbox-border: #d1d5db;
+
+  /* Layout & Spacing */
+  --border-radius: 21px;
+  --border-radius-sm: 4px;
+  --border-radius-pill: 21px;
+  --max-width-container: 1248px;
+  --max-content: 1247px;
+  --container-max-width: 1288px;
+  --spacing-sm: 6px;
+  --spacing-md: 15px;
+  --spacing-lg: 30px;
+  --spacing-xl: 32px;
+
+  /* Layout */
+  --card-max-width: 288px;
+  --card-height: 354px;
+  --card-back-height: 308px;
+  --sidebar-width: 280px;
+  --sidebar-width-tablet: 240px;
+  --icon-scroll-top: 36px;
+  --icon-visibility-width: 15px;
+  --icon-visibility-on-height: 10px;
+  --icon-visibility-off-height: 14px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --box-shadow-base: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --box-shadow-dropdown: 0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --box-shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.18);
+
+  /* Typography */
+  --font-family-thin: "SharpSans-Thin", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-light: "SharpSans-Light", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-book: "SharpSans-Regular", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-regular: "SharpSans-Regular", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-medium: "SharpSans-Medium", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-semi-bold: "SharpSans-SemiBold", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-bold: "SharpSans-Bold", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --font-family-extra-bold: "SharpSans-ExtraBold", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+
+  --font-family: var(--font-family-regular);
+  --font-family-base: var(--font-family-regular);
+  --font-family-medium: var(--font-family-medium);
+  --font-family-bold: var(--font-family-bold);
+  --font-family-footer: "Inter", Arial, sans-serif;
+  --font-family-heading: var(--font-family-bold);
+  --font-size-base: 14px;
+  --font-size-nav: 18px;
+  --line-height-relaxed: 1.6;
+  --line-height-loose: 1.8;
+
+  /* Transitions */
+  --transition-base: all 0.2s ease-in-out;
+  --transition-fast: 0.2s ease;
+  --transition-smooth: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: 0.3s ease;
+
+  /* Component-Specific Colors (only unique values) */
+  --footer-bg: #f8f8f8;
+
+  /* Z-Index Scale */
+  --z-close-btn: 10;
+  --z-scroll-top: 1000;
+}
+/* ==========================================================================
+     CSS Reset
+     ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 15px;
+  line-height: var(--line-height-relaxed);
+  color: var(--text-color);
+  background-color: var(--background-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   Common Styles - Shared Base Styles
+   Reusable base styles that can be imported across multiple pages
+   ========================================================================== */
+
+/* ==========================================================================
+   Accessibility Utilities
+   ========================================================================== */
+
+/* ==========================================================================
+   Focus Styles for Accessibility
+   ========================================================================== */
+*:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Layout Components
+   ========================================================================== */
+main {
+  padding: 40px 20px;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Breadcrumb Navigation
+   ========================================================================== */
+.breadcrumb {
+  margin-bottom: 22px;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+.breadcrumb-arrow {
+  font-size: 16px;
+  color: var(--text-light);
+  margin: 0;
+  vertical-align: middle;
+}
+
+.breadcrumb-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.breadcrumb-link:hover,
+.breadcrumb-link:focus {
+  color: var(--primary-color);
+  outline: none;
+}
+
+.breadcrumb-current {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Page Header
+   ========================================================================== */
+.page-header {
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.page-header h1 {
+  font-family: var(--font-family-medium);
+  font-size: clamp(24px, 5vw, 40px);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.page-header h2,
+.account-sidebar h3 {
+  color: var(--text-primary);
+  font-family: var(--font-family-medium);
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.page-header p {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 22px;
+  margin: 0 auto;
+  text-align: left;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Account Layout - Two Column Layout
+   ========================================================================== */
+.account-layout {
+  display: flex;
+  gap: 32px;
+  width: 100%;
+}
+
+.account-sidebar {
+  width: 288px;
+  flex-shrink: 0;
+}
+
+.account-main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   Account Sidebar Navigation
+   ========================================================================== */
+.account-sidebar h3 {
+  color: rgba(51, 51, 51, 1);
+  font-family: var(--font-family-medium);
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.account-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-sidebar li {
+  border-bottom: 1px solid rgba(229, 229, 229, 1);
+}
+
+.account-sidebar li:last-child {
+  border-bottom: none;
+}
+
+.account-sidebar a {
+  color: rgba(51, 51, 51, 1);
+  font-family: var(--font-family-medium);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 12px 0;
+  display: block;
+  transition: var(--transition);
+}
+
+.account-sidebar a:hover,
+.account-sidebar a:focus {
+  color: var(--primary-color);
+  outline: none;
+}
+
+.ad-vehicle {
+  border: 1px solid rgba(214, 214, 214, 1);
+  background-color: rgba(255, 255, 255, 1);
+  padding: 20px 20px 30px 20px;
+  margin-top: 32px;
+}
+
+/* ==========================================================================
+   Scroll to Top Button
+   ========================================================================== */
+.scroll-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  color: var(--primary-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-scroll-top);
+  text-decoration: none;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+  font-size: 24px;
+  color: var(--link-color);
+}
+
+.scroll-to-top .material-symbols-outlined {
+  font-size: 36px;
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+  line-height: 1;
+  color: rgba(0, 168, 228, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-to-top:hover .material-symbols-outlined,
+.scroll-to-top:focus .material-symbols-outlined {
+  color: var(--background-color);
+  transform: translateY(-2px);
+  outline: 0;
+  background-color: rgba(0, 168, 228, 1);
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   Responsive Design - Base
+   ========================================================================== */
+
+/* ==========================================================================
+   Accessibility Features
+   ========================================================================== */
+.btn-default-primary,
+button[type="submit"] {
+  align-items: center;
+  appearance: none;
+  background-color: rgba(7, 86, 151, 1);
+  border-radius: 21px;
+  border-radius: 21px;
+  border: 0;
+  box-shadow: none;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 1);
+  cursor: pointer;
+  display: flex;
+  font-family: var(--font-family-medium);
+  font-size: 15px;
+  font-weight: 500;
+  gap: 7px;
+  height: 36px;
+  outline: none;
+  padding: 0 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  user-select: none;
+  width: fit-content;
+  -moz-appearance: none;
+  -moz-border-radius: 21px;
+  -moz-box-shadow: none;
+  -moz-transition: all 0.3s ease;
+  -moz-user-select: none;
+  -ms-transition: all 0.3s ease;
+  -ms-user-select: none;
+  -o-transition: all 0.3s ease;
+  -webkit-appearance: none;
+  -webkit-border-radius: 21px;
+  -webkit-box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-transition: all 0.3s ease;
+  -webkit-user-drag: none;
+  -webkit-user-select: auto;
+  -webkit-user-select: auto;
+  -webkit-user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-select: text;
+}
+
+.btn-default-primary:hover,
+button[type="submit"]:hover {
+  background-color: #00a8e4;
+  text-decoration: none;
+}
+
+.btn-default-primary:disabled,
+.btn-default-primary[disabled],
+.btn-default-primary.disabled,
+button[type="submit"]:disabled,
+button[type="submit"][disabled] {
+  background-color: #a7a9ac;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Grid Layout - 2 columns desktop, 1 column mobile/tablet
+   ========================================================================== */
+.grid-d2-tm1 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+/* ==========================================================================
+   Card with Icon Component
+   ========================================================================== */
+.card-with-icon {
+  border: 1px solid rgba(150, 150, 150, 1);
+  background-color: rgba(255, 255, 255, 1);
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-icon {
+  font-size: 34px !important;
+  flex-shrink: 0;
+  color: var(--icon-color);
+}
+
+.card-with-icon h3 {
+  color: rgba(51, 51, 51, 1);
+  font-family: var(--font-family-bold);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.card-with-icon p {
+  color: rgba(51, 51, 51, 1);
+  font-family: var(--font-family-medium);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: var(--line-height-relaxed);
+  margin: 0 0 24px 0;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.card-with-icon .btn-default-primary {
+  align-self: flex-start;
+  margin-top: 0;
+}
+
+/* ==========================================================================
+   Link Styles
+   ========================================================================== */
+.link-tertiary,
+a.link-tertiary {
+  color: rgba(0, 85, 150, 1);
+  font-family: var(--font-family-medium);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.link-tertiary:hover,
+a.link-tertiary:hover,
+.link-tertiary:focus,
+a.link-tertiary:focus {
+  text-decoration: underline;
+  outline: none;
+}
+
+/* ==========================================================================
+   Responsive Media Queries
+   ========================================================================== */
+
+/* Tablet: >= 768px and < 1024px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific styles can be added here if needed */
+}
+
+/* Mobile: < 768px */
+@media (max-width: 767px) {
+  main {
+    padding: 62px 16px 24px;
+  }
+
+  .page-title {
+    font-size: 32px;
+  }
+
+  .grid-d2-tm1 {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* Small Mobile: < 480px */
+@media (max-width: 479px) {
+  .page-header h1 {
+    font-size: 32px;
+  }
+  .page-header h2,
+  .account-sidebar h3 {
+    font-size: 20px;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .page-header p {
+    font-size: 15px;
+  }
+  .card-with-icon {
+    padding: 30px;
+  }
+  .grid-d2-tm1 {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --text-color: #000000;
+    --text-primary: #000000;
+    --text-light: #333333;
+    --border-color: #000000;
+    --card-border: #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  main {
+    max-width: none;
+    padding: 0;
+  }
+
+  .page-title,
+  .page-header p {
+    color: #000000;
+  }
+
+  .scroll-to-top {
+    display: none;
+  }
+}

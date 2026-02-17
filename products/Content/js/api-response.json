@@ -1,0 +1,165 @@
+{
+  "@odata.context": "https://cms-testv2.greenheck.com/api/all-services/$metadata#buildingtypes(Id,Title,DisplayTitle,MarkerImage(Id,Title,Url),HeroSection(Title,Description,Id,ActionButton(Id,Type,Title,Action)),Spaces(Title,Name,Description,Id,MarkerImage,Overview(Title,Body,BackgroundImage(Id,Title,Url)),SystemEquipment(Id,Title,DisplayTitle,Body,ProductUrl,BackgroundImage(Id,Title,Url),SliderImage(Id,Title,Url)),DesignNarrative(Title,Body,BackgroundImage(Id,Title,Url))))",
+  "value": [
+    {
+      "Id": "3e0f3098-e63a-4632-bc5e-72316dd7e2a5",
+      "DisplayTitle": "K-12 School",
+      "Title": "K-12 School",
+      "MarkerImage": [],
+      "HeroSection": [
+        {
+          "Id": "b634b92f-9eab-4825-a189-b637cd06899d",
+          "Description": "THIS INFORMATIVE, USEFUL &amp; ENGAGING EXPERIENCE",
+          "Title": "K12 SHARE",
+          "ActionButton": [
+            {
+              "Id": "2f5152b7-cb41-4d2c-afd7-bdd1eca4a984",
+              "Type": "1",
+              "Title": "Select a Space",
+              "Action": "1"
+            },
+            {
+              "Id": "edcd823f-5e5e-4025-8a5d-a6be68100109",
+              "Type": "2",
+              "Title": "Share",
+              "Action": "2"
+            }
+          ]
+        }
+      ],
+      "Spaces": [
+        {
+          "Id": "928212f1-9435-488e-8d39-01542731eea5",
+          "Description": "Dedicated Outdoor Air System (DOAS)",
+          "Title": "Classrooms",
+          "Name": "Classrooms",
+          "Overview": [
+            {
+              "Body": "\u003Cp\u003EThe flexible design decouples ventilation air and loads, allowing the DOAS units to handle latent loads and condition air while secondary HVAC systems handle sensible loads. This approach provides better control, energy efficiency, and comfort. Proper control is essential for maintaining comfort and extending equipment lifespan.\u003C/p\u003E \u003Ch4\u003EFeatured Equipment\u003C/h4\u003E \u003Cul\u003E \u003Cli\u003EDedicated Outdoor Air System (DOAS) with energy recovery\u003C/li\u003E \u003Cli\u003ESecondary HVAC system (not provided by Greenheck)\u003C/li\u003E \u003C/ul\u003E",
+              "Title": "Classroom Overview",
+              "BackgroundImage": [
+                {
+                  "Id": "594242a8-7594-4a4d-9930-452fe71fadad",
+                  "Title": "warehouse_master",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/warehouse_master.jpg?sfvrsn=69d60848_1"
+                }
+              ]
+            }
+          ],
+          "SystemEquipment": [
+            {
+              "Id": "9c204e85-fb64-429e-8aeb-d7124da2a3e3",
+              "Title": "ATU-XG-TH-500",
+              "ProductUrl": "https://google.com",
+              "Body": "\u003Cul class=\"\\\"product-features\\\"\"\u003E\u003Cli\u003EDamper rotates in a self-lubricating, long-life, low-friction thermoplastic bearing\u003C/li\u003E\u003Cli\u003EIndustry leading continuous welded primary inlet duct to minimize leakage with three stiffening beads for added rigidity\u003C/li\u003E\u003Cli\u003EMechanically fastened damper assembly shall be double layer, 18-gauge equivalent, galvanized\u003C/li\u003E\u003C/ul\u003E",
+              "DisplayTitle": "ATU-XG-TH-500",
+              "BackgroundImage": [
+                {
+                  "Id": "16b2abbc-c647-4f47-9c4a-0e2791203dee",
+                  "Title": "office-ventilation-systems",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/office-ventilation-systems.png?sfvrsn=def5e415_1"
+                }
+              ],
+              "SliderImage": [
+                {
+                  "Id": "2f2e2923-29a7-4454-be33-93ee0c419a65",
+                  "Title": "TAUB-36",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/taub-36.png?sfvrsn=95896d12_1"
+                }
+              ]
+            },
+            {
+              "Id": "3ad36c7e-0b92-4fc2-9680-d51228811db0",
+              "Title": "RVE-85",
+              "ProductUrl": "https://google.com",
+              "Body": "\u003Cul class=\\\"product-features\\\"\u003E \u003Cli\u003EDirect drive plenum supply and optional exhaust fans with neoprene isolation and factory-provided variable frequency drive.\u003C/li\u003E \u003Cli\u003E2-inch double-wall cabinet with R13 injected foam insulation. R13 foam insulation thermally broken. Exterior Finish Permatector™ (2,500 hr salt spray rating under ASTM B117 testing conditions)\u003C/li\u003E\u003C/ul\u003E",
+              "DisplayTitle": "RVE-85",
+              "BackgroundImage": [
+                {
+                  "Id": "594242a8-7594-4a4d-9930-452fe71fadad",
+                  "Title": "warehouse_master",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/warehouse_master.jpg?sfvrsn=69d60848_1"
+                }
+              ],
+              "SliderImage": [
+                {
+                  "Id": "85f8d24b-d12a-41ab-86b9-060cbdf8ee69",
+                  "Title": "WIH",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/wih.png?sfvrsn=52d29389_1"
+                }
+              ]
+            }
+          ],
+          "DesignNarrative": [
+            {
+              "Title": "Classroom Design Narrative",
+              "Body": "\u003Cp\u003EThe \u003Cstrong\u003EDedicated Outdoor Air System (DOAS)\u003C/strong\u003E model handles latent loads and conditions air while secondary HVAC systems handle sensible loads. The design centers on a \u003Cstrong\u003EGreenheck model RVE-85, rooftop ventilator\u003C/strong\u003E equipped with a \u003Cstrong\u003Epolymer total energy recovery wheel\u003C/strong\u003E and a \u003Cstrong\u003Epackaged Air Source Heat Pump (ASHP)\u003C/strong\u003E with electric secondary heating.\u003C/p\u003E\u003Cp\u003EThe unit includes \u003Cstrong\u003Emodulating, inverter scroll compressors\u003C/strong\u003E, \u003Cstrong\u003Eelectronically commutated (EC) on all condenser fan motors\u003C/strong\u003E, and \u003Cstrong\u003Emodulating hot gas reheat\u003C/strong\u003E. Supply and exhaust fans are controlled by \u003Cstrong\u003Efactory provided, field mounted duct static pressure sensors\u003C/strong\u003E.\u003C/p\u003E\u003Cp\u003EEach room features \u003Cstrong\u003Emotorized, single duct VAV boxes, Greenheck model XG-TH-500\u003C/strong\u003E, which open/close based on occupancy to maintain ventilation. Air terminal units have \u003Cstrong\u003E1\\\" fiberglass insulation with 1 1/2 lb weight\u003C/strong\u003E and connect to a \u003Cstrong\u003EGreenheck XG-5750 air diffuser\u003C/strong\u003E.\u003C/p\u003E",
+              "BackgroundImage": [
+                {
+                  "Id": "29d8b9c7-6ac9-426b-a13c-211446cfd87a",
+                  "Title": "building-types_restaurant_callouts_1920",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/building-types_restaurant_callouts_1920.jpg?sfvrsn=6211fbd6_1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": "e810fbc3-7397-41a3-a9e6-28ff623203cd",
+          "Description": "DOAS",
+          "Title": "School Gym",
+          "Name": "DOAS",
+          "Overview": [
+            {
+              "Body": "\u003Cp\u003EThe gymnasium features a single-zone, variable airflow system designed for high occupancy and activity levels. The system includes demand-controlled ventilation and high-volume, low-speed fans for optimal air circulation.\u003C/p\u003E\u003Ch4\u003EFeatured Equipment\u003C/h4\u003E\u003Cul\u003E\u003Cli\u003EHigh Volume Low Speed (HVLS) fans\u003C/li\u003E\u003Cli\u003EDemand-controlled ventilation system\u003C/li\u003E\u003C/ul\u003E",
+              "Title": "Gym Overview",
+              "BackgroundImage": [
+                {
+                  "Id": "8eafab6b-9406-4dc7-ba51-f997a3480069",
+                  "Title": "QEID-24-100",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/qeid-24-100.png?sfvrsn=e3a9e6c5_1"
+                }
+              ]
+            }
+          ],
+          "SystemEquipment": [
+            {
+              "Id": "0e051537-91be-48d4-b328-88b413744ae6",
+              "Title": "HVLS Fan",
+              "ProductUrl": "https://greenheck.com/hvls",
+              "Body": "\u003Cul class=\\\"product-features\\\"\u003E\u003Cli\u003EHigh-volume, low-speed fan for large open spaces.\u003C/li\u003E\u003Cli\u003EImproves air circulation and comfort.\u003C/li\u003E\u003C/ul\u003E",
+              "DisplayTitle": "HVLS Fan",
+              "BackgroundImage": [
+                {
+                  "Id": "c7767c79-aee5-477c-8bbe-cef8403a8b20",
+                  "Title": "MAC_DD_Mobile-Kit",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/mac_dd_mobile-kit.png?sfvrsn=a7933b25_1"
+                }
+              ],
+              "SliderImage": [
+                {
+                  "Id": "7f917908-5868-4602-8812-c3c20570c7af",
+                  "Title": "AER-24_Exhaust_FabricatedSteelProp_Front",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/aer-24_exhaust_fabricatedsteelprop_front.png?sfvrsn=e4f93fa5_1"
+                }
+              ]
+            }
+          ],
+          "DesignNarrative": [
+            {
+              "Title": "Gym Design Narrative",
+              "Body": "\u003Cp\u003EThe gym design narrative is coming soon.\u003C/p\u003E",
+              "BackgroundImage": [
+                {
+                  "Id": "16b2abbc-c647-4f47-9c4a-0e2791203dee",
+                  "Title": "office-ventilation-systems",
+                  "Url": "https://webcontent-test.greenheck.com/atg-cms-test/images/default-source/building-types/office-ventilation-systems.png?sfvrsn=def5e415_1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

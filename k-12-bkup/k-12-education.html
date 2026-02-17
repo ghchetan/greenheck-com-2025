@@ -17,11 +17,11 @@
     <meta name="bingbot" content="index, follow" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.greenheck.com/k-12-school.html" />
+    <link rel="canonical" href="https://www.greenheck.com/k-12-education.html" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.greenheck.com/k-12-school.html" />
+    <meta property="og:url" content="https://www.greenheck.com/k-12-education.html" />
     <meta property="og:title" content="K-12 Education Ventilation Systems | Greenheck" />
     <meta property="og:description" content="Comprehensive HVAC solutions for K-12 schools including ventilation, energy recovery, and air quality systems designed for educational facilities." />
     <meta property="og:image" content="https://www.greenheck.com/Content/imgs/school/k-12-hero-bg.png" />
@@ -33,7 +33,7 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://www.greenheck.com/k-12-school.html" />
+    <meta name="twitter:url" content="https://www.greenheck.com/k-12-education.html" />
     <meta name="twitter:title" content="K-12 School Solutions | Greenheck" />
     <meta name="twitter:description" content="Comprehensive HVAC solutions for K-12 schools including ventilation, energy recovery, and air quality systems designed for educational facilities." />
     <meta name="twitter:image" content="https://www.greenheck.com/Content/imgs/school/k-12-hero-bg.png" />
@@ -143,8 +143,8 @@
               {
                 "@type": "ListItem",
                 "position": 3,
-                "name": "K-12 School",
-                "item": "https://www.greenheck.com/k-12-school.html"
+                "name": "K-12 Education",
+                "item": "https://www.greenheck.com/k-12-education.html"
               }
             ]
           },
@@ -185,7 +185,7 @@
                     <span class="material-symbols-outlined breadcrumb-arrow">chevron_right</span>
                 </li>
                 <li class="breadcrumb-item">
-                    <span class="breadcrumb-current" aria-current="page">K-12 School</span>
+                    <span class="breadcrumb-current" aria-current="page">K-12 Education</span>
                 </li>
             </ol>
         </nav>
@@ -241,10 +241,9 @@
                     <!-- Building Overview Scene -->
                     <div id="building-overview-scene" class="scene active">
                         <div class="school-building-container">
-                            <div class="school-building k12-layered-map">
-                                <object id="building-svg-map" data="./Content/imgs/k-12-map.svg" type="image/svg+xml" class="school-building-image map-layer" aria-label="Interactive School Map Background"></object>
-                                <object id="building-svg-markers" data="./Content/imgs/k-12-markers.svg" type="image/svg+xml" class="school-building-image markers-layer" aria-label="Interactive School Map Markers"></object>
-                                <object id="building-space-overlay-object" data="" type="image/svg+xml" class="school-building-overlay-image overlay-layer" aria-label="Selected Space Overlay"></object>
+                            <div class="school-building">
+                                <object id="building-svg-object" data="" type="image/svg+xml" class="school-building-image" aria-label="Interactive School Map"></object>
+                                <object id="building-space-overlay-object" data="" type="image/svg+xml" class="school-building-overlay-image" aria-label="Selected Space Overlay"></object>
                             </div>
                         </div>
                     </div>
@@ -429,6 +428,7 @@
         })();
     </script>
     <!-- Space Selection Modal Script -->
+    <script src="./Content/js/data-adapter.js"></script>
     <script src="./Content/js/k-12-app.js"></script>
 </body>
 
