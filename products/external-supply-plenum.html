@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>External Supply Plenum - Feature Map</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 2rem;
+      margin: 0;
+    }
+    .plenum-demo {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .image-wrapper {
+      position: relative;
+      flex-shrink: 0;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .image-wrapper img {
+      display: block;
+      width: 800px;
+      height: auto;
+      max-width: 100%;
+    }
+    .highlight-dot {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #075697;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2px #075697;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+    .highlight-dot.visible {
+      display: block;
+    }
+    .controls {
+      min-width: 280px;
+      flex: 1;
+    }
+    .legend {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      color: #555;
+    }
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .legend .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #075697;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    select {
+      width: 100%;
+      padding: 0.6rem 2rem 0.6rem 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      appearance: auto;
+    }
+    select:focus {
+      outline: none;
+      border-color: #075697;
+      box-shadow: 0 0 0 2px rgba(7, 86, 151, 0.2);
+    }
+    .description {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 6px;
+      border-left: 4px solid #075697;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: #444;
+    }
+    .description h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      color: #075697;
+    }
+    .description p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="plenum-demo">
+    <div class="image-wrapper">
+      <img
+        id="plenum-img"
+        src="Content/imgs/External Supply Plenums.png"
+        alt="External Supply Plenum"
+        width="800"
+        usemap="#plenum-map"
+      />
+      <div id="highlight-dot" class="highlight-dot" aria-hidden="true"></div>
+    </div>
+
+    <div class="controls">
+      <div class="legend">
+        <span><span class="dot"></span> Standard feature</span>
+      </div>
+      <label for="feature-select">Select a feature</label>
+      <select id="feature-select">
+        <option value="">— Choose a feature —</option>
+        <option value="coil">Heat exchange coil (top)</option>
+        <option value="fins">Vertical fins (front)</option>
+        <option value="top-fittings">Top right fittings</option>
+        <option value="handle">Handle / bracket (middle right)</option>
+        <option value="bottom-fittings">Bottom right fittings</option>
+        <option value="cylinder">Cylindrical connection</option>
+      </select>
+      <div id="description" class="description" hidden>
+        <h3 id="desc-title"></h3>
+        <p id="desc-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <map name="plenum-map" id="plenum-map">
+    <!-- Circle areas: coords = "centerX,centerY,radius" for dot placement -->
+    <area id="area-coil" shape="circle" coords="400,100,55" href="#" alt="Heat exchange coil" />
+    <area id="area-fins" shape="circle" coords="250,320,50" href="#" alt="Vertical fins" />
+    <area id="area-top-fittings" shape="circle" coords="600,150,40" href="#" alt="Top right fittings" />
+    <area id="area-handle" shape="circle" coords="650,300,35" href="#" alt="Handle / bracket" />
+    <area id="area-bottom-fittings" shape="circle" coords="600,450,40" href="#" alt="Bottom right fittings" />
+    <area id="area-cylinder" shape="circle" coords="620,220,25" href="#" alt="Cylindrical connection" />
+  </map>
+
+  <script>
+    (function () {
+      var img = document.getElementById("plenum-img");
+      var dot = document.getElementById("highlight-dot");
+      var select = document.getElementById("feature-select");
+      var descBlock = document.getElementById("description");
+      var descTitle = document.getElementById("desc-title");
+      var descText = document.getElementById("desc-text");
+
+      var descriptions = {
+        coil: {
+          title: "Heat exchange coil",
+          text: "The top section features a horizontally finned heat exchange coil for efficient airflow and thermal transfer."
+        },
+        fins: {
+          title: "Vertical fins",
+          text: "Six vertical plates with perforations form the front face, providing structural support and controlled airflow."
+        },
+        "top-fittings": {
+          title: "Top right fittings",
+          text: "Conical mounts near the top right allow secure attachment of external components."
+        },
+        handle: {
+          title: "Handle / bracket",
+          text: "A central handle or bracket on the right face aids installation and service access."
+        },
+        "bottom-fittings": {
+          title: "Bottom right fittings",
+          text: "Lower mounting points for stable installation and component connection."
+        },
+        cylinder: {
+          title: "Cylindrical connection",
+          text: "Horizontal pipe or rod connection for duct or sensor attachment."
+        }
+      };
+
+      function getAreaCenter(area) {
+        var coords = (area.getAttribute("coords") || "").split(",").map(Number);
+        if (area.getAttribute("shape").toLowerCase() === "circle" && coords.length >= 2) {
+          return { x: coords[0], y: coords[1] };
+        }
+        if (area.getAttribute("shape").toLowerCase() === "rect" && coords.length >= 4) {
+          return {
+            x: (coords[0] + coords[2]) / 2,
+            y: (coords[1] + coords[3]) / 2
+          };
+        }
+        return null;
+      }
+
+      function placeDot(x, y) {
+        dot.style.left = x + "px";
+        dot.style.top = y + "px";
+        dot.classList.add("visible");
+      }
+
+      function hideDot() {
+        dot.classList.remove("visible");
+      }
+
+      function updateDescription(key) {
+        var d = descriptions[key];
+        if (d) {
+          descTitle.textContent = d.title;
+          descText.textContent = d.text;
+          descBlock.hidden = false;
+        } else {
+          descBlock.hidden = true;
+        }
+      }
+
+      select.addEventListener("change", function () {
+        var value = select.value.trim();
+        hideDot();
+        descBlock.hidden = true;
+
+        if (!value) return;
+
+        var area = document.getElementById("area-" + value);
+        if (area) {
+          var center = getAreaCenter(area);
+          if (center) {
+            placeDot(center.x, center.y);
+            updateDescription(value);
+          }
+        }
+      });
+
+      // Optional: prevent area href navigation
+      var areas = document.querySelectorAll("#plenum-map area");
+      for (var i = 0; i < areas.length; i++) {
+        areas[i].addEventListener("click", function (e) {
+          e.preventDefault();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
